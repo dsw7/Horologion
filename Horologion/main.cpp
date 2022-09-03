@@ -75,6 +75,7 @@ bool file_exists(std::string &filepath)
 
     if (stat(filepath.c_str(), &info) != 0)
     {
+        Logger::error(strerror(errno));
         return false;
     }
 
@@ -83,16 +84,19 @@ bool file_exists(std::string &filepath)
 
 bool write_to_rtc_alarm(std::time_t wakeup_time)
 {
-    static std::string wakealarm = "/sys/class/rtc/rtc0/wakealar";
+    static std::string wakealarm = "/sys/class/rtc/rtc0/wakealarm";
+
+    Logger::info("Attempting to modify file " + wakealarm);
 
     if (not file_exists(wakealarm))
     {
-        Logger::error("File " + wakealarm + " does not exist!");
         return false;
     }
 
     std::string str_wakeup_time = std::to_string(wakeup_time);
     Logger::info("Will write " + str_wakeup_time + " to " + wakealarm);
+
+    return true;
 }
 
 bool shutdown(bool is_dry_run)
@@ -125,7 +129,10 @@ int main()
         return EXIT_FAILURE;
     }
 
-    write_to_rtc_alarm(compute_delay(60));
+    if (not write_to_rtc_alarm(compute_delay(60)))
+    {
+        return EXIT_FAILURE;
+    }
 
     bool dry = true;
 
