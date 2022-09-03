@@ -17,6 +17,7 @@ std::string get_current_datetime_string()
 
     time_struct = *localtime(&time_now);
     strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%dT%X", &time_struct);
+
     return time_buffer;
 }
 
@@ -24,20 +25,17 @@ namespace Logger {
 
     void info(const std::string &message)
     {
-        std::string line = get_current_datetime_string() + " I " + message;
-        std::cout << line << std::endl;
+        std::cout << get_current_datetime_string() + " I " + message << std::endl;
     }
 
     void warning(const std::string &message)
     {
-        std::string line = get_current_datetime_string() + " W " + message;
-        std::cout << line << std::endl;
+        std::cout << get_current_datetime_string() + " W " + message << std::endl;
     }
 
     void error(const std::string &message)
     {
-        std::string line = get_current_datetime_string() + " E " + message;
-        std::cout << line << std::endl;
+        std::cerr << get_current_datetime_string() + " E " + message << std::endl;
     }
 
 }
@@ -59,7 +57,8 @@ bool shutdown()
 
     if (reboot(LINUX_REBOOT_CMD_POWER_OFF) != 0)
     {
-        std::cerr << strerror(errno) << std::endl;
+        Logger::error("Failed to shut down machine");
+        Logger::error(strerror(errno));
         return false;
     }
 
@@ -78,5 +77,5 @@ int main()
         return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
