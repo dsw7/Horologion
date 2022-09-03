@@ -153,9 +153,9 @@ int main()
         return EXIT_FAILURE;
     }
 
-    bool dry = true;
+    bool is_dry_run = false;
 
-    if (not shutdown(dry))
+    if (not shutdown(is_dry_run))
     {
         return EXIT_FAILURE;
     }
