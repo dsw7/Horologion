@@ -4,6 +4,7 @@
 
 #include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <linux/reboot.h>  // For LINUX_REBOOT_CMD_POWER_OFF
 
@@ -68,9 +69,27 @@ std::time_t compute_delay(std::time_t offset_seconds)
     return offset_time;
 }
 
+bool file_exists(std::string &filepath)
+{
+    struct stat info;
+
+    if (stat(filepath.c_str(), &info) != 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool write_to_rtc_alarm(std::time_t wakeup_time)
 {
-    static std::string wakealarm = "/sys/class/rtc/rtc0/wakealarm";
+    static std::string wakealarm = "/sys/class/rtc/rtc0/wakealar";
+
+    if (not file_exists(wakealarm))
+    {
+        Logger::error("File " + wakealarm + " does not exist!");
+        return false;
+    }
 
     std::string str_wakeup_time = std::to_string(wakeup_time);
     Logger::info("Will write " + str_wakeup_time + " to " + wakealarm);
