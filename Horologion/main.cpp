@@ -68,9 +68,18 @@ bool is_running_as_root()
     return true;
 }
 
-bool shutdown()
+bool shutdown(bool is_dry_run)
 {
+    if (is_dry_run)
+    {
+        Logger::info("Dry run instruction provided. Will not shut down machine");
+        return true;
+    }
+
+    Logger::info("Committing buffer cache to disk");
     sync();
+
+    Logger::info("Shutting down system");
 
     if (reboot(LINUX_REBOOT_CMD_POWER_OFF) != 0)
     {
@@ -91,10 +100,9 @@ int main()
 
     compute_delay(60);
 
-    // temporary
-    return EXIT_SUCCESS;
+    bool dry = true;
 
-    if (not shutdown())
+    if (not shutdown(dry))
     {
         return EXIT_FAILURE;
     }
