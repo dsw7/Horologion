@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <fstream>
 
 #include <errno.h>
 #include <string.h>
@@ -82,6 +83,17 @@ bool file_exists(std::string &filepath)
     return true;
 }
 
+void write_to_file(std::string &filepath, std::string &message)
+{
+    Logger::info("Will write " + message + " to " + filepath);
+
+    std::ofstream file;
+
+    file.open(filepath);
+    file << message;
+    file.close();
+}
+
 bool write_to_rtc_alarm(std::time_t wakeup_time)
 {
     static std::string wakealarm = "/sys/class/rtc/rtc0/wakealarm";
@@ -93,8 +105,15 @@ bool write_to_rtc_alarm(std::time_t wakeup_time)
         return false;
     }
 
+    Logger::info("Resetting alarm");
+
+    std::string reset_str = "0";
+    write_to_file(wakealarm, reset_str);
+
+    Logger::info("Now setting actual alarm");
+
     std::string str_wakeup_time = std::to_string(wakeup_time);
-    Logger::info("Will write " + str_wakeup_time + " to " + wakealarm);
+    write_to_file(wakealarm, str_wakeup_time);
 
     return true;
 }
