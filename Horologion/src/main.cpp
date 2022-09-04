@@ -77,7 +77,9 @@ int main()
         return EXIT_FAILURE;
     }
 
-    if (not write_to_rtc_alarm(compute_delay(60)))
+    int when_to_wake_up = 60; // i.e. wake up in 60 seconds
+
+    if (not write_to_rtc_alarm(compute_delay(when_to_wake_up)))
     {
         return EXIT_FAILURE;
     }
