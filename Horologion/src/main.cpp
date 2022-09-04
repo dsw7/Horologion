@@ -1,11 +1,8 @@
-#include <iostream>
 #include <string>
 #include <ctime>
-#include <fstream>
 
 #include <errno.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <linux/reboot.h>  // For LINUX_REBOOT_CMD_POWER_OFF
 
 // System calls
@@ -13,6 +10,7 @@
 #include <sys/reboot.h>    // For reboot(2)
 
 #include "logger.h"
+#include "file_utils.h"
 
 bool is_running_as_root()
 {
@@ -38,30 +36,6 @@ std::time_t compute_delay(std::time_t offset_seconds)
     Logger::info(std::asctime(std::localtime(&offset_time)));
 
     return offset_time;
-}
-
-bool file_exists(std::string &filepath)
-{
-    struct stat info;
-
-    if (stat(filepath.c_str(), &info) != 0)
-    {
-        Logger::error(strerror(errno));
-        return false;
-    }
-
-    return true;
-}
-
-void write_to_file(std::string &filepath, std::string &message)
-{
-    Logger::info("Will write " + message + " to " + filepath);
-
-    std::ofstream file;
-
-    file.open(filepath);
-    file << message;
-    file.close();
 }
 
 bool write_to_rtc_alarm(std::time_t wakeup_time)

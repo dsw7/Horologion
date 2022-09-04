@@ -39,4 +39,5 @@ add_executable(
     ${OUTPUT_NAME}
     "src/main.cpp"
     "src/logger.cpp"
+    "src/file_utils.cpp"
 )
