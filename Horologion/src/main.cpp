@@ -1,5 +1,4 @@
 #include <string>
-#include <ctime>
 
 #include <errno.h>
 #include <string.h>
@@ -11,6 +10,7 @@
 
 #include "logger.h"
 #include "file_utils.h"
+#include "time_utils.h"
 
 bool is_running_as_root()
 {
@@ -21,21 +21,6 @@ bool is_running_as_root()
     }
 
     return true;
-}
-
-std::time_t compute_delay(std::time_t offset_seconds)
-{
-    std::time_t time_since_epoch = std::time(nullptr);
-
-    Logger::info("The current time is: ");
-    Logger::info(std::asctime(std::localtime(&time_since_epoch)));
-
-    std::time_t offset_time = time_since_epoch + offset_seconds;
-
-    Logger::info("The offset time was computed as: ");
-    Logger::info(std::asctime(std::localtime(&offset_time)));
-
-    return offset_time;
 }
 
 bool write_to_rtc_alarm(std::time_t wakeup_time)

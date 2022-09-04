@@ -40,4 +40,5 @@ add_executable(
     "src/main.cpp"
     "src/logger.cpp"
     "src/file_utils.cpp"
+    "src/time_utils.cpp"
 )
