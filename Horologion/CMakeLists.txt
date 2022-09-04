@@ -6,14 +6,18 @@ project(Horologion)
 
 if(UNIX)
     message(STATUS "Detected *nix platform. Proceeding.")
+
     if (APPLE)
         message(FATAL_ERROR "Detected Apple *nix platform. Cannot proceed!")
     endif(APPLE)
+
     if (CYGWIN)
         message(FATAL_ERROR "Detected Cygwin *nix platform. Cannot proceed!")
     endif(CYGWIN)
+
 else()
     message(FATAL_ERROR "Cannot compile on non-*nix platform!")
+
 endif(UNIX)
 
 message(STATUS "Detected ${CMAKE_SYSTEM}")
@@ -31,8 +35,8 @@ message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
 
 include_directories("src")
 
-# Avoid using glob patterns
 add_executable(
     ${OUTPUT_NAME}
     "src/main.cpp"
+    "src/logger.cpp"
 )
