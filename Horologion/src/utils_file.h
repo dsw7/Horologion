@@ -10,7 +10,7 @@
 
 #include "logger.h"
 
-bool file_exists(std::string &filepath);
-void write_to_file(std::string &filepath, std::string &message);
+bool file_exists(const std::string &filepath);
+void write_to_file(const std::string &filepath, std::string &message);
 
 #endif

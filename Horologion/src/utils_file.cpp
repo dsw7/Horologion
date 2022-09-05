@@ -1,6 +1,6 @@
 #include "utils_file.h"
 
-bool file_exists(std::string &filepath)
+bool file_exists(const std::string &filepath)
 {
     struct stat info;
 
@@ -13,7 +13,7 @@ bool file_exists(std::string &filepath)
     return true;
 }
 
-void write_to_file(std::string &filepath, std::string &message)
+void write_to_file(const std::string &filepath, std::string &message)
 {
     Logger::info("Will write " + message + " to " + filepath);
 

@@ -10,8 +10,6 @@
 
 #include "command_line_interface.h"
 #include "logger.h"
-#include "utils_file.h"
-#include "utils_time.h"
 #include "utils_alarm.h"
 
 bool is_running_as_root()
