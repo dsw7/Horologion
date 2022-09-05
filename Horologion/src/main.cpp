@@ -79,6 +79,14 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    std::string command = std::string(argv[1]);
+
+    if (command.compare("-h") == 0 or command.compare("--help") == 0)
+    {
+        help_commands(argv[0]);
+        return EXIT_SUCCESS;
+    }
+
     if (not is_running_as_root())
     {
         return EXIT_FAILURE;
