@@ -40,7 +40,7 @@ add_executable(
     "src/main.cpp"
     "src/command_line_interface.cpp"
     "src/logger.cpp"
-    "src/file_utils.cpp"
+    "src/utils_file.cpp"
     "src/time_utils.cpp"
     "src/utils_alarm.cpp"
 )
