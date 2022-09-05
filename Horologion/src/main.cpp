@@ -47,17 +47,18 @@ bool shutdown(bool is_dry_run)
     return true;
 }
 
-bool command_set_alarm(char **argv)
+bool command_set_alarm(int argc, char **argv)
 {
     if (not is_running_as_root())
     {
         return false;
     }
 
-    argv++;
+    int when_to_wake_up = 60;
 
-    // This will be replaced with custom options that come from CLI and are parsed with getopt_long
-    int when_to_wake_up = 60; // i.e. wake up in 60 seconds
+    // Remove first element from argv and decrement argc to account for this
+    argv++;
+    get_cli_setup_alarm(argc - 1, argv, when_to_wake_up);
 
     return set_rtc_alarm(compute_delay(when_to_wake_up));
 }
@@ -109,7 +110,7 @@ int main(int argc, char **argv)
     }
     else if (command.compare("set-alarm") == 0)
     {
-        if (not command_set_alarm(argv))
+        if (not command_set_alarm(argc, argv))
         {
             return EXIT_FAILURE;
         }
