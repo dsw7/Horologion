@@ -10,6 +10,7 @@
 
 #include "command_line_interface.h"
 #include "logger.h"
+#include "utils_time.h"
 #include "utils_alarm.h"
 
 bool is_running_as_root()
@@ -46,6 +47,47 @@ bool shutdown(bool is_dry_run)
     return true;
 }
 
+bool command_set_alarm()
+{
+    if (not is_running_as_root())
+    {
+        return false;
+    }
+
+    int when_to_wake_up = 60; // i.e. wake up in 60 seconds
+
+    if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool command_trigger()
+{
+    if (not is_running_as_root())
+    {
+        return false;
+    }
+
+    int when_to_wake_up = 60; // i.e. wake up in 60 seconds
+
+    if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
+    {
+        return false;
+    }
+
+    bool is_dry_run = false;
+
+    if (not shutdown(is_dry_run))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char **argv)
 {
     if (argc < 2)
@@ -61,23 +103,23 @@ int main(int argc, char **argv)
         help_commands(argv[0]);
         return EXIT_SUCCESS;
     }
-
-    if (not is_running_as_root())
+    else if (command.compare("set-alarm") == 0)
     {
-        return EXIT_FAILURE;
+        if (not command_set_alarm())
+        {
+            return EXIT_FAILURE;
+        }
     }
-
-    int when_to_wake_up = 60; // i.e. wake up in 60 seconds
-
-    if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
+    else if (command.compare("trigger") == 0)
     {
-        return EXIT_FAILURE;
+        if (not command_set_alarm())
+        {
+            return EXIT_FAILURE;
+        }
     }
-
-    bool is_dry_run = false;
-
-    if (not shutdown(is_dry_run))
+    else
     {
+        help_commands(argv[0]);
         return EXIT_FAILURE;
     }
 
