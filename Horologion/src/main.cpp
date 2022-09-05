@@ -56,12 +56,17 @@ bool command_set_alarm()
 
     int when_to_wake_up = 60; // i.e. wake up in 60 seconds
 
-    if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
+    return set_rtc_alarm(compute_delay(when_to_wake_up));
+}
+
+bool command_reset_alarm()
+{
+    if (not is_running_as_root())
     {
         return false;
     }
 
-    return true;
+    return reset_rtc_alarm();
 }
 
 bool command_trigger()
@@ -80,12 +85,7 @@ bool command_trigger()
 
     bool is_dry_run = false;
 
-    if (not shutdown(is_dry_run))
-    {
-        return false;
-    }
-
-    return true;
+    return shutdown(is_dry_run);
 }
 
 int main(int argc, char **argv)
@@ -106,6 +106,13 @@ int main(int argc, char **argv)
     else if (command.compare("set-alarm") == 0)
     {
         if (not command_set_alarm())
+        {
+            return EXIT_FAILURE;
+        }
+    }
+    else if (command.compare("reset-alarm") == 0)
+    {
+        if (not command_reset_alarm())
         {
             return EXIT_FAILURE;
         }
