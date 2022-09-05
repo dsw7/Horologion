@@ -54,6 +54,7 @@ bool command_set_alarm()
         return false;
     }
 
+    // This will be replaced with custom options that come from CLI and are parsed with getopt_long
     int when_to_wake_up = 60; // i.e. wake up in 60 seconds
 
     return set_rtc_alarm(compute_delay(when_to_wake_up));
@@ -76,6 +77,7 @@ bool command_trigger()
         return false;
     }
 
+    // This will be replaced with custom options that come from a config file
     int when_to_wake_up = 60; // i.e. wake up in 60 seconds
 
     if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
