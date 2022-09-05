@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "file_utils.h"
 #include "time_utils.h"
+#include "utils_alarm.h"
 
 bool is_running_as_root()
 {
@@ -20,30 +21,6 @@ bool is_running_as_root()
         Logger::error("Not running as root. Additional privileges needed!");
         return false;
     }
-
-    return true;
-}
-
-bool write_to_rtc_alarm(std::time_t wakeup_time)
-{
-    static std::string wakealarm = "/sys/class/rtc/rtc0/wakealarm";
-
-    Logger::info("Attempting to modify file " + wakealarm);
-
-    if (not file_exists(wakealarm))
-    {
-        return false;
-    }
-
-    Logger::info("Resetting alarm");
-
-    std::string reset_str = "0";
-    write_to_file(wakealarm, reset_str);
-
-    Logger::info("Now setting actual alarm");
-
-    std::string str_wakeup_time = std::to_string(wakeup_time);
-    write_to_file(wakealarm, str_wakeup_time);
 
     return true;
 }
@@ -94,7 +71,7 @@ int main(int argc, char **argv)
 
     int when_to_wake_up = 60; // i.e. wake up in 60 seconds
 
-    if (not write_to_rtc_alarm(compute_delay(when_to_wake_up)))
+    if (not set_rtc_alarm(compute_delay(when_to_wake_up)))
     {
         return EXIT_FAILURE;
     }

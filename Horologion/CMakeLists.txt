@@ -42,4 +42,5 @@ add_executable(
     "src/logger.cpp"
     "src/file_utils.cpp"
     "src/time_utils.cpp"
+    "src/utils_alarm.cpp"
 )
