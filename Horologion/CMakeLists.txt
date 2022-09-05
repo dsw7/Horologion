@@ -41,6 +41,6 @@ add_executable(
     "src/command_line_interface.cpp"
     "src/logger.cpp"
     "src/utils_file.cpp"
-    "src/time_utils.cpp"
+    "src/utils_time.cpp"
     "src/utils_alarm.cpp"
 )
