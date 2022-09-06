@@ -42,37 +42,3 @@ void CommandBase::set_rtc_alarm()
     std::string str_wakeup_time = std::to_string(wakeup_time);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
 }
-
-bool CommandResetAlarm::main()
-{
-    if (not this->is_running_as_root())
-    {
-        return false;
-    }
-
-    if (not this->wakealarm_exists())
-    {
-        return false;
-    }
-
-    this->reset_rtc_alarm();
-
-    return true;
-};
-
-bool CommandSetAlarm::main()
-{
-    if (not this->is_running_as_root())
-    {
-        return false;
-    }
-
-    if (not this->wakealarm_exists())
-    {
-        return false;
-    }
-
-    this->set_rtc_alarm();
-
-    return true;
-};

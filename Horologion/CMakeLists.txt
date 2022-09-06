@@ -42,5 +42,8 @@ add_executable(
     "src/logger.cpp"
     "src/utils_file.cpp"
     "src/utils_time.cpp"
-    "src/commands.cpp"
+    "src/command_base.cpp"
+    "src/command_reset_alarm.cpp"
+    "src/command_set_alarm.cpp"
+    "src/command_trigger.cpp"
 )

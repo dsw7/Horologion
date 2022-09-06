@@ -1,5 +1,5 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef COMMAND_BASE_H
+#define COMMAND_BASE_H
 
 #include <string>
 #include <ctime>
@@ -21,18 +21,6 @@ class CommandBase
 
     public:
         virtual bool main() {};
-};
-
-class CommandResetAlarm: public CommandBase
-{
-    public:
-        bool main();
-};
-
-class CommandSetAlarm: public CommandBase
-{
-    public:
-        bool main();
 };
 
 #endif
