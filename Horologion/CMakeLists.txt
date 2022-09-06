@@ -43,4 +43,5 @@ add_executable(
     "src/utils_file.cpp"
     "src/utils_time.cpp"
     "src/utils_alarm.cpp"
+    "src/commands.cpp"
 )
