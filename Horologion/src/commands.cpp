@@ -19,6 +19,8 @@ bool CommandBase::wakealarm_exists()
     {
         return false;
     }
+
+    return true;
 }
 
 void CommandBase::reset_rtc_alarm()
@@ -53,7 +55,8 @@ bool CommandResetAlarm::main()
         return false;
     }
 
-    reset_rtc_alarm();
+    this->reset_rtc_alarm();
+
     return true;
 };
 
@@ -68,6 +71,8 @@ bool CommandSetAlarm::main()
     {
         return false;
     }
+
+    this->set_rtc_alarm();
 
     return true;
 };
