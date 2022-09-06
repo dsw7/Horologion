@@ -38,7 +38,6 @@ include_directories("src")
 add_executable(
     ${OUTPUT_NAME}
     "src/main.cpp"
-    "src/command_line_interface.cpp"
     "src/logger.cpp"
     "src/utils_file.cpp"
     "src/utils_time.cpp"
