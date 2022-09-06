@@ -11,7 +11,6 @@
 #include "command_line_interface.h"
 #include "logger.h"
 #include "utils_time.h"
-#include "utils_alarm.h"
 #include "commands.h"
 
 bool is_running_as_root()
@@ -46,18 +45,6 @@ bool shutdown(bool is_dry_run)
     }
 
     return true;
-}
-
-bool command_set_alarm()
-{
-    if (not is_running_as_root())
-    {
-        return false;
-    }
-
-    int when_to_wake_up = 60;
-
-    return set_rtc_alarm(compute_delay(when_to_wake_up));
 }
 
 bool command_trigger()
@@ -106,7 +93,9 @@ int main(int argc, char **argv)
     }
     else if (command.compare("set-alarm") == 0)
     {
-        if (not command_set_alarm())
+        CommandSetAlarm command;
+
+        if (not command.main())
         {
             return EXIT_FAILURE;
         }
