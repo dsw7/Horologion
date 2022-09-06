@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "utils_time.h"
 #include "utils_alarm.h"
+#include "commands.h"
 
 bool is_running_as_root()
 {
@@ -59,16 +60,6 @@ bool command_set_alarm()
     return set_rtc_alarm(compute_delay(when_to_wake_up));
 }
 
-bool command_reset_alarm()
-{
-    if (not is_running_as_root())
-    {
-        return false;
-    }
-
-    return reset_rtc_alarm();
-}
-
 bool command_trigger()
 {
     if (not is_running_as_root())
@@ -104,16 +95,18 @@ int main(int argc, char **argv)
         help_commands(argv[0]);
         return EXIT_SUCCESS;
     }
-    else if (command.compare("set-alarm") == 0)
+    else if (command.compare("reset-alarm") == 0)
     {
-        if (not command_set_alarm())
+        CommandResetAlarm command;
+
+        if (not command.main())
         {
             return EXIT_FAILURE;
         }
     }
-    else if (command.compare("reset-alarm") == 0)
+    else if (command.compare("set-alarm") == 0)
     {
-        if (not command_reset_alarm())
+        if (not command_set_alarm())
         {
             return EXIT_FAILURE;
         }
