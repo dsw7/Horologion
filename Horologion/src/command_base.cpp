@@ -11,6 +11,11 @@ bool CommandBase::is_running_as_root()
     return true;
 }
 
+bool CommandBase::load_configs()
+{
+    return true;
+}
+
 bool CommandBase::wakealarm_exists()
 {
     Logger::info("Checking if wakealarm file exists: " + SYSFS_WAKEALARM);
