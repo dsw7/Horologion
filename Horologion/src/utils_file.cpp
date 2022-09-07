@@ -23,3 +23,18 @@ void write_to_file(const std::string &filepath, std::string &message)
     file << message;
     file.close();
 }
+
+void read_file(const std::string &filepath, std::string &file_contents)
+{
+    Logger::info("Reading " + filepath);
+
+    std::ifstream filestream(filepath);
+
+    std::string line;
+    while (getline(filestream, line))
+    {
+        file_contents += line + "\n";
+    }
+
+    filestream.close();
+}
