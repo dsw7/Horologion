@@ -96,9 +96,9 @@ void CommandBase::set_rtc_alarm()
 {
     this->reset_rtc_alarm();
 
-    Logger::info("Setting alarm");
-
     std::time_t wakeup_time = get_epoch_time_from_tm(this->configs.time_alarm);
+
+    Logger::info("Setting alarm for: " + epoch_time_to_ascii_time(wakeup_time));
 
     std::string str_wakeup_time = std::to_string(wakeup_time);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
