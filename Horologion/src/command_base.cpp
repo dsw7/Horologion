@@ -60,6 +60,10 @@ void CommandBase::read_configs_from_file()
         }
     }
 
+    // See: https://linux.die.net/man/3/mktime
+    this->configs.time_alarm.tm_year -= 1900;
+    this->configs.time_alarm.tm_mon--;
+
     Logger::info("Parsed year (tm_year): " + std::to_string(this->configs.time_alarm.tm_year));
     Logger::info("Parsed month (tm_mon): " + std::to_string(this->configs.time_alarm.tm_mon));
     Logger::info("Parsed day (tm_mday): " + std::to_string(this->configs.time_alarm.tm_mday));
@@ -95,7 +99,6 @@ void CommandBase::set_rtc_alarm()
     Logger::info("Setting alarm");
 
     std::time_t wakeup_time = get_epoch_time_from_tm(this->configs.time_alarm);
-    //std::time_t wakeup_time = compute_delay(60);
 
     std::string str_wakeup_time = std::to_string(wakeup_time);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
