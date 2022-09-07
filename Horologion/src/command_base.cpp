@@ -34,27 +34,27 @@ void CommandBase::read_configs_from_file()
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
     {
-        if (it->first.compare("time_alarm_year") == 0)
+        if (it->first.compare("time-alarm-year") == 0)
         {
             this->configs.time_alarm.tm_year = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time_alarm_month") == 0)
+        else if (it->first.compare("time-alarm-month") == 0)
         {
             this->configs.time_alarm.tm_mon = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time_alarm_day") == 0)
+        else if (it->first.compare("time-alarm-day") == 0)
         {
             this->configs.time_alarm.tm_mday = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time_alarm_hour") == 0)
+        else if (it->first.compare("time-alarm-hour") == 0)
         {
             this->configs.time_alarm.tm_hour = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time_alarm_minute") == 0)
+        else if (it->first.compare("time-alarm-minute") == 0)
         {
             this->configs.time_alarm.tm_min = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time_alarm_second") == 0)
+        else if (it->first.compare("time-alarm-second") == 0)
         {
             this->configs.time_alarm.tm_sec = atoi(it->second.c_str());
         }
