@@ -23,6 +23,44 @@ bool CommandBase::config_exists()
     return true;
 }
 
+void CommandBase::read_configs_from_file()
+{
+    std::string file_contents;
+
+    read_file(PROG_CONFIG, file_contents);
+
+    std::map<std::string, std::string> raw_configs;
+    parse_configs(file_contents, raw_configs);
+
+    for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
+    {
+        if (it->first.compare("time_alarm_year") == 0)
+        {
+            this->configs.time_alarm.tm_year = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time_alarm_month") == 0)
+        {
+            this->configs.time_alarm.tm_mon = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time_alarm_day") == 0)
+        {
+            this->configs.time_alarm.tm_mday = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time_alarm_hour") == 0)
+        {
+            this->configs.time_alarm.tm_hour = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time_alarm_minute") == 0)
+        {
+            this->configs.time_alarm.tm_min = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time_alarm_second") == 0)
+        {
+            this->configs.time_alarm.tm_sec = atoi(it->second.c_str());
+        }
+    }
+}
+
 bool CommandBase::wakealarm_exists()
 {
     Logger::info("Checking if wakealarm file exists: " + SYSFS_WAKEALARM);

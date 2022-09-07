@@ -3,10 +3,12 @@
 
 #include <string>
 #include <ctime>
+#include <map>
 #include <time.h>
 #include <unistd.h>
 
 #include "logger.h"
+#include "parse_config_file.h"
 #include "utils_file.h"
 #include "utils_time.h"
 
@@ -23,6 +25,7 @@ class CommandBase
     protected:
         bool is_running_as_root();
         bool config_exists();
+        void read_configs_from_file();
         bool wakealarm_exists();
         void reset_rtc_alarm();
         void set_rtc_alarm();
