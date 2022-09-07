@@ -13,7 +13,7 @@
 #include "utils_time.h"
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
-const std::string PROG_CONFIG = "/etc/horolog.conf";
+const std::string PROG_CONFIG = "/etc/horolog.ini";
 
 struct Configs
 {
