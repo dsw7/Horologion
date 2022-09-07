@@ -14,3 +14,13 @@ std::time_t compute_delay(std::time_t offset_seconds)
 
     return offset_time;
 }
+
+std::time_t get_epoch_time_from_tm(tm &time)
+{
+    std::time_t epoch_time = mktime(&time);
+
+    Logger::info("Parsed time: ");
+    Logger::info(std::asctime(std::localtime(&epoch_time)));
+
+    return epoch_time;
+}

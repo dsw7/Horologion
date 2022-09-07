@@ -59,6 +59,13 @@ void CommandBase::read_configs_from_file()
             this->configs.time_alarm.tm_sec = atoi(it->second.c_str());
         }
     }
+
+    Logger::info("Parsed year (tm_year): " + std::to_string(this->configs.time_alarm.tm_year));
+    Logger::info("Parsed month (tm_mon): " + std::to_string(this->configs.time_alarm.tm_mon));
+    Logger::info("Parsed day (tm_mday): " + std::to_string(this->configs.time_alarm.tm_mday));
+    Logger::info("Parsed hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
+    Logger::info("Parsed minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
+    Logger::info("Parsed month (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
 }
 
 bool CommandBase::wakealarm_exists()
@@ -87,7 +94,8 @@ void CommandBase::set_rtc_alarm()
 
     Logger::info("Setting alarm");
 
-    std::time_t wakeup_time = compute_delay(60);
+    std::time_t wakeup_time = get_epoch_time_from_tm(this->configs.time_alarm);
+    //std::time_t wakeup_time = compute_delay(60);
 
     std::string str_wakeup_time = std::to_string(wakeup_time);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
