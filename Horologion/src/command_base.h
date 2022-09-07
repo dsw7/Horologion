@@ -22,7 +22,7 @@ class CommandBase
 {
     protected:
         bool is_running_as_root();
-        bool load_configs();
+        bool config_exists();
         bool wakealarm_exists();
         void reset_rtc_alarm();
         void set_rtc_alarm();
