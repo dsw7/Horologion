@@ -7,6 +7,13 @@ bool CommandSetAlarm::main()
         return false;
     }
 
+    if (not this->config_exists())
+    {
+        return false;
+    }
+
+    this->read_configs_from_file();
+
     if (not this->wakealarm_exists())
     {
         return false;
