@@ -36,6 +36,7 @@ void CommandBase::read_configs_from_file()
     {
         if (it->first.compare("time-alarm-year") == 0)
         {
+            Logger::info("foo");
             this->configs.time_alarm.tm_year = atoi(it->second.c_str());
         }
         else if (it->first.compare("time-alarm-month") == 0)
