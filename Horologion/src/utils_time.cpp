@@ -28,6 +28,7 @@ std::time_t compute_epoch_wakeup_time(int &hour, int &minute, int &second)
 
     if (wakeup_time <= now)
     {
+        // i.e. wake up next day if we already passed today's wake up time
         wakeup_time += 86400;
     }
 
