@@ -48,9 +48,6 @@ void CommandBase::read_configs_from_file()
         }
     }
 
-    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
-    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
-    Logger::info("Parsed wake up second (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
 }
 
 bool CommandBase::wakealarm_exists()
@@ -75,6 +72,10 @@ void CommandBase::reset_rtc_alarm()
 
 void CommandBase::set_rtc_alarm()
 {
+    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
+    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
+    Logger::info("Parsed wake up second (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
+
     this->reset_rtc_alarm();
 
     std::time_t wakeup_time = compute_epoch_wakeup_time(
