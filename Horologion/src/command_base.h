@@ -24,11 +24,15 @@ struct Configs
 class CommandBase
 {
     protected:
+        std::time_t time_alarm;
+        std::time_t time_sleep;
+
         bool is_running_as_root();
         bool config_exists();
         void read_configs_from_file();
         bool wakealarm_exists();
         void reset_rtc_alarm();
+        void set_time_alarm();
         void set_rtc_alarm();
 
     public:

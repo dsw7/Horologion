@@ -36,6 +36,7 @@ bool CommandTrigger::main()
         return false;
     }
 
+    this->set_time_alarm();
     this->set_rtc_alarm();
 
     if (not this->shutdown())

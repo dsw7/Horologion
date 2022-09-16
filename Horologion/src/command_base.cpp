@@ -81,22 +81,25 @@ void CommandBase::reset_rtc_alarm()
     write_to_file(SYSFS_WAKEALARM, reset_str);
 }
 
-void CommandBase::set_rtc_alarm()
+void CommandBase::set_time_alarm()
 {
     Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
     Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
     Logger::info("Parsed wake up second (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
 
-    this->reset_rtc_alarm();
-
-    std::time_t wakeup_time = compute_epoch_wakeup_time(
+    this->time_alarm = compute_epoch_wakeup_time(
         this->configs.time_alarm.tm_hour,
         this->configs.time_alarm.tm_min,
         this->configs.time_alarm.tm_sec
     );
 
-    Logger::info("Setting alarm for: " + epoch_time_to_ascii_time(wakeup_time));
+    Logger::info("The machine will wake at: " + epoch_time_to_ascii_time(this->time_alarm));
+}
 
-    std::string str_wakeup_time = std::to_string(wakeup_time);
+void CommandBase::set_rtc_alarm()
+{
+    this->reset_rtc_alarm();
+
+    std::string str_wakeup_time = std::to_string(this->time_alarm);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
 }

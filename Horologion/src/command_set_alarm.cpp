@@ -19,6 +19,7 @@ bool CommandSetAlarm::main()
         return false;
     }
 
+    this->set_time_alarm();
     this->set_rtc_alarm();
 
     return true;
