@@ -46,8 +46,19 @@ void CommandBase::read_configs_from_file()
         {
             this->configs.time_alarm.tm_sec = atoi(it->second.c_str());
         }
+        else if (it->first.compare("time-sleep-hour") == 0)
+        {
+            this->configs.time_sleep.tm_hour = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time-sleep-minute") == 0)
+        {
+            this->configs.time_sleep.tm_min = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time-sleep-second") == 0)
+        {
+            this->configs.time_sleep.tm_sec = atoi(it->second.c_str());
+        }
     }
-
 }
 
 bool CommandBase::wakealarm_exists()

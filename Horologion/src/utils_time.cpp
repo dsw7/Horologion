@@ -29,3 +29,23 @@ std::time_t compute_epoch_wakeup_time(int &hour, int &minute, int &second)
 
     return wakeup_time;
 }
+
+std::time_t compute_epoch_sleep_time(int &hour, int &minute, int &second)
+{
+    std::time_t now = get_current_epoch_time();
+    std::tm *tm_time = std::localtime(&now);
+
+    tm_time->tm_hour = hour;
+    tm_time->tm_min = minute;
+    tm_time->tm_sec = second;
+
+    std::time_t sleep_time = mktime(tm_time);
+
+    if (sleep_time <= now)
+    {
+        // i.e. sleep next day if we already passed today's sleep time
+        sleep_time += 86400;
+    }
+
+    return sleep_time;
+}

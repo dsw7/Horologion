@@ -18,6 +18,7 @@ const std::string PROG_CONFIG = "/etc/horolog.ini";
 struct Configs
 {
     struct tm time_alarm = {0};
+    struct tm time_sleep = {0};
 };
 
 class CommandBase
