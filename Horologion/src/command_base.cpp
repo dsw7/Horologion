@@ -93,7 +93,22 @@ void CommandBase::set_time_alarm()
         this->configs.time_alarm.tm_sec
     );
 
-    Logger::info("The machine will wake at: " + epoch_time_to_ascii_time(this->time_alarm));
+    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_alarm));
+}
+
+void CommandBase::set_time_sleep()
+{
+    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
+    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
+    Logger::info("Parsed sleep second (tm_sec): " + std::to_string(this->configs.time_sleep.tm_sec));
+
+    this->time_sleep = compute_epoch_sleep_time(
+        this->configs.time_sleep.tm_hour,
+        this->configs.time_sleep.tm_min,
+        this->configs.time_sleep.tm_sec
+    );
+
+    Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
 }
 
 void CommandBase::set_rtc_alarm()

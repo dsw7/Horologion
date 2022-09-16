@@ -33,6 +33,7 @@ class CommandBase
         bool wakealarm_exists();
         void reset_rtc_alarm();
         void set_time_alarm();
+        void set_time_sleep();
         void set_rtc_alarm();
 
     public:

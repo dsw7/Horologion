@@ -20,6 +20,8 @@ bool CommandSetAlarm::main()
     }
 
     this->set_time_alarm();
+    this->set_time_sleep();
+
     this->set_rtc_alarm();
 
     return true;
