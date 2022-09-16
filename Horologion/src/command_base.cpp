@@ -77,7 +77,6 @@ void CommandBase::set_rtc_alarm()
 {
     this->reset_rtc_alarm();
 
-    //std::time_t wakeup_time = get_epoch_time_from_tm(this->configs.time_alarm);
     std::time_t wakeup_time = compute_epoch_wakeup_time(
         this->configs.time_alarm.tm_hour,
         this->configs.time_alarm.tm_min,
