@@ -111,6 +111,26 @@ void CommandBase::set_time_sleep()
     Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
 }
 
+bool CommandBase::sanitize_wake_sleep_cycle()
+{
+    int delta_t = this->time_sleep - this->time_alarm;
+
+    if (delta_t < 0)
+    {
+        Logger::error("Sleep time must be greater than wake time!");
+        return false;
+    }
+
+    if (delta_t >= 0 and delta_t < MINIMUM_WAKE_TIME)
+    {
+        Logger::error("The wake-sleep duration must be at least " + std::to_string(MINIMUM_WAKE_TIME) + " s");
+        return false;
+    }
+
+    Logger::info("The wake-sleep duration will be " + std::to_string(delta_t) + " s");
+    return true;
+}
+
 void CommandBase::set_rtc_alarm()
 {
     this->reset_rtc_alarm();

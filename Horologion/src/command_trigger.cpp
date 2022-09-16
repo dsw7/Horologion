@@ -39,6 +39,11 @@ bool CommandTrigger::main()
     this->set_time_alarm();
     this->set_time_sleep();
 
+    if (not this->sanitize_wake_sleep_cycle())
+    {
+        return false;
+    }
+
     this->set_rtc_alarm();
 
     if (not this->shutdown())

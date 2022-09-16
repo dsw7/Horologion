@@ -14,6 +14,7 @@
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string PROG_CONFIG = "/etc/horolog.ini";
+const std::time_t MINIMUM_WAKE_TIME = 300;
 
 struct Configs
 {
@@ -34,6 +35,7 @@ class CommandBase
         void reset_rtc_alarm();
         void set_time_alarm();
         void set_time_sleep();
+        bool sanitize_wake_sleep_cycle();
         void set_rtc_alarm();
 
     public:
