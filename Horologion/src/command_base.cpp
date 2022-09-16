@@ -34,19 +34,7 @@ void CommandBase::read_configs_from_file()
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
     {
-        if (it->first.compare("time-alarm-year") == 0)
-        {
-            this->configs.time_alarm.tm_year = atoi(it->second.c_str());
-        }
-        else if (it->first.compare("time-alarm-month") == 0)
-        {
-            this->configs.time_alarm.tm_mon = atoi(it->second.c_str());
-        }
-        else if (it->first.compare("time-alarm-day") == 0)
-        {
-            this->configs.time_alarm.tm_mday = atoi(it->second.c_str());
-        }
-        else if (it->first.compare("time-alarm-hour") == 0)
+        if (it->first.compare("time-alarm-hour") == 0)
         {
             this->configs.time_alarm.tm_hour = atoi(it->second.c_str());
         }
@@ -60,16 +48,9 @@ void CommandBase::read_configs_from_file()
         }
     }
 
-    // See: https://linux.die.net/man/3/mktime
-    this->configs.time_alarm.tm_year -= 1900;
-    this->configs.time_alarm.tm_mon--;
-
-    Logger::info("Parsed year (tm_year): " + std::to_string(this->configs.time_alarm.tm_year));
-    Logger::info("Parsed month (tm_mon): " + std::to_string(this->configs.time_alarm.tm_mon));
-    Logger::info("Parsed day (tm_mday): " + std::to_string(this->configs.time_alarm.tm_mday));
-    Logger::info("Parsed hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
-    Logger::info("Parsed minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
-    Logger::info("Parsed month (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
+    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
+    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
+    Logger::info("Parsed wake up second (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
 }
 
 bool CommandBase::wakealarm_exists()
