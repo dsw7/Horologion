@@ -52,6 +52,9 @@ void parse_configs(std::string &file_contents, std::map<std::string, std::string
             // then we read between = and \n
             if (std::getline(is_line, value))
             {
+                strip_whitespace_from_left(value);
+                strip_whitespace_from_right(value);
+
                 raw_configs[key] = value;
             }
         }
