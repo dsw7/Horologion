@@ -14,7 +14,33 @@ bool CommandTrigger::sysfs_sleep_state_files_exist()
 
 bool CommandTrigger::check_valid_suspend_state()
 {
-    return true;
+    if (this->configs.suspend_type.compare("reboot") == 0)
+    {
+        return true;
+    }
+
+    std::string sysfs_states, state;
+    read_file(SYSFS_STATE, sysfs_states);
+
+    std::stringstream ss_states(sysfs_states);
+
+    bool state_found = false;
+
+    while (ss_states >> state)
+    {
+        if (this->configs.suspend_type.compare(state) == 0)
+        {
+            state_found = true;
+        }
+    }
+
+    if (not state_found)
+    {
+        Logger::error("State \"" + this->configs.suspend_type + "\" not supported!");
+        Logger::error("Valid states are: " + sysfs_states);
+    }
+
+    return state_found;
 }
 
 bool CommandTrigger::run_commands()

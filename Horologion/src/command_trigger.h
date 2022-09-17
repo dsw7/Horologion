@@ -2,6 +2,7 @@
 #define COMMAND_TRIGGER_H
 
 #include <string>
+#include <sstream>
 #include <errno.h>
 #include <string.h>
 #include <linux/reboot.h>  // For LINUX_REBOOT_CMD_POWER_OFF
