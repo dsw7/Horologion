@@ -56,7 +56,7 @@ bool CommandTrigger::run_commands()
     return true;
 }
 
-bool CommandTrigger::shutdown()
+bool CommandTrigger::suspend_system()
 {
     Logger::info("Committing buffer cache to disk");
     sync();
@@ -117,7 +117,7 @@ bool CommandTrigger::main()
         return false;
     }
 
-    if (not this->shutdown())
+    if (not this->suspend_system())
     {
         return false;
     }
