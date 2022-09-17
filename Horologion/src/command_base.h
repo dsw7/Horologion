@@ -18,6 +18,7 @@ const std::time_t MINIMUM_WAKE_TIME = 90;
 
 struct Configs
 {
+    std::string suspend_type = "reboot";
     struct tm time_alarm = {0};
     struct tm time_sleep = {0};
 };
