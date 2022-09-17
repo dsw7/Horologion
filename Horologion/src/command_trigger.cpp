@@ -3,6 +3,8 @@
 bool CommandTrigger::run_commands()
 {
     unsigned int delta_t = this->time_sleep - this->time_alarm;
+
+    Logger::info("System will stay awake for " + std::to_string(delta_t) + " seconds for all subprocesses to complete");
     sleep(delta_t);
 
     return true;
