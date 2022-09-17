@@ -1,5 +1,17 @@
 #include "command_trigger.h"
 
+bool CommandTrigger::sysfs_sleep_state_files_exist()
+{
+    Logger::info("Checking if sysfs state file exists: " + SYSFS_STATE);
+
+    if (not file_exists(SYSFS_STATE))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool CommandTrigger::check_valid_suspend_state()
 {
     return true;
@@ -48,6 +60,11 @@ bool CommandTrigger::main()
     }
 
     this->read_configs_from_file();
+
+    if (not this->sysfs_sleep_state_files_exist())
+    {
+        return false;
+    }
 
     if (not this->check_valid_suspend_state())
     {
