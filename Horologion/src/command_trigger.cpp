@@ -1,5 +1,13 @@
 #include "command_trigger.h"
 
+bool CommandTrigger::run_commands()
+{
+    unsigned int delta_t = this->time_sleep - this->time_alarm;
+    sleep(delta_t);
+
+    return true;
+}
+
 bool CommandTrigger::shutdown()
 {
     Logger::info("Committing buffer cache to disk");
@@ -45,6 +53,11 @@ bool CommandTrigger::main()
     }
 
     this->set_rtc_alarm();
+
+    if (not this->run_commands())
+    {
+        return false;
+    }
 
     if (not this->shutdown())
     {
