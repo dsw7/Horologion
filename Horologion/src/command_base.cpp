@@ -59,6 +59,9 @@ void CommandBase::read_configs_from_file()
             this->configs.time_sleep.tm_sec = atoi(it->second.c_str());
         }
     }
+
+    Logger::info("Parsed raw configs: ");
+    Logger::debug_map(raw_configs);
 }
 
 bool CommandBase::wakealarm_exists()

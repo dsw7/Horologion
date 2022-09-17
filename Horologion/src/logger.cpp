@@ -29,4 +29,17 @@ namespace Logger {
         std::cerr << get_current_datetime_string() + " E " + message << std::endl;
     }
 
+    void debug_map(std::map<std::string, std::string> &map)
+    {
+        std::map<std::string, std::string>::iterator it = map.begin();
+
+        std::cout << get_current_datetime_string() + " I {\n";
+        while (it != map.end())
+        {
+            std::cout << "    \"" << it->first << "\": \"" << it->second << "\",\n";
+            it++;
+        }
+        std::cout << "}" << std::endl;
+
+    }
 }
