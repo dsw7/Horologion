@@ -1,5 +1,29 @@
 #include "parse_config_file.h"
 
+void strip_whitespace_from_left(std::string &str)
+{
+    std::size_t found_ws = str.find_first_not_of(" ");
+
+    if (found_ws == std::string::npos)
+    {
+        return;
+    }
+
+    str.erase(0, found_ws);
+}
+
+void strip_whitespace_from_right(std::string &str)
+{
+    std::size_t found_ws = str.find_last_not_of(" ");
+
+    if (found_ws == std::string::npos)
+    {
+        return;
+    }
+
+    str.erase(found_ws + 1);
+}
+
 void parse_configs(std::string &file_contents, std::map<std::string, std::string> &raw_configs)
 {
     std::istringstream is_file(file_contents);
@@ -20,6 +44,8 @@ void parse_configs(std::string &file_contents, std::map<std::string, std::string
         // then for the extracted line, is_line, we read from the beginning of the line to =
         if (std::getline(is_line, key, '='))
         {
+            strip_whitespace_from_left(key);
+            strip_whitespace_from_right(key);
 
             std::string value;
 
