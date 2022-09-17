@@ -58,6 +58,15 @@ bool CommandTrigger::run_commands()
 
 bool CommandTrigger::suspend_system()
 {
+    if (not this->configs.suspend_type.compare("reboot") == 0)
+    {
+        write_to_file(SYSFS_STATE, this->configs.suspend_type);
+        return true;
+    }
+
+    // might replace this with /sys/power/disk write
+    // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
+
     Logger::info("Committing buffer cache to disk");
     sync();
 

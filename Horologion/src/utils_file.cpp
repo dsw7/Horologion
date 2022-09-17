@@ -15,7 +15,7 @@ bool file_exists(const std::string &filepath)
 
 void write_to_file(const std::string &filepath, std::string &message)
 {
-    Logger::info("Will write " + message + " to " + filepath);
+    Logger::info("Will write \"" + message + "\" to " + filepath);
 
     std::ofstream file;
 
