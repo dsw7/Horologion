@@ -1,5 +1,10 @@
 #include "command_trigger.h"
 
+bool CommandTrigger::check_valid_suspend_state()
+{
+    return true;
+}
+
 bool CommandTrigger::run_commands()
 {
     unsigned int delta_t = this->time_sleep - this->time_alarm;
@@ -43,6 +48,11 @@ bool CommandTrigger::main()
     }
 
     this->read_configs_from_file();
+
+    if (not this->check_valid_suspend_state())
+    {
+        return false;
+    }
 
     if (not this->wakealarm_exists())
     {

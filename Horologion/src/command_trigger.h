@@ -15,6 +15,7 @@
 class CommandTrigger: public CommandBase
 {
     private:
+        bool check_valid_suspend_state();
         bool run_commands();
         bool shutdown();
 
