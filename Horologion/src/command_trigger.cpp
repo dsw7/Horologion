@@ -15,6 +15,12 @@ void worker_run_command(std::string *target, std::string *command)
     std::array<char, 128> buffer;
     std::string subproc_output;
 
+    if (command->find_first_not_of(' ') == std::string::npos)
+    {
+        Logger::error_thread_safe("<" + *target + "> Found empty command. Doing nothing");
+        return;
+    }
+
     if (command->find(" 2>&1") == std::string::npos)
     {
         // stderr will otherwise leak out to terminal
