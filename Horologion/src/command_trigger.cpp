@@ -14,7 +14,7 @@ bool CommandTrigger::sysfs_sleep_state_files_exist()
 
 bool CommandTrigger::check_valid_suspend_state()
 {
-    if (this->configs.suspend_type.compare("reboot") == 0)
+    if (this->configs.suspend_type.compare("none") == 0)
     {
         return true;
     }
@@ -65,6 +65,12 @@ bool CommandTrigger::run_commands()
 
 void CommandTrigger::suspend_system()
 {
+    if (this->configs.suspend_type.compare("none") == 0)
+    {
+        Logger::info("ACPI signal transmission disabled. Doing nothing");
+        return;
+    }
+
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     Logger::info("Sending ACPI suspend signal to machine");
 
