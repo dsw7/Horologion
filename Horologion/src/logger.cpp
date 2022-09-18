@@ -29,6 +29,29 @@ namespace Logger {
         std::cerr << get_current_datetime_string() + " E " + message << std::endl;
     }
 
+    std::mutex mu;
+
+    void info_thread_safe(const std::string &message)
+    {
+        mu.lock();
+        std::cout << get_current_datetime_string() + " I " + message << std::endl;
+        mu.unlock();
+    }
+
+    void warning_thread_safe(const std::string &message)
+    {
+        mu.lock();
+        std::cout << get_current_datetime_string() + " W " + message << std::endl;
+        mu.unlock();
+    }
+
+    void error_thread_safe(const std::string &message)
+    {
+        mu.lock();
+        std::cerr << get_current_datetime_string() + " E " + message << std::endl;
+        mu.unlock();
+    }
+
     void debug_map(std::map<std::string, std::string> &map)
     {
         std::map<std::string, std::string>::iterator it = map.begin();
@@ -40,6 +63,5 @@ namespace Logger {
             it++;
         }
         std::cout << "}" << std::endl;
-
     }
 }
