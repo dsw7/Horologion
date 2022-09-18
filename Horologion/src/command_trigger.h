@@ -3,13 +3,6 @@
 
 #include <string>
 #include <sstream>
-#include <errno.h>
-#include <string.h>
-#include <linux/reboot.h>  // For LINUX_REBOOT_CMD_POWER_OFF
-
-// System calls
-#include <unistd.h>        // For sync(2)
-#include <sys/reboot.h>    // For reboot(2)
 
 #include "logger.h"
 #include "command_base.h"
@@ -22,7 +15,7 @@ class CommandTrigger: public CommandBase
         bool sysfs_sleep_state_files_exist();
         bool check_valid_suspend_state();
         bool run_commands();
-        bool suspend_system();
+        void suspend_system();
 
     public:
         bool main();

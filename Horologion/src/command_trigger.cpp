@@ -56,30 +56,12 @@ bool CommandTrigger::run_commands()
     return true;
 }
 
-bool CommandTrigger::suspend_system()
+void CommandTrigger::suspend_system()
 {
-    if (not this->configs.suspend_type.compare("reboot") == 0)
-    {
-        write_to_file(SYSFS_STATE, this->configs.suspend_type);
-        return true;
-    }
-
-    // might replace this with /sys/power/disk write
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
+    Logger::info("Sending ACPI suspend signal to machine");
 
-    Logger::info("Committing buffer cache to disk");
-    sync();
-
-    Logger::info("Shutting down system");
-
-    if (reboot(LINUX_REBOOT_CMD_POWER_OFF) != 0)
-    {
-        Logger::error("Failed to shut down machine");
-        Logger::error(strerror(errno));
-        return false;
-    }
-
-    return true;
+    write_to_file(SYSFS_STATE, this->configs.suspend_type);
 }
 
 bool CommandTrigger::main()
@@ -126,10 +108,6 @@ bool CommandTrigger::main()
         return false;
     }
 
-    if (not this->suspend_system())
-    {
-        return false;
-    }
-
+    this->suspend_system();
     return true;
 };
