@@ -57,8 +57,9 @@ bool CommandTrigger::check_valid_suspend_state()
 
 bool CommandTrigger::run_commands()
 {
+    unsigned int num_commands = this->configs.commands.size();
 
-    if (this->configs.commands.size() == 0)
+    if (num_commands == 0)
     {
         Logger::info("Found no commands to run. Doing nothing");
         return true;
@@ -68,6 +69,11 @@ bool CommandTrigger::run_commands()
 
     unsigned int wake_time = this->time_sleep - this->time_alarm;
     jobs.push_back(std::thread(worker_stay_awake, &wake_time));
+
+    for (unsigned int i = 0; i < num_commands; ++i)
+    {
+        Logger::info(this->configs.commands.at(i).first);
+    }
 
     for (unsigned int i = 0; i < jobs.size(); ++i)
     {
