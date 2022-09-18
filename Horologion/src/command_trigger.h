@@ -6,6 +6,8 @@
 #include <chrono>
 #include <thread>
 #include <vector>
+#include <array>
+#include <stdio.h>
 
 #include "logger.h"
 #include "command_base.h"
@@ -15,6 +17,7 @@ const std::string SYSFS_STATE = "/sys/power/state";
 // ----------------------------------------------------------------------------------------------------------
 
 void worker_stay_awake(unsigned int *wake_time);
+void worker_run_command(std::string &target, std::string &command, int *exit_code);
 
 // ----------------------------------------------------------------------------------------------------------
 

@@ -10,6 +10,32 @@ void worker_stay_awake(unsigned int *wake_time)
     Logger::info_thread_safe(std::to_string(*wake_time) + " seconds have elapsed");
 }
 
+void worker_run_command(std::string &target, std::string &command, int *exit_code)
+{
+    std::array<char, 128> buffer;
+    std::string subproc_output;
+
+    Logger::info_thread_safe("Deploying target \"" + target + "\" (" + command + ")");
+
+    FILE* pipe = popen(command.c_str(), "r");
+
+    if (!pipe)
+    {
+        Logger::error_thread_safe("Target \"" + target + "\" could not be started!");
+        *exit_code = 1;
+        return;
+    }
+
+    while (fgets(buffer.data(), 128, pipe) != NULL)
+    {
+        Logger::info_thread_safe("Reading output from target \"" + target + "\"");
+        subproc_output += buffer.data();
+    }
+
+    *exit_code = pclose(pipe);
+    Logger::info_thread_safe("Output from target \"" + target + "\": " + subproc_output);
+}
+
 // ----------------------------------------------------------------------------------------------------------
 
 bool CommandTrigger::sysfs_sleep_state_files_exist()
