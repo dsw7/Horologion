@@ -10,7 +10,7 @@ void worker_stay_awake(unsigned int *wake_time)
     Logger::info_thread_safe("<target_0> " + std::to_string(*wake_time) + " seconds have elapsed");
 }
 
-void worker_run_command(std::string *target, std::string *command, int *exit_code)
+void worker_run_command(std::string *target, std::string *command)
 {
     std::array<char, 128> buffer;
     std::string subproc_output;
@@ -22,7 +22,6 @@ void worker_run_command(std::string *target, std::string *command, int *exit_cod
     if (!pipe)
     {
         Logger::error_thread_safe("<" + *target + "> Target could not be started");
-        *exit_code = 1;
         return;
     }
 
@@ -32,7 +31,10 @@ void worker_run_command(std::string *target, std::string *command, int *exit_cod
         subproc_output += buffer.data();
     }
 
-    *exit_code = pclose(pipe);
+    if (pclose(pipe) != 0)
+    {
+        Logger::warning_thread_safe("<" + *target + "> Target exited with non-zero exit code");
+    }
 
     if (subproc_output.size() > 0)
     {
@@ -104,16 +106,13 @@ bool CommandTrigger::run_commands()
     unsigned int wake_time = this->time_sleep - this->time_alarm;
     jobs.push_back(std::thread(worker_stay_awake, &wake_time));
 
-    std::vector<int> exit_codes(num_commands);
-
     for (unsigned int i = 0; i < num_commands; ++i)
     {
         jobs.push_back(
             std::thread(
                 worker_run_command,
                 &this->configs.commands.at(i).first,
-                &this->configs.commands.at(i).second,
-                &exit_codes.at(i)
+                &this->configs.commands.at(i).second
             )
         );
     }
