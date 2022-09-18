@@ -91,14 +91,14 @@ bool CommandTrigger::check_valid_suspend_state()
     return state_found;
 }
 
-bool CommandTrigger::run_commands()
+void CommandTrigger::run_commands()
 {
     unsigned int num_commands = this->configs.commands.size();
 
     if (num_commands == 0)
     {
         Logger::info("Found no commands to run. Doing nothing");
-        return true;
+        return;
     }
 
     std::vector<std::thread> jobs;
@@ -121,8 +121,6 @@ bool CommandTrigger::run_commands()
     {
         jobs.at(i).join();
     }
-
-    return true;
 }
 
 void CommandTrigger::suspend_system()
@@ -177,12 +175,8 @@ bool CommandTrigger::main()
     }
 
     this->set_rtc_alarm();
-
-    if (not this->run_commands())
-    {
-        return false;
-    }
-
+    this->run_commands();
     this->suspend_system();
+
     return true;
 };

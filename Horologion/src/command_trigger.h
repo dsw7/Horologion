@@ -26,7 +26,7 @@ class CommandTrigger: public CommandBase
     private:
         bool sysfs_sleep_state_files_exist();
         bool check_valid_suspend_state();
-        bool run_commands();
+        void run_commands();
         void suspend_system();
 
     public:
