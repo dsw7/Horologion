@@ -15,6 +15,12 @@ void worker_run_command(std::string *target, std::string *command)
     std::array<char, 128> buffer;
     std::string subproc_output;
 
+    if (command->find(" 2>&1") == std::string::npos)
+    {
+        // stderr will otherwise leak out to terminal
+        *command += " 2>&1";
+    }
+
     Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
 
     FILE* pipe = popen(command->c_str(), "r");
