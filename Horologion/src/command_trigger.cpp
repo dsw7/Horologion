@@ -1,5 +1,17 @@
 #include "command_trigger.h"
 
+// ----------------------------------------------------------------------------------------------------------
+
+void worker_stay_awake(unsigned int &wake_time)
+{
+    Logger::info_thread_safe("Keeping system awake for " + std::to_string(wake_time) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(wake_time));
+
+    Logger::info_thread_safe(std::to_string(wake_time) + " seconds have elapsed");
+}
+
+// ----------------------------------------------------------------------------------------------------------
+
 bool CommandTrigger::sysfs_sleep_state_files_exist()
 {
     Logger::info("Checking if sysfs state file exists: " + SYSFS_STATE);

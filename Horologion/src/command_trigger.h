@@ -3,11 +3,19 @@
 
 #include <string>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 #include "logger.h"
 #include "command_base.h"
 
 const std::string SYSFS_STATE = "/sys/power/state";
+
+// ----------------------------------------------------------------------------------------------------------
+
+void worker_stay_awake(unsigned int &wake_time);
+
+// ----------------------------------------------------------------------------------------------------------
 
 class CommandTrigger: public CommandBase
 {
