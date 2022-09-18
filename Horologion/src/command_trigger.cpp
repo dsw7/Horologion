@@ -4,10 +4,10 @@
 
 void worker_stay_awake(unsigned int *wake_time)
 {
-    Logger::info_thread_safe("Keeping system awake for " + std::to_string(*wake_time) + " seconds");
+    Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*wake_time) + " seconds");
     std::this_thread::sleep_for(std::chrono::seconds(*wake_time));
 
-    Logger::info_thread_safe(std::to_string(*wake_time) + " seconds have elapsed");
+    Logger::info_thread_safe("<target_0> " + std::to_string(*wake_time) + " seconds have elapsed");
 }
 
 void worker_run_command(std::string *target, std::string *command, int *exit_code)
@@ -15,25 +15,33 @@ void worker_run_command(std::string *target, std::string *command, int *exit_cod
     std::array<char, 128> buffer;
     std::string subproc_output;
 
-    Logger::info_thread_safe("Deploying target \"" + *target + "\" (" + *command + ")");
+    Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
 
     FILE* pipe = popen(command->c_str(), "r");
 
     if (!pipe)
     {
-        Logger::error_thread_safe("Target \"" + *target + "\" could not be started!");
+        Logger::error_thread_safe("<" + *target + "> Target could not be started");
         *exit_code = 1;
         return;
     }
 
     while (fgets(buffer.data(), 128, pipe) != NULL)
     {
-        Logger::info_thread_safe("Reading output from target \"" + *target + "\"");
+        Logger::info_thread_safe("<" + *target + "> Reading output from target");
         subproc_output += buffer.data();
     }
 
     *exit_code = pclose(pipe);
-    Logger::info_thread_safe("Output from target \"" + *target + "\": " + subproc_output);
+
+    if (subproc_output.size() > 0)
+    {
+        Logger::info_thread_safe("<" + *target + "> Output from target:\n" + subproc_output);
+    }
+    else
+    {
+        Logger::info_thread_safe("<" + *target + "> No output from target");
+    }
 }
 
 // ----------------------------------------------------------------------------------------------------------
