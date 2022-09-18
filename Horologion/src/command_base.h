@@ -2,8 +2,10 @@
 #define COMMAND_BASE_H
 
 #include <string>
+#include <vector>
 #include <ctime>
 #include <map>
+#include <utility>
 #include <time.h>
 #include <unistd.h>
 
@@ -18,6 +20,7 @@ const std::time_t MINIMUM_WAKE_TIME = 90;
 
 struct Configs
 {
+    std::vector<std::pair<std::string, std::string>> commands = {};
     std::string suspend_type = "reboot";
     struct tm time_alarm = {0};
     struct tm time_sleep = {0};

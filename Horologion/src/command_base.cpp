@@ -64,6 +64,19 @@ void CommandBase::read_configs_from_file()
         }
     }
 
+    for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
+    {
+        if (it->first.find("target_") != std::string::npos)
+        {
+            std::pair<std::string, std::string> command;
+
+            command.first = it->first;
+            command.second = it->second;
+
+            this->configs.commands.push_back(command);
+        }
+    }
+
     Logger::info("Parsed raw configs: ");
     Logger::debug_map(raw_configs);
 }
