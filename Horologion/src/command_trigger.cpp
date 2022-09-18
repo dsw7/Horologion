@@ -2,12 +2,12 @@
 
 // ----------------------------------------------------------------------------------------------------------
 
-void worker_stay_awake(unsigned int &wake_time)
+void worker_stay_awake(unsigned int *wake_time)
 {
-    Logger::info_thread_safe("Keeping system awake for " + std::to_string(wake_time) + " seconds");
-    std::this_thread::sleep_for(std::chrono::seconds(wake_time));
+    Logger::info_thread_safe("Keeping system awake for " + std::to_string(*wake_time) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(*wake_time));
 
-    Logger::info_thread_safe(std::to_string(wake_time) + " seconds have elapsed");
+    Logger::info_thread_safe(std::to_string(*wake_time) + " seconds have elapsed");
 }
 
 // ----------------------------------------------------------------------------------------------------------
@@ -64,13 +64,11 @@ bool CommandTrigger::run_commands()
         return true;
     }
 
-    unsigned int delta_t = this->time_sleep - this->time_alarm;
+    unsigned int wake_time = this->time_sleep - this->time_alarm;
 
-    Logger::info("System will stay awake for " + std::to_string(delta_t) + " seconds for all subprocesses to complete");
+    std::thread t1(worker_stay_awake, &wake_time);
 
-    // replace sleep with std::this_thread::sleep_for as sleep(3) is not thread safe
-    // see https://cplusplus.com/reference/thread/this_thread/sleep_for/
-    sleep(delta_t);
+    t1.join();
 
     return true;
 }

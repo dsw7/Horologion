@@ -13,7 +13,7 @@ const std::string SYSFS_STATE = "/sys/power/state";
 
 // ----------------------------------------------------------------------------------------------------------
 
-void worker_stay_awake(unsigned int &wake_time);
+void worker_stay_awake(unsigned int *wake_time);
 
 // ----------------------------------------------------------------------------------------------------------
 

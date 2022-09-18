@@ -25,6 +25,10 @@ message(STATUS "Detected ${CMAKE_SYSTEM}")
 # Use C++ 17 or later
 set(CMAKE_CXX_STANDARD 17)
 
+# Support threading
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 # Set binary name
 set(OUTPUT_NAME horolog)
 
@@ -47,3 +51,5 @@ add_executable(
     "src/command_set_alarm.cpp"
     "src/command_trigger.cpp"
 )
+
+target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)
