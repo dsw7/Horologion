@@ -10,30 +10,30 @@ void worker_stay_awake(unsigned int *wake_time)
     Logger::info_thread_safe(std::to_string(*wake_time) + " seconds have elapsed");
 }
 
-void worker_run_command(std::string &target, std::string &command, int *exit_code)
+void worker_run_command(std::string *target, std::string *command, int *exit_code)
 {
     std::array<char, 128> buffer;
     std::string subproc_output;
 
-    Logger::info_thread_safe("Deploying target \"" + target + "\" (" + command + ")");
+    Logger::info_thread_safe("Deploying target \"" + *target + "\" (" + *command + ")");
 
-    FILE* pipe = popen(command.c_str(), "r");
+    FILE* pipe = popen(command->c_str(), "r");
 
     if (!pipe)
     {
-        Logger::error_thread_safe("Target \"" + target + "\" could not be started!");
+        Logger::error_thread_safe("Target \"" + *target + "\" could not be started!");
         *exit_code = 1;
         return;
     }
 
     while (fgets(buffer.data(), 128, pipe) != NULL)
     {
-        Logger::info_thread_safe("Reading output from target \"" + target + "\"");
+        Logger::info_thread_safe("Reading output from target \"" + *target + "\"");
         subproc_output += buffer.data();
     }
 
     *exit_code = pclose(pipe);
-    Logger::info_thread_safe("Output from target \"" + target + "\": " + subproc_output);
+    Logger::info_thread_safe("Output from target \"" + *target + "\": " + subproc_output);
 }
 
 // ----------------------------------------------------------------------------------------------------------
@@ -96,9 +96,18 @@ bool CommandTrigger::run_commands()
     unsigned int wake_time = this->time_sleep - this->time_alarm;
     jobs.push_back(std::thread(worker_stay_awake, &wake_time));
 
+    std::vector<int> exit_codes(num_commands);
+
     for (unsigned int i = 0; i < num_commands; ++i)
     {
-        Logger::info(this->configs.commands.at(i).first);
+        jobs.push_back(
+            std::thread(
+                worker_run_command,
+                &this->configs.commands.at(i).first,
+                &this->configs.commands.at(i).second,
+                &exit_codes.at(i)
+            )
+        );
     }
 
     for (unsigned int i = 0; i < jobs.size(); ++i)
