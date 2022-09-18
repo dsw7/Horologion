@@ -64,11 +64,15 @@ bool CommandTrigger::run_commands()
         return true;
     }
 
+    std::vector<std::thread> jobs;
+
     unsigned int wake_time = this->time_sleep - this->time_alarm;
+    jobs.push_back(std::thread(worker_stay_awake, &wake_time));
 
-    std::thread t1(worker_stay_awake, &wake_time);
-
-    t1.join();
+    for (unsigned int i = 0; i < jobs.size(); ++i)
+    {
+        jobs.at(i).join();
+    }
 
     return true;
 }
