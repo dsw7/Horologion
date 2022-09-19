@@ -87,8 +87,8 @@ remove_log()
 
 reset_alarm()
 {
-    if [ -f horolog ];
-        then horolog reset-alarm
+    if [ -f ${DST_BINARY}/${BINARY_NAME} ];
+        then ${DST_BINARY}/${BINARY_NAME} reset-alarm
     fi
 }
 
