@@ -34,10 +34,6 @@ bool CommandBase::read_configs_from_file()
         {
             this->configs.time_alarm.tm_min = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time-alarm-second") == 0)
-        {
-            this->configs.time_alarm.tm_sec = atoi(it->second.c_str());
-        }
         else if (it->first.compare("time-sleep-hour") == 0)
         {
             this->configs.time_sleep.tm_hour = atoi(it->second.c_str());
@@ -45,10 +41,6 @@ bool CommandBase::read_configs_from_file()
         else if (it->first.compare("time-sleep-minute") == 0)
         {
             this->configs.time_sleep.tm_min = atoi(it->second.c_str());
-        }
-        else if (it->first.compare("time-sleep-second") == 0)
-        {
-            this->configs.time_sleep.tm_sec = atoi(it->second.c_str());
         }
         else if (it->first.compare("suspend-type") == 0)
         {
@@ -87,7 +79,6 @@ void CommandBase::set_time_alarm()
 {
     Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
     Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
-    Logger::info("Parsed wake up second (tm_sec): " + std::to_string(this->configs.time_alarm.tm_sec));
 
     this->time_alarm = compute_epoch_wakeup_time(
         this->configs.time_alarm.tm_hour,
@@ -102,7 +93,6 @@ void CommandBase::set_time_sleep()
 {
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
-    Logger::info("Parsed sleep second (tm_sec): " + std::to_string(this->configs.time_sleep.tm_sec));
 
     this->time_sleep = compute_epoch_sleep_time(
         this->configs.time_sleep.tm_hour,
