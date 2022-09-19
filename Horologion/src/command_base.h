@@ -23,8 +23,12 @@ struct Configs
 {
     std::vector<std::pair<std::string, std::string>> commands = {};
     std::string suspend_type = "reboot";
+
     struct tm time_alarm = {0};
     struct tm time_sleep = {0};
+
+    std::string path_to_binary = "/usr/bin/horolog";
+    std::string path_to_log = "/var/log/horolog.log";
 };
 
 class CommandBase
