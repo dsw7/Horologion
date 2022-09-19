@@ -80,7 +80,11 @@ bool CommandTrigger::check_valid_suspend_state()
     }
 
     std::string sysfs_states, state;
-    read_file(SYSFS_STATE, sysfs_states);
+
+    if (not read_file(SYSFS_STATE, sysfs_states))
+    {
+        return false;
+    }
 
     std::stringstream ss_states(sysfs_states);
 
