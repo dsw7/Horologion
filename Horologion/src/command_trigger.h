@@ -24,7 +24,6 @@ void worker_run_command(std::string *target, std::string *command);
 class CommandTrigger: public CommandBase
 {
     private:
-        bool sysfs_sleep_state_files_exist();
         bool check_valid_suspend_state();
         void run_commands();
         void suspend_system();

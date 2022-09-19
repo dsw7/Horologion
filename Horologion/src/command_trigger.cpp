@@ -60,18 +60,6 @@ void worker_run_command(std::string *target, std::string *command)
 
 // ----------------------------------------------------------------------------------------------------------
 
-bool CommandTrigger::sysfs_sleep_state_files_exist()
-{
-    Logger::info("Checking if sysfs state file exists: " + SYSFS_STATE);
-
-    if (not file_exists(SYSFS_STATE))
-    {
-        return false;
-    }
-
-    return true;
-}
-
 bool CommandTrigger::check_valid_suspend_state()
 {
     if (this->configs.suspend_type.compare("none") == 0)
@@ -161,11 +149,6 @@ bool CommandTrigger::main()
     }
 
     if (not this->read_configs_from_file())
-    {
-        return false;
-    }
-
-    if (not this->sysfs_sleep_state_files_exist())
     {
         return false;
     }
