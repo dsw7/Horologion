@@ -142,7 +142,5 @@ bool CommandBase::set_rtc_alarm()
     }
 
     std::string str_wakeup_time = std::to_string(this->time_alarm);
-    write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
-
-    return true;
+    return write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
 }
