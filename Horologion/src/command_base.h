@@ -17,7 +17,7 @@
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string PROG_CONFIG = "/etc/horolog.ini";
 const std::string ETC_CRONTAB = "/etc/cron.d/horolog";
-const std::time_t MINIMUM_WAKE_TIME = 60;
+const std::time_t MINIMUM_WAKE_TIME = 120;
 
 struct Configs
 {
