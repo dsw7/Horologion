@@ -13,6 +13,7 @@ void CommandSetAlarm::set_cron_job()
 
     cron_str += PATH_TO_BINARY + " trigger >> ";
     cron_str += PATH_TO_LOG + " 2>&1";
+    cron_str += "\n"; // cron.d will ignore file if newline does not exist
 
     overwrite_file(ETC_CRONTAB, cron_str);
 }
