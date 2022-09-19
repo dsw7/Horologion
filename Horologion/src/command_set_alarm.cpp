@@ -7,12 +7,10 @@ bool CommandSetAlarm::main()
         return false;
     }
 
-    if (not this->config_exists())
+    if (not this->read_configs_from_file())
     {
         return false;
     }
-
-    this->read_configs_from_file();
 
     this->set_time_alarm();
     this->set_time_sleep();

@@ -156,12 +156,10 @@ bool CommandTrigger::main()
         return false;
     }
 
-    if (not this->config_exists())
+    if (not this->read_configs_from_file())
     {
         return false;
     }
-
-    this->read_configs_from_file();
 
     if (not this->sysfs_sleep_state_files_exist())
     {

@@ -23,11 +23,15 @@ bool CommandBase::config_exists()
     return true;
 }
 
-void CommandBase::read_configs_from_file()
+bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
 
-    read_file(PROG_CONFIG, file_contents);
+    if (not read_file(PROG_CONFIG, file_contents))
+    {
+        Logger::error("Could not load configurations. Cannot continue");
+        return false;
+    }
 
     std::map<std::string, std::string> raw_configs;
     parse_configs(file_contents, raw_configs);
@@ -79,6 +83,8 @@ void CommandBase::read_configs_from_file()
 
     Logger::info("Parsed raw configs: ");
     Logger::debug_map(raw_configs);
+
+    return true;
 }
 
 bool CommandBase::reset_rtc_alarm()
