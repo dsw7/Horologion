@@ -6,7 +6,7 @@ void CommandSetAlarm::set_cron_job()
 
     std::string cron_str;
 
-    cron_str += std::to_string(this->configs.time_alarm.tm_min + 1);
+    cron_str += std::to_string(this->configs.time_alarm.tm_min + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN);
     cron_str += " ";
     cron_str += std::to_string(this->configs.time_alarm.tm_hour);
     cron_str += " * * * root ";
