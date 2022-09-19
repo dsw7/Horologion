@@ -83,7 +83,7 @@ void CommandBase::set_time_alarm()
     this->time_alarm = compute_epoch_wakeup_time(
         this->configs.time_alarm.tm_hour,
         this->configs.time_alarm.tm_min,
-        this->configs.time_alarm.tm_sec
+        this->configs.time_alarm.tm_sec  // set seconds to zero
     );
 
     Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_alarm));
@@ -97,7 +97,7 @@ void CommandBase::set_time_sleep()
     this->time_sleep = compute_epoch_sleep_time(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
-        this->configs.time_sleep.tm_sec
+        this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
     Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
