@@ -5,6 +5,9 @@
 
 class CommandSetAlarm: public CommandBase
 {
+    private:
+        void set_cron_job();
+
     public:
         bool main();
 };

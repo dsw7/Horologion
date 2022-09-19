@@ -6,7 +6,6 @@ bool file_exists(const std::string &filepath)
 
     if (stat(filepath.c_str(), &info) != 0)
     {
-        Logger::error(strerror(errno));
         return false;
     }
 
@@ -30,6 +29,21 @@ bool write_to_file(const std::string &filepath, std::string &message)
     file.close();
 
     return true;
+}
+
+void overwrite_file(const std::string &filepath, std::string &message)
+{
+    if (not file_exists(filepath))
+    {
+        Logger::info("File \"" + filepath + "\" does not exist! Creating new file");
+    }
+
+    Logger::info("Will write \"" + message + "\" to " + filepath);
+    std::ofstream file;
+
+    file.open(filepath);
+    file << message;
+    file.close();
 }
 
 bool read_file(const std::string &filepath, std::string &file_contents)

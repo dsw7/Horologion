@@ -44,7 +44,6 @@ class CommandBase
         void set_time_sleep();
         bool sanitize_wake_sleep_cycle();
         bool set_rtc_alarm();
-        bool set_cron_job();
 
     public:
         Configs configs;

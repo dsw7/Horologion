@@ -142,19 +142,3 @@ bool CommandBase::set_rtc_alarm()
     std::string str_wakeup_time = std::to_string(this->time_alarm);
     return write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
 }
-
-bool CommandBase::set_cron_job()
-{
-    std::string cron_str;
-
-    cron_str += std::to_string(this->configs.time_alarm.tm_min + 1);
-    cron_str += " ";
-    cron_str += std::to_string(this->configs.time_alarm.tm_hour);
-    cron_str += " * * * root ";
-
-    cron_str += this->configs.path_to_binary + " trigger >> ";
-    cron_str += this->configs.path_to_log + " 2>&1";
-
-    Logger::info(cron_str);
-    return true;
-}
