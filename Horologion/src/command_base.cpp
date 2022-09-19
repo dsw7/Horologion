@@ -46,6 +46,18 @@ bool CommandBase::read_configs_from_file()
         {
             this->configs.suspend_type = it->second.c_str();
         }
+        else if (it->first.compare("path-to-binary") == 0)
+        {
+            this->configs.path_to_binary = it->second.c_str();
+        }
+        else if (it->first.compare("path-to-log") == 0)
+        {
+            this->configs.path_to_log = it->second.c_str();
+        }
+        else
+        {
+            Logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
+        }
     }
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
