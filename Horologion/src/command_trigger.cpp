@@ -127,18 +127,18 @@ void CommandTrigger::run_commands()
     }
 }
 
-void CommandTrigger::suspend_system()
+bool CommandTrigger::suspend_system()
 {
     if (this->configs.suspend_type.compare("none") == 0)
     {
         Logger::info("ACPI signal transmission disabled. Doing nothing");
-        return;
+        return true;
     }
 
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     Logger::info("Sending ACPI suspend signal to machine");
 
-    write_to_file(SYSFS_STATE, this->configs.suspend_type);
+    return write_to_file(SYSFS_STATE, this->configs.suspend_type);
 }
 
 bool CommandTrigger::main()
@@ -168,7 +168,6 @@ bool CommandTrigger::main()
 
     this->set_rtc_alarm();
     this->run_commands();
-    this->suspend_system();
 
-    return true;
+    return this->suspend_system();
 };

@@ -26,7 +26,7 @@ class CommandTrigger: public CommandBase
     private:
         bool check_valid_suspend_state();
         void run_commands();
-        void suspend_system();
+        bool suspend_system();
 
     public:
         bool main();
