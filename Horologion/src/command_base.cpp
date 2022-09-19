@@ -54,15 +54,7 @@ bool CommandBase::read_configs_from_file()
         {
             this->configs.path_to_log = it->second.c_str();
         }
-        else
-        {
-            Logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
-        }
-    }
-
-    for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
-    {
-        if (it->first.find("target_") != std::string::npos)
+        else if (it->first.find("target_") != std::string::npos)
         {
             std::pair<std::string, std::string> command;
 
@@ -70,6 +62,10 @@ bool CommandBase::read_configs_from_file()
             command.second = it->second;
 
             this->configs.commands.push_back(command);
+        }
+        else
+        {
+            Logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
         }
     }
 
