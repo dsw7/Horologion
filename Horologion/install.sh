@@ -10,6 +10,8 @@ CONFIG_FILE=horolog.ini
 SRC_CONFIG=$(dirname $0)/cfg
 DST_CONFIG=/etc
 
+LOG_FILEPATH=/var/log/horolog.log
+
 echo -e "\e[1m\e[4mHorologion Sleep Wake Cycle Management Software\e[0m\n"
 
 if [ $(id --user) -ne 0 ];
@@ -43,7 +45,7 @@ remove_binary()
 {
     echo "Removing ${BINARY_NAME} binary from ${DST_BINARY}/"
 
-    rm --verbose ${DST_BINARY}/${BINARY_NAME}
+    rm --force --verbose ${DST_BINARY}/${BINARY_NAME}
 
     if [ $? -ne 0 ];
         then exit 1
@@ -65,10 +67,28 @@ remove_config_file()
 {
     echo "Removing ${CONFIG_FILE} from ${DST_CONFIG}/"
 
-    rm --verbose ${DST_CONFIG}/${CONFIG_FILE}
+    rm --force --verbose ${DST_CONFIG}/${CONFIG_FILE}
 
     if [ $? -ne 0 ];
         then exit 1
+    fi
+}
+
+remove_log()
+{
+    echo "Removing ${LOG_FILEPATH}"
+
+    rm --force --verbose ${LOG_FILEPATH}
+
+    if [ $? -ne 0 ];
+        then exit 1
+    fi
+}
+
+reset_alarm()
+{
+    if [ -f horolog ];
+        then horolog reset-alarm
     fi
 }
 
@@ -81,7 +101,9 @@ install()
 
 uninstall()
 {
+    reset_alarm
     remove_config_file
+    remove_log
     remove_binary
 }
 
