@@ -81,6 +81,7 @@ void CommandBase::read_configs_from_file()
     Logger::debug_map(raw_configs);
 }
 
+// remove this
 bool CommandBase::wakealarm_exists()
 {
     Logger::info("Checking if wakealarm file exists: " + SYSFS_WAKEALARM);
@@ -93,12 +94,13 @@ bool CommandBase::wakealarm_exists()
     return true;
 }
 
-void CommandBase::reset_rtc_alarm()
+bool CommandBase::reset_rtc_alarm()
 {
     Logger::info("Resetting alarm");
 
     std::string reset_str = "0";
-    write_to_file(SYSFS_WAKEALARM, reset_str);
+
+    return write_to_file(SYSFS_WAKEALARM, reset_str);
 }
 
 void CommandBase::set_time_alarm()
@@ -151,10 +153,16 @@ bool CommandBase::sanitize_wake_sleep_cycle()
     return true;
 }
 
-void CommandBase::set_rtc_alarm()
+bool CommandBase::set_rtc_alarm()
 {
-    this->reset_rtc_alarm();
+    if (not this->reset_rtc_alarm())
+    {
+        Logger::error("Failed to reset alarm");
+        return false;
+    }
 
     std::string str_wakeup_time = std::to_string(this->time_alarm);
     write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
+
+    return true;
 }

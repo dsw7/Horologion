@@ -12,7 +12,5 @@ bool CommandResetAlarm::main()
         return false;
     }
 
-    this->reset_rtc_alarm();
-
-    return true;
+    return this->reset_rtc_alarm();
 };

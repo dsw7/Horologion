@@ -37,11 +37,11 @@ class CommandBase
         bool config_exists();
         void read_configs_from_file();
         bool wakealarm_exists();
-        void reset_rtc_alarm();
+        bool reset_rtc_alarm();
         void set_time_alarm();
         void set_time_sleep();
         bool sanitize_wake_sleep_cycle();
-        void set_rtc_alarm();
+        bool set_rtc_alarm();
 
     public:
         Configs configs;

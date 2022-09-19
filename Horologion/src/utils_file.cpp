@@ -13,8 +13,14 @@ bool file_exists(const std::string &filepath)
     return true;
 }
 
-void write_to_file(const std::string &filepath, std::string &message)
+bool write_to_file(const std::string &filepath, std::string &message)
 {
+    if (not file_exists(filepath))
+    {
+        Logger::error("File \"" + filepath + "\" does not exist!");
+        return false;
+    }
+
     Logger::info("Will write \"" + message + "\" to " + filepath);
 
     std::ofstream file;
@@ -22,6 +28,8 @@ void write_to_file(const std::string &filepath, std::string &message)
     file.open(filepath);
     file << message;
     file.close();
+
+    return true;
 }
 
 void read_file(const std::string &filepath, std::string &file_contents)
