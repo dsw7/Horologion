@@ -67,3 +67,22 @@ bool read_file(const std::string &filepath, std::string &file_contents)
     filestream.close();
     return true;
 }
+
+bool remove_file(const std::string &filepath)
+{
+    if (not file_exists(filepath))
+    {
+        Logger::error("File \"" + filepath + "\" does not exist!");
+        return false;
+    }
+
+    Logger::info("Will remove file \"" + filepath + "\"");
+
+    if (remove(filepath.c_str()) != 0)
+    {
+        Logger::error(strerror(errno));
+        return false;
+    }
+
+    return true;
+}

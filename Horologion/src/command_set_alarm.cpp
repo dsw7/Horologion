@@ -2,6 +2,8 @@
 
 void CommandSetAlarm::set_cron_job()
 {
+    Logger::info("Setting up cron job");
+
     std::string cron_str;
 
     cron_str += std::to_string(this->configs.time_alarm.tm_min + 1);

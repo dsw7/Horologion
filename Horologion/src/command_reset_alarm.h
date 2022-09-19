@@ -5,6 +5,9 @@
 
 class CommandResetAlarm: public CommandBase
 {
+    private:
+        void unset_cron_job();
+
     public:
         bool main();
 };
