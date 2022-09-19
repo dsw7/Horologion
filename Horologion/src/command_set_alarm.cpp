@@ -22,5 +22,5 @@ bool CommandSetAlarm::main()
 
     this->set_rtc_alarm();
 
-    return true;
+    return this->set_cron_job();
 };
