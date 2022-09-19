@@ -81,23 +81,9 @@ void CommandBase::read_configs_from_file()
     Logger::debug_map(raw_configs);
 }
 
-// remove this
-bool CommandBase::wakealarm_exists()
-{
-    Logger::info("Checking if wakealarm file exists: " + SYSFS_WAKEALARM);
-
-    if (not file_exists(SYSFS_WAKEALARM))
-    {
-        return false;
-    }
-
-    return true;
-}
-
 bool CommandBase::reset_rtc_alarm()
 {
     Logger::info("Resetting alarm");
-
     std::string reset_str = "0";
 
     return write_to_file(SYSFS_WAKEALARM, reset_str);

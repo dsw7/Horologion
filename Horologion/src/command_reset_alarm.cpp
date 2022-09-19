@@ -7,10 +7,5 @@ bool CommandResetAlarm::main()
         return false;
     }
 
-    if (not this->wakealarm_exists())
-    {
-        return false;
-    }
-
     return this->reset_rtc_alarm();
 };

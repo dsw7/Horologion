@@ -14,11 +14,6 @@ bool CommandSetAlarm::main()
 
     this->read_configs_from_file();
 
-    if (not this->wakealarm_exists())
-    {
-        return false;
-    }
-
     this->set_time_alarm();
     this->set_time_sleep();
 

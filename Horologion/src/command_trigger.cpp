@@ -173,11 +173,6 @@ bool CommandTrigger::main()
         return false;
     }
 
-    if (not this->wakealarm_exists())
-    {
-        return false;
-    }
-
     this->set_time_alarm();
     this->set_time_sleep();
 
