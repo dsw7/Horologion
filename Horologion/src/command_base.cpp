@@ -46,14 +46,6 @@ bool CommandBase::read_configs_from_file()
         {
             this->configs.suspend_type = it->second.c_str();
         }
-        else if (it->first.compare("path-to-binary") == 0)
-        {
-            this->configs.path_to_binary = it->second.c_str();
-        }
-        else if (it->first.compare("path-to-log") == 0)
-        {
-            this->configs.path_to_log = it->second.c_str();
-        }
         else if (it->first.find("target_") != std::string::npos)
         {
             std::pair<std::string, std::string> command;
