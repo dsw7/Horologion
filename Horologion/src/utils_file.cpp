@@ -32,8 +32,14 @@ bool write_to_file(const std::string &filepath, std::string &message)
     return true;
 }
 
-void read_file(const std::string &filepath, std::string &file_contents)
+bool read_file(const std::string &filepath, std::string &file_contents)
 {
+    if (not file_exists(filepath))
+    {
+        Logger::error("File \"" + filepath + "\" does not exist!");
+        return false;
+    }
+
     Logger::info("Reading " + filepath);
 
     std::ifstream filestream(filepath);
@@ -45,4 +51,5 @@ void read_file(const std::string &filepath, std::string &file_contents)
     }
 
     filestream.close();
+    return true;
 }
