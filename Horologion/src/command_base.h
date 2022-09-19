@@ -34,7 +34,6 @@ class CommandBase
         std::time_t time_sleep;
 
         bool is_running_as_root();
-        bool config_exists();
         bool read_configs_from_file();
         bool reset_rtc_alarm();
         void set_time_alarm();

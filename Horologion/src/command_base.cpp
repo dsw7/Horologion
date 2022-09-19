@@ -11,18 +11,6 @@ bool CommandBase::is_running_as_root()
     return true;
 }
 
-bool CommandBase::config_exists()
-{
-    Logger::info("Checking if program configuration file exists: " + PROG_CONFIG);
-
-    if (not file_exists(PROG_CONFIG))
-    {
-        return false;
-    }
-
-    return true;
-}
-
 bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
