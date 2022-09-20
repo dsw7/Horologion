@@ -158,6 +158,11 @@ bool CommandTrigger::main()
         return false;
     }
 
+    if (not this->is_config_file_input_sane())
+    {
+        return false;
+    }
+
     if (not this->check_valid_suspend_state())
     {
         return false;
