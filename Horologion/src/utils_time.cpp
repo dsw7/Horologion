@@ -7,7 +7,14 @@ std::time_t get_current_epoch_time()
 
 std::string epoch_time_to_ascii_time(std::time_t &epoch_time)
 {
-    return std::string(std::asctime(std::localtime(&epoch_time)));
+    std::string ascii_time = std::string(std::asctime(std::localtime(&epoch_time)));
+
+    if (not ascii_time.empty() and ascii_time[ascii_time.length() - 1] == '\n')
+    {
+        ascii_time.erase(ascii_time.length() - 1);
+    }
+
+    return ascii_time;
 }
 
 std::time_t compute_epoch_wakeup_time(int &hour, int &minute, int &second)
