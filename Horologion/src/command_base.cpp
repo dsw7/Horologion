@@ -67,6 +67,35 @@ bool CommandBase::read_configs_from_file()
     return true;
 }
 
+bool CommandBase::is_config_file_input_sane()
+{
+    if (this->configs.time_alarm.tm_hour < 0 or this->configs.time_alarm.tm_hour > 23)
+    {
+        Logger::error("Invalid input for \"time-alarm-hour\" field. Input must be between [0, 23] hours");
+        return false;
+    }
+
+    if (this->configs.time_alarm.tm_min < 0 or this->configs.time_alarm.tm_min > 59)
+    {
+        Logger::error("Invalid input for \"time-alarm-minute\" field. Input must be between [0, 59] minutes");
+        return false;
+    }
+
+    if (this->configs.time_sleep.tm_hour < 0 or this->configs.time_sleep.tm_hour > 23)
+    {
+        Logger::error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
+        return false;
+    }
+
+    if (this->configs.time_sleep.tm_min < 0 or this->configs.time_sleep.tm_min > 59)
+    {
+        Logger::error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
+        return false;
+    }
+
+    return true;
+}
+
 bool CommandBase::reset_rtc_alarm()
 {
     Logger::info("Resetting alarm");

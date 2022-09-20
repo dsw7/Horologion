@@ -37,6 +37,7 @@ class CommandBase
 
         bool is_running_as_root();
         bool read_configs_from_file();
+        bool is_config_file_input_sane();
         bool reset_rtc_alarm();
         void set_time_alarm();
         void set_time_sleep();

@@ -40,6 +40,11 @@ bool CommandSetAlarm::main()
         return false;
     }
 
+    if (not this->is_config_file_input_sane())
+    {
+        return false;
+    }
+
     this->set_time_alarm();
     this->set_time_sleep();
 
