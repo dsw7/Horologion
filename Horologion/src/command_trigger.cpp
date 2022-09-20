@@ -178,5 +178,11 @@ bool CommandTrigger::main()
     this->set_rtc_alarm();
     this->run_commands();
 
-    return this->suspend_system();
+    if (not this->suspend_system())
+    {
+        return false;
+    }
+
+    Logger::info("Cycle complete!");
+    return true;
 };
