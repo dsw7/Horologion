@@ -17,6 +17,28 @@ std::string epoch_time_to_ascii_time(std::time_t &epoch_time)
     return ascii_time;
 }
 
+std::time_t get_epoch_time_from_configs(int &hour, int &minute, int &second)
+{
+    std::time_t now = get_current_epoch_time();
+    std::tm *tm_time = std::localtime(&now);
+
+    tm_time->tm_hour = hour;
+    tm_time->tm_min = minute;
+    tm_time->tm_sec = second;
+
+    return mktime(tm_time);
+}
+
+bool wake_time_is_earlier_than_current_time(std::time_t &wake_time)
+{
+    if (wake_time <= get_current_epoch_time())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 std::time_t compute_epoch_wakeup_time(int &hour, int &minute, int &second)
 {
     std::time_t now = get_current_epoch_time();
