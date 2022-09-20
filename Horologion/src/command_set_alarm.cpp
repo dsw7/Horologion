@@ -45,8 +45,7 @@ bool CommandSetAlarm::main()
         return false;
     }
 
-    this->set_time_alarm();
-    this->set_time_sleep();
+    this->compute_wake_sleep_window();
 
     if (not this->sanitize_wake_sleep_cycle())
     {

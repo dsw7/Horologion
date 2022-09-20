@@ -39,8 +39,7 @@ class CommandBase
         bool read_configs_from_file();
         bool is_config_file_input_sane();
         bool reset_rtc_alarm();
-        void set_time_alarm();
-        void set_time_sleep();
+        void compute_wake_sleep_window();
         bool sanitize_wake_sleep_cycle();
         bool set_rtc_alarm();
 
