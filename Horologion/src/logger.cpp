@@ -16,17 +16,17 @@ namespace Logger {
 
     void info(const std::string &message)
     {
-        std::cout << get_current_datetime_string() + " I " + message << std::endl;
+        std::cout << get_current_datetime_string() + LOG_INFO + message << std::endl;
     }
 
     void warning(const std::string &message)
     {
-        std::cout << get_current_datetime_string() + " W " + message << std::endl;
+        std::cout << get_current_datetime_string() + LOG_WARNING + message << std::endl;
     }
 
     void error(const std::string &message)
     {
-        std::cerr << get_current_datetime_string() + " E " + message << std::endl;
+        std::cerr << get_current_datetime_string() + LOG_ERROR + message << std::endl;
     }
 
     std::mutex mu;
@@ -34,21 +34,21 @@ namespace Logger {
     void info_thread_safe(const std::string &message)
     {
         mu.lock();
-        std::cout << get_current_datetime_string() + " I " + message << std::endl;
+        std::cout << get_current_datetime_string() + LOG_INFO + message << std::endl;
         mu.unlock();
     }
 
     void warning_thread_safe(const std::string &message)
     {
         mu.lock();
-        std::cout << get_current_datetime_string() + " W " + message << std::endl;
+        std::cout << get_current_datetime_string() + LOG_WARNING + message << std::endl;
         mu.unlock();
     }
 
     void error_thread_safe(const std::string &message)
     {
         mu.lock();
-        std::cerr << get_current_datetime_string() + " E " + message << std::endl;
+        std::cerr << get_current_datetime_string() + LOG_ERROR + message << std::endl;
         mu.unlock();
     }
 
@@ -56,7 +56,7 @@ namespace Logger {
     {
         std::map<std::string, std::string>::iterator it = map.begin();
 
-        std::cout << get_current_datetime_string() + " I {\n";
+        std::cout << get_current_datetime_string() + LOG_INFO + "{\n";
         while (it != map.end())
         {
             std::cout << "    \"" << it->first << "\": \"" << it->second << "\",\n";

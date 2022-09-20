@@ -6,8 +6,13 @@
 #include <map>
 #include <mutex>
 #include <time.h>
+#include <unistd.h>
 
 std::string get_current_datetime_string();
+
+const std::string LOG_INFO = " " + std::to_string(getpid()) + " I ";
+const std::string LOG_WARNING = " " + std::to_string(getpid()) + " W ";
+const std::string LOG_ERROR = " " + std::to_string(getpid()) + " E ";
 
 namespace Logger
 {
