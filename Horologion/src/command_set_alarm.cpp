@@ -6,9 +6,19 @@ void CommandSetAlarm::set_cron_job()
 
     std::string cron_str;
 
-    cron_str += std::to_string(this->configs.time_alarm.tm_min + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN);
+    unsigned int tm_min_with_delay = this->configs.time_alarm.tm_min + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN;
+    unsigned int tm_hour_with_delay = this->configs.time_alarm.tm_hour;
+
+    // 59 + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN can exceed 59
+    if (tm_min_with_delay >= 60)
+    {
+        tm_min_with_delay -= 60;
+        tm_hour_with_delay += 1;
+    }
+
+    cron_str += std::to_string(tm_min_with_delay);
     cron_str += " ";
-    cron_str += std::to_string(this->configs.time_alarm.tm_hour);
+    cron_str += std::to_string(tm_hour_with_delay);
     cron_str += " * * * root ";
 
     cron_str += PATH_TO_BINARY + " trigger >> ";
