@@ -17,6 +17,7 @@
 const std::string  SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string  PROG_CONFIG = "/etc/horolog.ini";
 const std::string  ETC_CRONTAB = "/etc/cron.d/horolog";
+const unsigned int SECONDS_PER_DAY = 86400;
 const unsigned int DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN = 1;
 const std::time_t  MINIMUM_WAKE_TIME = 60 + (DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN * 60);
 
@@ -39,8 +40,7 @@ class CommandBase
         bool read_configs_from_file();
         bool is_config_file_input_sane();
         bool reset_rtc_alarm();
-        void set_time_alarm();
-        void set_time_sleep();
+        void compute_wake_sleep_window();
         bool sanitize_wake_sleep_cycle();
         bool set_rtc_alarm();
 

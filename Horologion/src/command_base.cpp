@@ -104,31 +104,33 @@ bool CommandBase::reset_rtc_alarm()
     return write_to_file(SYSFS_WAKEALARM, reset_str);
 }
 
-void CommandBase::set_time_alarm()
+void CommandBase::compute_wake_sleep_window()
 {
     Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
     Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
 
-    this->time_alarm = compute_epoch_wakeup_time(
+    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
+    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
+
+    this->time_alarm = get_epoch_time_from_configs(
         this->configs.time_alarm.tm_hour,
         this->configs.time_alarm.tm_min,
         this->configs.time_alarm.tm_sec  // set seconds to zero
     );
 
-    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_alarm));
-}
-
-void CommandBase::set_time_sleep()
-{
-    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
-    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
-
-    this->time_sleep = compute_epoch_sleep_time(
+    this->time_sleep = get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
+    if (wake_time_is_earlier_than_current_time(this->time_alarm))
+    {
+        this->time_alarm += SECONDS_PER_DAY;
+        this->time_sleep += SECONDS_PER_DAY;
+    }
+
+    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_alarm));
     Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
 }
 
