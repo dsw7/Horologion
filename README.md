@@ -18,9 +18,11 @@ next calendar day. The following cycle depicts the program's daily rhythm:
 
 | Day | Time   | Action |
 | --- | ------ | ------ |
-| 1   | $t_{w1}$  | System wakes up |
-| 1   | $t_w1 + 60\ s$  | `cron` job is triggered which runs `horolog` binary |
-| 1   | $t_w1 + 60 s$  | `horolog` binary sets alarm for $t_w1 + 86400 s$ |
+| 1 | $t_{w1}$ | System wakes up |
+| 1 | $t_{w1} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
+| 1 | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ |
+| 1 | $t_{w1} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| 1 | $t_{s1}$ | `horolog` process sends ACPI suspend signal to machine |
 
 
 
