@@ -14,11 +14,13 @@ suspending the machine.
 ## How it works
 The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
 host wakes up and is suspended, respectively. The system also assumes that $t_s$ does not cross into the
-next calendar day. The cycle represents
+next calendar day. The following cycle depicts the program's daily rhythm:
 
-| File/directory | Description |
-| -------------- | ----------- |
-| $t_w$  | Project configuration file |
+| Day | Time   | Action |
+| --- | ------ | ------ |
+| 1   | $t_w1$  | System wakes up |
+| 1   | $t_w1 + 60 s$  | `cron` job is triggered which runs `horolog` binary |
+| 1   | $t_w1 + 60 s$  | `horolog` binary sets alarm for $t_w1 + 86400 s$ |
 
 
 
