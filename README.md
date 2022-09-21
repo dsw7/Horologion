@@ -18,22 +18,22 @@ next calendar day. The following cycle depicts the program's daily rhythm:
 
 | Day | Time   | Action |
 | --- | ------ | ------ |
-| 1 | $t_{w1}$ | System wakes up |
-| 1 | $t_{w1} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| 1 | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ |
-| 1 | $t_{w1} + 60\ s$ | `horolog` process runs subprocesses (targets) |
-| 1 | $t_{s1}$ | `horolog` process sends ACPI suspend signal to machine |
-| 2 | $t_{w2}$ | System wakes up (this value is equal to $t_{w1} + 86400\ s$) |
-| 2 | $t_{w2} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| 2 | $t_{w2} + 60\ s$ | `horolog` process sets alarm for $t_{w2} + 86400\ s$ |
-| 2 | $t_{w2} + 60\ s$ | `horolog` process runs subprocesses (targets) |
-| 2 | $t_{s2}$ | `horolog` process sends ACPI suspend signal to machine |
+| $1$ | $t_{w1}$ | System wakes up |
+| $1$ | $t_{w1} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
+| $1$ | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ |
+| $1$ | $t_{w1} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $1$ | $t_{s1}$ | `horolog` process sends ACPI suspend signal to machine |
+| $2$ | $t_{w2}$ | System wakes up (this value is equal to $t_{w1} + 86400\ s$) |
+| $2$ | $t_{w2} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
+| $2$ | $t_{w2} + 60\ s$ | `horolog` process sets alarm for $t_{w2} + 86400\ s$ |
+| $2$ | $t_{w2} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $2$ | $t_{s2}$ | `horolog` process sends ACPI suspend signal to machine |
 | ... | ... | ... |
-| n | $t_{wn}$ | System wakes up (this value is equal to $t_{wn - 1} + 86400\ s$) |
-| n | $t_{wn} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| n | $t_{wn} + 60\ s$ | `horolog` process sets alarm for $t_{wn} + 86400\ s$ |
-| n | $t_{wn} + 60\ s$ | `horolog` process runs subprocesses (targets) |
-| n | $t_{sn}$ | `horolog` process sends ACPI suspend signal to machine |
+| $n$ | $t_{wn}$ | System wakes up (this value is equal to $t_{wn - 1} + 86400\ s$) |
+| $n$ | $t_{wn} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
+| $n$ | $t_{wn} + 60\ s$ | `horolog` process sets alarm for $t_{wn} + 86400\ s$ |
+| $n$ | $t_{wn} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $n$ | $t_{sn}$ | `horolog` process sends ACPI suspend signal to machine |
 
 ## Setup
 ### Step 1 - Run install script
