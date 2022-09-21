@@ -18,8 +18,8 @@ next calendar day. The following cycle depicts the program's daily rhythm:
 
 | Day | Time   | Action |
 | --- | ------ | ------ |
-| 1   | $t_w1$  | System wakes up |
-| 1   | $t_w1 + 60 s$  | `cron` job is triggered which runs `horolog` binary |
+| 1   | $t_{w1}$  | System wakes up |
+| 1   | $t_w1 + 60\ s$  | `cron` job is triggered which runs `horolog` binary |
 | 1   | $t_w1 + 60 s$  | `horolog` binary sets alarm for $t_w1 + 86400 s$ |
 
 
