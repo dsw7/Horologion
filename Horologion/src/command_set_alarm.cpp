@@ -6,8 +6,8 @@ void CommandEnable::set_cron_job()
 
     std::string cron_str;
 
-    unsigned int tm_min_with_delay = this->configs.time_alarm.tm_min + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN;
-    unsigned int tm_hour_with_delay = this->configs.time_alarm.tm_hour;
+    unsigned int tm_min_with_delay = this->configs.time_wake.tm_min + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN;
+    unsigned int tm_hour_with_delay = this->configs.time_wake.tm_hour;
 
     // 59 + DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN can exceed 59
     if (tm_min_with_delay >= 60)

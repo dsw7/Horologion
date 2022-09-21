@@ -107,7 +107,7 @@ void CommandTrigger::run_commands()
 
     std::vector<std::thread> jobs;
 
-    unsigned int wake_time = this->time_sleep - this->time_alarm;
+    unsigned int wake_time = this->time_sleep - this->time_wake;
 
     // Correct for offset between make and when cron job is triggered
     wake_time -= (DELAY_BETWEEN_WAKE_AND_CRON_TRIG_MIN * 60);

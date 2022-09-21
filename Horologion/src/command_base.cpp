@@ -28,11 +28,11 @@ bool CommandBase::read_configs_from_file()
     {
         if (it->first.compare("time-alarm-hour") == 0)
         {
-            this->configs.time_alarm.tm_hour = atoi(it->second.c_str());
+            this->configs.time_wake.tm_hour = atoi(it->second.c_str());
         }
         else if (it->first.compare("time-alarm-minute") == 0)
         {
-            this->configs.time_alarm.tm_min = atoi(it->second.c_str());
+            this->configs.time_wake.tm_min = atoi(it->second.c_str());
         }
         else if (it->first.compare("time-sleep-hour") == 0)
         {
@@ -69,13 +69,13 @@ bool CommandBase::read_configs_from_file()
 
 bool CommandBase::is_config_file_input_sane()
 {
-    if (this->configs.time_alarm.tm_hour < 0 or this->configs.time_alarm.tm_hour > 23)
+    if (this->configs.time_wake.tm_hour < 0 or this->configs.time_wake.tm_hour > 23)
     {
         Logger::error("Invalid input for \"time-alarm-hour\" field. Input must be between [0, 23] hours");
         return false;
     }
 
-    if (this->configs.time_alarm.tm_min < 0 or this->configs.time_alarm.tm_min > 59)
+    if (this->configs.time_wake.tm_min < 0 or this->configs.time_wake.tm_min > 59)
     {
         Logger::error("Invalid input for \"time-alarm-minute\" field. Input must be between [0, 59] minutes");
         return false;
@@ -106,16 +106,16 @@ bool CommandBase::reset_rtc_alarm()
 
 void CommandBase::compute_wake_sleep_window()
 {
-    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_alarm.tm_hour));
-    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_alarm.tm_min));
+    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
+    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
 
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
-    this->time_alarm = get_epoch_time_from_configs(
-        this->configs.time_alarm.tm_hour,
-        this->configs.time_alarm.tm_min,
-        this->configs.time_alarm.tm_sec  // set seconds to zero
+    this->time_wake = get_epoch_time_from_configs(
+        this->configs.time_wake.tm_hour,
+        this->configs.time_wake.tm_min,
+        this->configs.time_wake.tm_sec  // set seconds to zero
     );
 
     this->time_sleep = get_epoch_time_from_configs(
@@ -124,19 +124,19 @@ void CommandBase::compute_wake_sleep_window()
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
-    if (wake_time_is_earlier_than_current_time(this->time_alarm))
+    if (wake_time_is_earlier_than_current_time(this->time_wake))
     {
-        this->time_alarm += SECONDS_PER_DAY;
+        this->time_wake += SECONDS_PER_DAY;
         this->time_sleep += SECONDS_PER_DAY;
     }
 
-    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_alarm));
+    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_wake));
     Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
 }
 
 bool CommandBase::sanitize_wake_sleep_cycle()
 {
-    int delta_t = this->time_sleep - this->time_alarm;
+    int delta_t = this->time_sleep - this->time_wake;
 
     if (delta_t < 0)
     {
@@ -162,6 +162,6 @@ bool CommandBase::set_rtc_alarm()
         return false;
     }
 
-    std::string str_wakeup_time = std::to_string(this->time_alarm);
+    std::string str_wakeup_time = std::to_string(this->time_wake);
     return write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
 }

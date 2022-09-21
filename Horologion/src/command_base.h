@@ -26,14 +26,14 @@ struct Configs
     std::vector<std::pair<std::string, std::string>> commands = {};
     std::string suspend_type = "reboot";
 
-    struct tm time_alarm = {0};
+    struct tm time_wake = {0};
     struct tm time_sleep = {0};
 };
 
 class CommandBase
 {
     protected:
-        std::time_t time_alarm;
+        std::time_t time_wake;
         std::time_t time_sleep;
 
         bool is_running_as_root();
