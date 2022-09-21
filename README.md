@@ -2,6 +2,7 @@
 Check back later.
 
 $$
+\usepackage{tikz}
 \sqrt{3}
 $$
 
