@@ -1,9 +1,9 @@
 # Horologion
 Check back later.
 
-```math
+$$
 \sqrt{3}
-```
+$$
 
 ## Table of Contents
 - [Setup](#setup)
