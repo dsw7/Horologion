@@ -13,7 +13,7 @@ void help_commands(char *filename)
     std::string commands =
     "\e[1m\e[4mCommands\e[0m:\n\n"
     "  -h, --help    Print help information and exit.\n"
-    "  set-alarm     \e[1mSet alarm clock.\e[0m This command will write out an Epoch time to the system's"
+    "  enable     \e[1mSet alarm clock.\e[0m This command will write out an Epoch time to the system's"
     " wakealarm file.\n"
     "  disable   \e[1mReset alarm clock.\e[0m This command will erase the contents of the system's"
     " wakealarm file.\n"
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
             return EXIT_FAILURE;
         }
     }
-    else if (command.compare("set-alarm") == 0)
+    else if (command.compare("enable") == 0)
     {
         CommandSetAlarm command;
 
