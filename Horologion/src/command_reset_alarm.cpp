@@ -1,12 +1,12 @@
 #include "command_reset_alarm.h"
 
-void CommandResetAlarm::unset_cron_job()
+void CommandDisable::unset_cron_job()
 {
     Logger::info("Unsetting cron job");
     remove_file(ETC_CRONTAB);
 }
 
-bool CommandResetAlarm::main()
+bool CommandDisable::main()
 {
     if (not this->is_running_as_root())
     {

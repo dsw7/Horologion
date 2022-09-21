@@ -8,7 +8,7 @@
 const std::string PATH_TO_BINARY = "/usr/bin/horolog";
 const std::string PATH_TO_LOG = "/var/log/horolog.log";
 
-class CommandSetAlarm: public CommandBase
+class CommandEnable: public CommandBase
 {
     private:
         void set_cron_job();

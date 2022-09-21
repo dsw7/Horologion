@@ -3,7 +3,7 @@
 
 #include "command_base.h"
 
-class CommandResetAlarm: public CommandBase
+class CommandDisable: public CommandBase
 {
     private:
         void unset_cron_job();

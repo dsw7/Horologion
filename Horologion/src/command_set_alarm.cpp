@@ -1,6 +1,6 @@
 #include "command_set_alarm.h"
 
-void CommandSetAlarm::set_cron_job()
+void CommandEnable::set_cron_job()
 {
     Logger::info("Setting up cron job");
 
@@ -28,7 +28,7 @@ void CommandSetAlarm::set_cron_job()
     overwrite_file(ETC_CRONTAB, cron_str);
 }
 
-bool CommandSetAlarm::main()
+bool CommandEnable::main()
 {
     if (not this->is_running_as_root())
     {

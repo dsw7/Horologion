@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     }
     else if (command.compare("disable") == 0)
     {
-        CommandResetAlarm command;
+        CommandDisable command;
 
         if (not command.main())
         {
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     }
     else if (command.compare("enable") == 0)
     {
-        CommandSetAlarm command;
+        CommandEnable command;
 
         if (not command.main())
         {
