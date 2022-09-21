@@ -1,8 +1,10 @@
 # Horologion
 Check back later.
+
 ```math
 \sqrt{3}
 ```
+
 ## Table of Contents
 - [Setup](#setup)
   - [Step 1 - Run install script](#step-1---run-install-script)
