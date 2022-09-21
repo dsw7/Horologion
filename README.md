@@ -13,7 +13,12 @@ suspending the machine.
 - [Teardown](#teardown)
 ## How it works
 The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
-machines wakes up and is suspended, respectively.
+host wakes up and is suspended, respectively. The system also assumes that $t_s$ does not cross into the
+next calendar day. The cycle represents
+
+| File/directory | Description |
+| -------------- | ----------- |
+| $t_w$  | Project configuration file |
 
 
 
