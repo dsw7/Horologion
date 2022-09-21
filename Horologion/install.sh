@@ -88,7 +88,7 @@ remove_log()
 reset_alarm()
 {
     if [ -f ${DST_BINARY}/${BINARY_NAME} ];
-        then ${DST_BINARY}/${BINARY_NAME} reset-alarm
+        then ${DST_BINARY}/${BINARY_NAME} disable
     fi
 }
 

@@ -15,7 +15,7 @@ void help_commands(char *filename)
     "  -h, --help    Print help information and exit.\n"
     "  set-alarm     \e[1mSet alarm clock.\e[0m This command will write out an Epoch time to the system's"
     " wakealarm file.\n"
-    "  reset-alarm   \e[1mReset alarm clock.\e[0m This command will erase the contents of the system's"
+    "  disable   \e[1mReset alarm clock.\e[0m This command will erase the contents of the system's"
     " wakealarm file.\n"
     "  trigger       \e[1mTrigger a wake-sleep cycle.\e[0m This command should be invoked by systemd or an"
     " equivalent init system.\n";
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
         help_commands(argv[0]);
         return EXIT_SUCCESS;
     }
-    else if (command.compare("reset-alarm") == 0)
+    else if (command.compare("disable") == 0)
     {
         CommandResetAlarm command;
 
