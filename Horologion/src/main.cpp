@@ -17,8 +17,8 @@ void help_commands(char *filename)
     " wakealarm file.\n"
     "  disable       \e[1mReset alarm clock.\e[0m This command will erase the contents of the system's"
     " wakealarm file.\n"
-    "  trigger       \e[1mTrigger a wake-sleep cycle.\e[0m This command should be invoked by systemd or an"
-    " equivalent init system.\n";
+    "  trigger       \e[1mTrigger a wake-sleep cycle.\e[0m This command should be only be run manually for"
+    " troubleshooting purposes.\n";
 
     std::cerr << commands << std::endl;
 }
