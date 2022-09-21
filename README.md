@@ -93,3 +93,19 @@ To enable the system, run:
 sudo horolog enable
 ```
 ## Teardown
+To uninstall the product, make the script executable:
+```
+chmod +x Horologion/install.sh
+```
+Then run the script with elevated privileges:
+```
+sudo ./Horologion/install.sh
+```
+The following menu will appear:
+```
+Select setup type:
+[1] -> Install product
+[2] -> Uninstall product
+>
+```
+Type 2 then press enter. The install script will uninstall all relevant files.
