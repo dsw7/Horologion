@@ -20,9 +20,15 @@ next calendar day. The following cycle depicts the program's daily rhythm:
 | --- | ------ | ------ |
 | 1 | $t_{w1}$ | System wakes up |
 | 1 | $t_{w1} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| 1 | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ ( $t_{w2}$ ) |
+| 1 | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ |
 | 1 | $t_{w1} + 60\ s$ | `horolog` process runs subprocesses (targets) |
 | 1 | $t_{s1}$ | `horolog` process sends ACPI suspend signal to machine |
+
+| 2 | $t_{w2}$ | System wakes up (this value is equal to $t_{w1} + 86400\ s$) |
+| 2 | $t_{w2} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
+| 2 | $t_{w2} + 60\ s$ | `horolog` process sets alarm for $t_{w2} + 86400\ s$ |
+| 2 | $t_{w2} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| 2 | $t_{s2}$ | `horolog` process sends ACPI suspend signal to machine |
 
 
 
