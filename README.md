@@ -3,6 +3,7 @@ An easy-to-use program for waking a Linux machine at a specific time of day, run
 suspending the machine some time later. The program achieves this through a delicate interplay between `cron`
 and dynamically modifying the host's real time clock (RTC).
 > Why not just use `systemd`?
+
 I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 ## Table of Contents
 - [How it works](#how-it-works)
