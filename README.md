@@ -1,12 +1,8 @@
 # Horologion
-Check back later.
-
-$$
-\usepackage{tikz}
-\sqrt{3}
-$$
-
+An easy-to-use program for waking a Linux machine at a specific time of day, running some commands, then
+suspending the machine.
 ## Table of Contents
+- [How it works](#how-it-works)
 - [Setup](#setup)
   - [Step 1 - Run install script](#step-1---run-install-script)
   - [Step 2 - Check that binary is ready](#step-2---check-that-binary-is-ready)
@@ -15,6 +11,11 @@ $$
   - [Step 5 - Choose commands to run](#step-5---choose-commands-to-run)
   - [Step 6 - Enable the trigger](#step-6---enable-the-trigger)
 - [Teardown](#teardown)
+## How it works
+The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
+machines wakes up and is suspended, respectively.
+
+
 
 ## Setup
 ### Step 1 - Run install script
