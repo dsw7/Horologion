@@ -26,11 +26,11 @@ bool CommandBase::read_configs_from_file()
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
     {
-        if (it->first.compare("time-alarm-hour") == 0)
+        if (it->first.compare("time-wake-hour") == 0)
         {
             this->configs.time_wake.tm_hour = atoi(it->second.c_str());
         }
-        else if (it->first.compare("time-alarm-minute") == 0)
+        else if (it->first.compare("time-wake-minute") == 0)
         {
             this->configs.time_wake.tm_min = atoi(it->second.c_str());
         }
@@ -71,13 +71,13 @@ bool CommandBase::is_config_file_input_sane()
 {
     if (this->configs.time_wake.tm_hour < 0 or this->configs.time_wake.tm_hour > 23)
     {
-        Logger::error("Invalid input for \"time-alarm-hour\" field. Input must be between [0, 23] hours");
+        Logger::error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
         return false;
     }
 
     if (this->configs.time_wake.tm_min < 0 or this->configs.time_wake.tm_min > 59)
     {
-        Logger::error("Invalid input for \"time-alarm-minute\" field. Input must be between [0, 59] minutes");
+        Logger::error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
         return false;
     }
 
