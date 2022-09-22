@@ -42,6 +42,10 @@ include_directories("foo")
 add_executable(
     ${OUTPUT_NAME}
     "foo/main.cpp"
+    "foo/command_base.cpp"
+    "foo/parse_config_file.cpp"
+    "foo/utils_file.cpp"
+    "foo/logger.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)
