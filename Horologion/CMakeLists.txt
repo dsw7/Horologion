@@ -46,6 +46,7 @@ add_executable(
     "foo/command_loop.cpp"
     "foo/parse_config_file.cpp"
     "foo/utils_file.cpp"
+    "foo/utils_time.cpp"
     "foo/logger.cpp"
 )
 

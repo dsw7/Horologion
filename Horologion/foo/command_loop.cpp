@@ -1,5 +1,41 @@
 #include "command_loop.h"
 
+void CommandLoop::compute_wake_sleep_window()
+{
+    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
+    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
+
+    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
+    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
+
+    this->time_wake = get_epoch_time_from_configs(
+        this->configs.time_wake.tm_hour,
+        this->configs.time_wake.tm_min,
+        this->configs.time_wake.tm_sec  // set seconds to zero
+    );
+
+    this->time_sleep = get_epoch_time_from_configs(
+        this->configs.time_sleep.tm_hour,
+        this->configs.time_sleep.tm_min,
+        this->configs.time_sleep.tm_sec  // set seconds to zero
+    );
+
+    if (wake_time_is_earlier_than_current_time(this->time_wake))
+    {
+        this->time_wake += SECONDS_PER_DAY;
+        this->time_sleep += SECONDS_PER_DAY;
+    }
+
+    Logger::info(
+        "The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake) + \
+        " or " + std::to_string(this->time_wake) + " seconds since Epoch"
+    );
+    Logger::info(
+        "The machine will sleep at " + epoch_time_to_ascii_time(this->time_sleep) + \
+        " or " + std::to_string(this->time_sleep) + " seconds since Epoch"
+    );
+}
+
 void signal_handler(int signum)
 {
     Logger::info("Received signal " + std::to_string(signum));
@@ -37,6 +73,8 @@ void CommandLoop::main()
     {
         exit(EXIT_FAILURE);
     }
+
+    this->compute_wake_sleep_window();
 
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
