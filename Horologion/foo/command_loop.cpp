@@ -1,13 +1,7 @@
 #include "command_loop.h"
 
-void CommandLoop::compute_wake_sleep_window()
+void CommandLoop::update_window_limits()
 {
-    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
-    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
-
-    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
-    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
-
     this->time_wake = get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
@@ -19,21 +13,21 @@ void CommandLoop::compute_wake_sleep_window()
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
+}
 
-    if (wake_time_is_earlier_than_current_time(this->time_wake))
-    {
-        this->time_wake += SECONDS_PER_DAY;
-        this->time_sleep += SECONDS_PER_DAY;
-    }
+void CommandLoop::shift_window_by_one_day()
+{
+    this->time_wake += SECONDS_PER_DAY;
+    this->time_sleep += SECONDS_PER_DAY;
+}
 
-    Logger::info(
-        "The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake) + \
-        " or " + std::to_string(this->time_wake) + " seconds since Epoch"
-    );
-    Logger::info(
-        "The machine will sleep at " + epoch_time_to_ascii_time(this->time_sleep) + \
-        " or " + std::to_string(this->time_sleep) + " seconds since Epoch"
-    );
+void CommandLoop::log_window_limits()
+{
+    Logger::info("The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake));
+    Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
+
+    Logger::info("The machine will sleep at " + epoch_time_to_ascii_time(this->time_sleep));
+    Logger::info("The machine will sleep at " + std::to_string(this->time_sleep) + " seconds since Epoch");
 }
 
 void signal_handler(int signum)
@@ -65,6 +59,13 @@ void CommandLoop::run_loop()
                 alarm_is_set = true;
             }
         }
+        else
+        {
+            this->shift_window_by_one_day();
+            this->log_window_limits();
+
+            alarm_is_set = false;
+        }
 
         sleep(1);
     }
@@ -87,7 +88,8 @@ void CommandLoop::main()
         exit(EXIT_FAILURE);
     }
 
-    this->compute_wake_sleep_window();
+    this->update_window_limits();
+    this->log_window_limits();
 
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);

@@ -93,5 +93,11 @@ bool CommandBase::is_config_file_input_sane()
         return false;
     }
 
+    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
+    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
+
+    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
+    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
+
     return true;
 }
