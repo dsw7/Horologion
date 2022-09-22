@@ -23,13 +23,3 @@ std::time_t get_epoch_time_from_configs(int &hour, int &minute, int &second)
 
     return mktime(tm_time);
 }
-
-bool wake_time_is_earlier_than_current_time(std::time_t &wake_time)
-{
-    if (wake_time <= std::time(nullptr))
-    {
-        return true;
-    }
-
-    return false;
-}
