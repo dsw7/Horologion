@@ -1,16 +1,24 @@
 #include "command_loop.h"
 
+void interrupt_signal_handler(int signum)
+{
+    Logger::info("Received signal " + std::to_string(signum));
+    LOOP_ENABLED = false;
+}
+
 void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
 
-    while (true)
+    while (LOOP_ENABLED)
     {
         std::time_t current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
 
         sleep(1);
     }
+
+    Logger::info("Ending loop");
 }
 
 bool CommandLoop::main()
@@ -29,6 +37,8 @@ bool CommandLoop::main()
     {
         return false;
     }
+
+    signal(SIGINT, interrupt_signal_handler);
 
     this->run_loop();
 

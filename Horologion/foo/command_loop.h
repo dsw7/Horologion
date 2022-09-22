@@ -3,9 +3,14 @@
 
 #include <string>
 #include <ctime>
+#include <csignal>
 #include <unistd.h>
 
 #include "command_base.h"
+
+bool LOOP_ENABLED = true;
+
+void interrupt_signal_handler(int signum);
 
 class CommandLoop: public CommandBase
 {
