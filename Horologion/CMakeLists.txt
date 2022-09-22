@@ -43,6 +43,7 @@ add_executable(
     ${OUTPUT_NAME}
     "foo/main.cpp"
     "foo/command_base.cpp"
+    "foo/command_loop.cpp"
     "foo/parse_config_file.cpp"
     "foo/utils_file.cpp"
     "foo/logger.cpp"

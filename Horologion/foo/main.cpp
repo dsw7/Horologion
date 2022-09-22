@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include "command_loop.h"
+
 void help_commands(char *filename)
 {
     std::cerr << "\e[1m\e[4mUsage:\e[0m\n\n";
@@ -32,7 +34,12 @@ int main(int argc, char **argv)
     }
     else if (command.compare("loop") == 0)
     {
-        std::cout << "loop" << std::endl;
+        CommandLoop command;
+
+        if (not command.main())
+        {
+            return EXIT_FAILURE;
+        }
     }
     else
     {
