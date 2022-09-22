@@ -39,6 +39,10 @@ void signal_handler(int signum)
     exit(signum);
 }
 
+void CommandLoop::deploy_jobs()
+{
+}
+
 void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
@@ -61,9 +65,13 @@ void CommandLoop::run_loop()
         }
         else
         {
+            Logger::info("Waiting " + std::to_string(SECONDS_DELAY_WAKE_UP) + " for machine to warm up");
+            sleep(SECONDS_DELAY_WAKE_UP);
+
             this->shift_window_by_one_day();
             this->log_window_limits();
 
+            this->deploy_jobs();
             alarm_is_set = false;
         }
 

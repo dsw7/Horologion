@@ -11,6 +11,7 @@
 #include "utils_sysfs.h"
 
 const unsigned int SECONDS_PER_DAY = 86400;
+const unsigned int SECONDS_DELAY_WAKE_UP = 60;
 
 void interrupt_signal_handler(int signum);
 
@@ -21,6 +22,7 @@ class CommandLoop: public CommandBase
         void update_window_limits();
         void shift_window_by_one_day();
         void log_window_limits();
+        void deploy_jobs();
         void run_loop();
 
     public:
