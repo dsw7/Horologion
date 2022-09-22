@@ -1,5 +1,65 @@
 #include "command_loop.h"
 
+// ----------------------------------------------------------------------------------------------------------
+
+void worker_stay_awake(unsigned int *wake_time)
+{
+    Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*wake_time) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(*wake_time));
+
+    Logger::info_thread_safe("<target_0> " + std::to_string(*wake_time) + " seconds have elapsed");
+}
+
+void worker_run_command(std::string *target, std::string *command)
+{
+    std::array<char, 128> buffer;
+    std::string subproc_output;
+
+    if (command->find_first_not_of(' ') == std::string::npos)
+    {
+        Logger::error_thread_safe("<" + *target + "> Found empty command. Doing nothing");
+        return;
+    }
+
+    if (command->find(" 2>&1") == std::string::npos)
+    {
+        // stderr will otherwise leak out to terminal
+        *command += " 2>&1";
+    }
+
+    Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
+
+    FILE* pipe = popen(command->c_str(), "r");
+
+    if (!pipe)
+    {
+        Logger::error_thread_safe("<" + *target + "> Target could not be started");
+        return;
+    }
+
+    while (fgets(buffer.data(), 128, pipe) != NULL)
+    {
+        Logger::info_thread_safe("<" + *target + "> Reading output from target");
+        subproc_output += buffer.data();
+    }
+
+    if (pclose(pipe) != 0)
+    {
+        Logger::warning_thread_safe("<" + *target + "> Target exited with non-zero exit code");
+    }
+
+    if (subproc_output.size() > 0)
+    {
+        Logger::info_thread_safe("<" + *target + "> Output from target:\n" + subproc_output);
+    }
+    else
+    {
+        Logger::info_thread_safe("<" + *target + "> No output from target");
+    }
+}
+
+// ----------------------------------------------------------------------------------------------------------
+
 void CommandLoop::update_window_limits()
 {
     this->time_wake = get_epoch_time_from_configs(
@@ -41,6 +101,31 @@ void signal_handler(int signum)
 
 void CommandLoop::deploy_jobs()
 {
+    std::vector<std::thread> jobs;
+
+    unsigned int wake_time = this->time_sleep - this->time_wake - SECONDS_DELAY_WAKE_UP;
+    jobs.push_back(std::thread(worker_stay_awake, &wake_time));
+
+    unsigned int num_commands = this->configs.commands.size();
+
+    if (num_commands > 0)
+    {
+        for (unsigned int i = 0; i < num_commands; ++i)
+        {
+            jobs.push_back(
+                std::thread(
+                    worker_run_command,
+                    &this->configs.commands.at(i).first,
+                    &this->configs.commands.at(i).second
+                )
+            );
+        }
+    }
+
+    for (unsigned int i = 0; i < jobs.size(); ++i)
+    {
+        jobs.at(i).join();
+    }
 }
 
 void CommandLoop::run_loop()
@@ -65,7 +150,7 @@ void CommandLoop::run_loop()
         }
         else
         {
-            Logger::info("Waiting " + std::to_string(SECONDS_DELAY_WAKE_UP) + " for machine to warm up");
+            Logger::info("Waiting " + std::to_string(SECONDS_DELAY_WAKE_UP) + " seconds for machine to warm up");
             sleep(SECONDS_DELAY_WAKE_UP);
 
             this->shift_window_by_one_day();
