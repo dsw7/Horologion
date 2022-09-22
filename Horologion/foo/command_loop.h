@@ -2,6 +2,8 @@
 #define COMMAND_RUN_LOOP_H
 
 #include <string>
+#include <ctime>
+#include <unistd.h>
 
 #include "command_base.h"
 

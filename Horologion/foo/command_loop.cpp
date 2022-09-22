@@ -3,6 +3,14 @@
 void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
+
+    while (true)
+    {
+        std::time_t current_epoch_time = std::time(nullptr);
+        Logger::info(std::to_string(current_epoch_time));
+
+        sleep(1);
+    }
 }
 
 bool CommandLoop::main()
