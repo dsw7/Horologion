@@ -60,7 +60,7 @@ void worker_run_command(std::string *target, std::string *command)
 
 // ----------------------------------------------------------------------------------------------------------
 
-void CommandLoop::update_window_limits()
+bool CommandLoop::set_window_limits()
 {
     this->time_wake = get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
@@ -73,6 +73,14 @@ void CommandLoop::update_window_limits()
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
+
+    if (this->time_wake >= this->time_sleep)
+    {
+        Logger::error("Sleep time cannot be sooner than or equal to wake time");
+        return false;
+    }
+
+    return true;
 }
 
 void CommandLoop::shift_window_by_one_day()
@@ -181,7 +189,11 @@ void CommandLoop::main()
         exit(EXIT_FAILURE);
     }
 
-    this->update_window_limits();
+    if (not this->set_window_limits())
+    {
+        exit(EXIT_FAILURE);
+    }
+
     this->log_window_limits();
 
     signal(SIGINT, signal_handler);

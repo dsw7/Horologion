@@ -28,7 +28,7 @@ class CommandLoop: public CommandBase
 {
     private:
         void compute_wake_sleep_window();
-        void update_window_limits();
+        bool set_window_limits();
         void shift_window_by_one_day();
         void log_window_limits();
         void deploy_jobs();
