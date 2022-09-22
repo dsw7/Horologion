@@ -35,7 +35,7 @@ class CommandBase
 
     public:
         Configs configs;
-        virtual bool main() {};
+        virtual void main() {};
 };
 
 #endif

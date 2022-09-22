@@ -8,8 +8,6 @@
 
 #include "command_base.h"
 
-bool LOOP_ENABLED = true;
-
 void interrupt_signal_handler(int signum);
 
 class CommandLoop: public CommandBase
@@ -18,7 +16,7 @@ class CommandLoop: public CommandBase
         void run_loop();
 
     public:
-        bool main();
+        void main();
 };
 
 #endif

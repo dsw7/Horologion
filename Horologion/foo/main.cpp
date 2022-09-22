@@ -35,11 +35,7 @@ int main(int argc, char **argv)
     else if (command.compare("loop") == 0)
     {
         CommandLoop command;
-
-        if (not command.main())
-        {
-            return EXIT_FAILURE;
-        }
+        command.main();
     }
     else
     {
