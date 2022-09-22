@@ -8,15 +8,10 @@ bool unset_rtc_alarm()
     return write_to_file(SYSFS_WAKEALARM, unset_str);
 }
 
-bool set_rtc_alarm(std::string &wake_time)
+bool set_rtc_alarm(unsigned int wake_time)
 {
     Logger::info("Setting alarm");
+    std::string str_wake_time = std::to_string(wake_time);
 
-    if (unset_rtc_alarm())
-    {
-        Logger::error("Failed to unset alarm");
-        return false;
-    }
-
-    return write_to_file(SYSFS_WAKEALARM, wake_time);
+    return write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }

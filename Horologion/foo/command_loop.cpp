@@ -41,11 +41,7 @@ void signal_handler(int signum)
     Logger::info("Received signal " + std::to_string(signum));
     Logger::info("Ending loop");
 
-    if (not unset_rtc_alarm())
-    {
-        Logger::warning("Could not unset RTC alarm!");
-    }
-
+    unset_rtc_alarm();
     exit(signum);
 }
 
@@ -53,10 +49,22 @@ void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
 
+    bool alarm_is_set = false;
+    std::time_t current_epoch_time;
+
     while (true)
     {
-        std::time_t current_epoch_time = std::time(nullptr);
+        current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
+
+        if (current_epoch_time <= this->time_wake)
+        {
+            if (not alarm_is_set)
+            {
+                set_rtc_alarm(this->time_wake);
+                alarm_is_set = true;
+            }
+        }
 
         sleep(1);
     }

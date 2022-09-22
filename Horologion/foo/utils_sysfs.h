@@ -9,6 +9,6 @@
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 
 bool unset_rtc_alarm();
-bool set_rtc_alarm(std::string &wake_time);
+bool set_rtc_alarm(unsigned int wake_time);
 
 #endif
