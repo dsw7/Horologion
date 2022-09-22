@@ -41,6 +41,11 @@ void signal_handler(int signum)
     Logger::info("Received signal " + std::to_string(signum));
     Logger::info("Ending loop");
 
+    if (not unset_rtc_alarm())
+    {
+        Logger::warning("Could not unset RTC alarm!");
+    }
+
     exit(signum);
 }
 
