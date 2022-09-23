@@ -18,6 +18,8 @@ bool set_rtc_alarm(unsigned int wake_time)
 
 bool is_valid_suspend_state(std::string &state_from_ini)
 {
+    Logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
+
     std::string sysfs_states, state;
 
     if (not read_file(SYSFS_STATE, sysfs_states))
