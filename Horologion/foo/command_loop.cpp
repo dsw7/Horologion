@@ -9,6 +9,15 @@ void signal_handler(int signum)
     exit(signum);
 }
 
+void worker_stay_awake(std::time_t *duration)
+{
+    Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*duration) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(*duration));
+
+    Logger::info_thread_safe("<target_0> " + std::to_string(*duration) + " seconds have elapsed");
+    Logger::info_thread_safe("<target_0> Suspending system");
+}
+
 void worker_run_command(std::string *target, std::string *command)
 {
     std::array<char, 128> buffer;
@@ -103,22 +112,21 @@ void CommandLoop::deploy_jobs()
 {
     unsigned int num_commands = this->configs.commands.size();
 
-    if (num_commands < 1)
-    {
-        return;
-    }
-
     std::vector<std::thread> jobs;
+    jobs.push_back(std::thread(worker_stay_awake, &this->wake_duration));
 
-    for (unsigned int i = 0; i < num_commands; ++i)
+    if (num_commands > 0)
     {
-        jobs.push_back(
-            std::thread(
-                worker_run_command,
-                &this->configs.commands.at(i).first,
-                &this->configs.commands.at(i).second
-            )
-        );
+        for (unsigned int i = 0; i < num_commands; ++i)
+        {
+            jobs.push_back(
+                std::thread(
+                    worker_run_command,
+                    &this->configs.commands.at(i).first,
+                    &this->configs.commands.at(i).second
+                )
+            );
+        }
     }
 
     for (unsigned int i = 0; i < jobs.size(); ++i)
@@ -139,7 +147,12 @@ void CommandLoop::run_loop()
         current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
 
-        if (current_epoch_time >= this->time_wake)
+        if (current_epoch_time == this->time_wake)
+        {
+            this->deploy_jobs();
+        }
+
+        if (current_epoch_time > this->time_wake)
         {
             this->time_wake += SECONDS_PER_DAY;
             alarm_is_set = false;
