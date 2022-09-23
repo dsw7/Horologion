@@ -2,14 +2,6 @@
 
 // ----------------------------------------------------------------------------------------------------------
 
-void worker_stay_awake(unsigned int *wake_time)
-{
-    Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*wake_time) + " seconds");
-    std::this_thread::sleep_for(std::chrono::seconds(*wake_time));
-
-    Logger::info_thread_safe("<target_0> " + std::to_string(*wake_time) + " seconds have elapsed");
-}
-
 void worker_run_command(std::string *target, std::string *command)
 {
     std::array<char, 128> buffer;
@@ -91,6 +83,8 @@ void CommandLoop::shift_window_by_one_day()
 
 void CommandLoop::log_window_limits()
 {
+    Logger::info("Next scheduled wake up / sleep times:");
+
     Logger::info("The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake));
     Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
 
@@ -109,30 +103,29 @@ void signal_handler(int signum)
 
 void CommandLoop::deploy_jobs()
 {
-    std::vector<std::thread> jobs;
-
-    unsigned int wake_time = this->time_sleep - this->time_wake - SECONDS_DELAY_WAKE_UP;
-    jobs.push_back(std::thread(worker_stay_awake, &wake_time));
-
     unsigned int num_commands = this->configs.commands.size();
 
-    if (num_commands > 0)
+    if (num_commands < 1)
     {
-        for (unsigned int i = 0; i < num_commands; ++i)
-        {
-            jobs.push_back(
-                std::thread(
-                    worker_run_command,
-                    &this->configs.commands.at(i).first,
-                    &this->configs.commands.at(i).second
-                )
-            );
-        }
+        return;
+    }
+
+    std::vector<std::thread> jobs;
+
+    for (unsigned int i = 0; i < num_commands; ++i)
+    {
+        jobs.push_back(
+            std::thread(
+                worker_run_command,
+                &this->configs.commands.at(i).first,
+                &this->configs.commands.at(i).second
+            )
+        );
     }
 
     for (unsigned int i = 0; i < jobs.size(); ++i)
     {
-        jobs.at(i).join();
+        jobs.at(i).detach();
     }
 }
 
@@ -140,33 +133,12 @@ void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
 
-    bool alarm_is_set = false;
     std::time_t current_epoch_time;
 
     while (true)
     {
         current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
-
-        if (current_epoch_time <= this->time_wake)
-        {
-            if (not alarm_is_set)
-            {
-                set_rtc_alarm(this->time_wake);
-                alarm_is_set = true;
-            }
-        }
-        else
-        {
-            Logger::info("Waiting " + std::to_string(SECONDS_DELAY_WAKE_UP) + " seconds for machine to warm up");
-            sleep(SECONDS_DELAY_WAKE_UP);
-
-            this->shift_window_by_one_day();
-            this->log_window_limits();
-
-            this->deploy_jobs();
-            alarm_is_set = false;
-        }
 
         sleep(1);
     }
@@ -193,8 +165,6 @@ void CommandLoop::main()
     {
         exit(EXIT_FAILURE);
     }
-
-    this->log_window_limits();
 
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
