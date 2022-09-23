@@ -1,0 +1,12 @@
+[Unit]
+Description=Horolog Job Scheduling Software
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=username
+ExecStart=execstart
+
+[Install]
+WantedBy=multi-user.target
