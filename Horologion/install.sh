@@ -85,13 +85,6 @@ remove_log()
     fi
 }
 
-reset_alarm()
-{
-    if [ -f ${DST_BINARY}/${BINARY_NAME} ];
-        then ${DST_BINARY}/${BINARY_NAME} disable
-    fi
-}
-
 install()
 {
     compile_binary
@@ -101,7 +94,6 @@ install()
 
 uninstall()
 {
-    reset_alarm
     remove_config_file
     remove_log
     remove_binary
