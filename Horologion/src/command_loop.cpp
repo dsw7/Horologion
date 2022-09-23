@@ -159,7 +159,6 @@ void CommandLoop::run_loop()
     while (true)
     {
         current_epoch_time = std::time(nullptr);
-        Logger::info(std::to_string(current_epoch_time));
 
         if (current_epoch_time > this->time_wake)
         {
