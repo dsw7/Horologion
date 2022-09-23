@@ -15,8 +15,14 @@ void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
     std::this_thread::sleep_for(std::chrono::seconds(*duration));
 
     Logger::info_thread_safe("<target_0> " + std::to_string(*duration) + " seconds have elapsed");
-    Logger::info_thread_safe("<target_0> Suspending system");
 
+    if (suspend_type.compare("none") == 0)
+    {
+        Logger::info_thread_safe("<target_0> Suspend disabled. Doing nothing");
+        return;
+    }
+
+    Logger::info_thread_safe("<target_0> Suspending system");
     suspend_system(*suspend_type);
 }
 
