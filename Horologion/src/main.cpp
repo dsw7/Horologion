@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "command_reset_alarm.h"
-#include "command_set_alarm.h"
-#include "command_trigger.h"
+#include "command_loop.h"
 
 void help_commands(char *filename)
 {
@@ -13,14 +11,8 @@ void help_commands(char *filename)
     std::string commands =
     "\e[1m\e[4mCommands:\e[0m\n\n"
     "  -h, --help    Print help information and exit.\n"
-    "  enable        \e[1mEnable daily wake-sleep cycle.\e[0m\n"
-    "                  > This command will write out an Epoch time to the system's wakealarm file.\n"
-    "                  > This command will enable a daily horolog trigger cron job.\n"
-    "  disable       \e[1mDisable daily wake-sleep cycle.\e[0m\n"
-    "                  > This command will erase the contents of the system's wakealarm file.\n"
-    "                  > This command will disable a daily horolog trigger cron job.\n"
-    "  trigger       \e[1mTrigger a wake-sleep cycle.\e[0m\n"
-    "                  > This command should be only be run manually for troubleshooting purposes.\n";
+    "  loop          \e[1mStart the wake-sleep cycle.\e[0m This command should be run by\n"
+    "                systemd or some equivalent init system.";
 
     std::cerr << commands << std::endl;
 }
@@ -40,32 +32,10 @@ int main(int argc, char **argv)
         help_commands(argv[0]);
         return EXIT_SUCCESS;
     }
-    else if (command.compare("disable") == 0)
+    else if (command.compare("loop") == 0)
     {
-        CommandDisable command;
-
-        if (not command.main())
-        {
-            return EXIT_FAILURE;
-        }
-    }
-    else if (command.compare("enable") == 0)
-    {
-        CommandEnable command;
-
-        if (not command.main())
-        {
-            return EXIT_FAILURE;
-        }
-    }
-    else if (command.compare("trigger") == 0)
-    {
-        CommandTrigger command;
-
-        if (not command.main())
-        {
-            return EXIT_FAILURE;
-        }
+        CommandLoop command;
+        command.main();
     }
     else
     {

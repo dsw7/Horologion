@@ -1,5 +1,6 @@
 #include "logger.h"
 
+// return pointer
 std::string get_current_datetime_string()
 {
     time_t time_now = time(0);

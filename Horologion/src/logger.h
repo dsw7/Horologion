@@ -5,7 +5,6 @@
 #include <string>
 #include <map>
 #include <mutex>
-#include <time.h>
 #include <unistd.h>
 
 std::string get_current_datetime_string();

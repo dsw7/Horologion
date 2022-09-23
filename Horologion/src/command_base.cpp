@@ -34,6 +34,14 @@ bool CommandBase::read_configs_from_file()
         {
             this->configs.time_wake.tm_min = atoi(it->second.c_str());
         }
+        else if (it->first.compare("time-cmd-hour") == 0)
+        {
+            this->configs.time_run_cmd.tm_hour = atoi(it->second.c_str());
+        }
+        else if (it->first.compare("time-cmd-minute") == 0)
+        {
+            this->configs.time_run_cmd.tm_min = atoi(it->second.c_str());
+        }
         else if (it->first.compare("time-sleep-hour") == 0)
         {
             this->configs.time_sleep.tm_hour = atoi(it->second.c_str());
@@ -81,6 +89,18 @@ bool CommandBase::is_config_file_input_sane()
         return false;
     }
 
+    if (this->configs.time_run_cmd.tm_hour < 0 or this->configs.time_run_cmd.tm_hour > 23)
+    {
+        Logger::error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
+        return false;
+    }
+
+    if (this->configs.time_run_cmd.tm_min < 0 or this->configs.time_run_cmd.tm_min > 59)
+    {
+        Logger::error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
+        return false;
+    }
+
     if (this->configs.time_sleep.tm_hour < 0 or this->configs.time_sleep.tm_hour > 23)
     {
         Logger::error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
@@ -93,75 +113,14 @@ bool CommandBase::is_config_file_input_sane()
         return false;
     }
 
-    return true;
-}
-
-bool CommandBase::reset_rtc_alarm()
-{
-    Logger::info("Resetting alarm");
-    std::string reset_str = "0";
-
-    return write_to_file(SYSFS_WAKEALARM, reset_str);
-}
-
-void CommandBase::compute_wake_sleep_window()
-{
     Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
     Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
+
+    Logger::info("Parsed command execution hour (tm_hour): " + std::to_string(this->configs.time_run_cmd.tm_hour));
+    Logger::info("Parsed command execution minute (tm_min): " + std::to_string(this->configs.time_run_cmd.tm_min));
 
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
-    this->time_wake = get_epoch_time_from_configs(
-        this->configs.time_wake.tm_hour,
-        this->configs.time_wake.tm_min,
-        this->configs.time_wake.tm_sec  // set seconds to zero
-    );
-
-    this->time_sleep = get_epoch_time_from_configs(
-        this->configs.time_sleep.tm_hour,
-        this->configs.time_sleep.tm_min,
-        this->configs.time_sleep.tm_sec  // set seconds to zero
-    );
-
-    if (wake_time_is_earlier_than_current_time(this->time_wake))
-    {
-        this->time_wake += SECONDS_PER_DAY;
-        this->time_sleep += SECONDS_PER_DAY;
-    }
-
-    Logger::info("The machine will wake up at: " + epoch_time_to_ascii_time(this->time_wake));
-    Logger::info("The machine will sleep at: " + epoch_time_to_ascii_time(this->time_sleep));
-}
-
-bool CommandBase::sanitize_wake_sleep_cycle()
-{
-    int delta_t = this->time_sleep - this->time_wake;
-
-    if (delta_t < 0)
-    {
-        Logger::error("Sleep time must be greater than wake time!");
-        return false;
-    }
-
-    if (delta_t >= 0 and delta_t < MINIMUM_WAKE_TIME)
-    {
-        Logger::error("The wake-sleep duration must be at least " + std::to_string(MINIMUM_WAKE_TIME) + " s");
-        return false;
-    }
-
-    Logger::info("The wake-sleep duration will be " + std::to_string(delta_t) + " s");
-    return true;
-}
-
-bool CommandBase::set_rtc_alarm()
-{
-    if (not this->reset_rtc_alarm())
-    {
-        Logger::error("Failed to reset alarm");
-        return false;
-    }
-
-    std::string str_wakeup_time = std::to_string(this->time_wake);
-    return write_to_file(SYSFS_WAKEALARM, str_wakeup_time);
+    return is_valid_suspend_state(this->configs.suspend_type);
 }

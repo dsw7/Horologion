@@ -37,18 +37,18 @@ set(FULL_PATH_BINARY "${CMAKE_BINARY_DIR}/${OUTPUT_NAME}")
 
 message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
 
-include_directories("foo")
+include_directories("src")
 
 add_executable(
     ${OUTPUT_NAME}
-    "foo/main.cpp"
-    "foo/command_base.cpp"
-    "foo/command_loop.cpp"
-    "foo/parse_config_file.cpp"
-    "foo/utils_file.cpp"
-    "foo/utils_time.cpp"
-    "foo/utils_sysfs.cpp"
-    "foo/logger.cpp"
+    "src/main.cpp"
+    "src/command_base.cpp"
+    "src/command_loop.cpp"
+    "src/parse_config_file.cpp"
+    "src/utils_file.cpp"
+    "src/utils_time.cpp"
+    "src/utils_sysfs.cpp"
+    "src/logger.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)
