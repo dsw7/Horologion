@@ -15,8 +15,6 @@ SERVICE_NAME=horolog.service
 SRC_SERVICE_FILE=$(dirname $0)/systemd
 DST_SERVICE_FILE=/etc/systemd/system
 
-LOG_FILEPATH=/var/log/horolog.log
-
 echo -e "\e[1m\e[4mHorologion Sleep Wake Cycle Management Software\e[0m\n"
 
 if [ $(id --user) -ne 0 ];
@@ -33,13 +31,25 @@ install()
     cp --verbose ${SRC_BINARY}/${BINARY_NAME} ${DST_BINARY}/
     cp --verbose ${SRC_CONFIG}/${CONFIG_FILE} ${DST_CONFIG}/
     cp --verbose ${SRC_SERVICE_FILE}/${SERVICE_FILE} ${DST_SERVICE_FILE}/
+
+    local user=$(whoami)
+    sed -i "s/username/${user}/" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+    sed -i "s@execstart@${DST_BINARY}\/${BINARY_NAME} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+
+    systemctl daemon-reload
+    systemctl start ${SERVICE_NAME}
+    systemctl enable ${SERVICE_NAME}
+    systemctl status ${SERVICE_NAME}
 }
 
 uninstall()
 {
+    systemctl stop ${SERVICE_NAME}
+    systemctl disable ${SERVICE_NAME}
+    systemctl daemon-reload
+
     rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
     rm --force --verbose ${DST_CONFIG}/${CONFIG_FILE}
-    rm --force --verbose ${LOG_FILEPATH}
     rm --force --verbose ${DST_BINARY}/${BINARY_NAME}
 }
 
