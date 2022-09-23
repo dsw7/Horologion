@@ -1,6 +1,13 @@
 #include "command_loop.h"
 
-// ----------------------------------------------------------------------------------------------------------
+void signal_handler(int signum)
+{
+    Logger::info("Received signal " + std::to_string(signum));
+    Logger::info("Ending loop");
+
+    unset_rtc_alarm();
+    exit(signum);
+}
 
 void worker_run_command(std::string *target, std::string *command)
 {
@@ -66,15 +73,15 @@ bool CommandLoop::set_wake_duration()
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
-    this->wake_duration = this->time_wake - time_sleep;
+    this->wake_duration = time_sleep - this->time_wake;
 
-    if (this->time_wake < 0)
+    if (this->wake_duration < 0)
     {
         Logger::error("Invalid sleep / wake time. Sleep time sooner than wake time");
         return false;
     }
 
-    if (this->time_wake == 0)
+    if (this->wake_duration == 0)
     {
         Logger::error("Wake and sleep time cannot be identical!");
         return false;
@@ -83,26 +90,13 @@ bool CommandLoop::set_wake_duration()
     return true;
 }
 
-void CommandLoop::shift_window_by_one_day()
+void CommandLoop::set_alarm()
 {
-    this->time_wake += SECONDS_PER_DAY;
-}
-
-void CommandLoop::log_window_limits()
-{
-    Logger::info("Next scheduled wake up time:");
-
+    Logger::info("Setting RTC alarm. Next scheduled wake up time:");
     Logger::info("The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake));
     Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
-}
 
-void signal_handler(int signum)
-{
-    Logger::info("Received signal " + std::to_string(signum));
-    Logger::info("Ending loop");
-
-    unset_rtc_alarm();
-    exit(signum);
+    set_rtc_alarm(this->time_wake);
 }
 
 void CommandLoop::deploy_jobs()
@@ -137,12 +131,25 @@ void CommandLoop::run_loop()
 {
     Logger::info("Starting loop");
 
+    bool alarm_is_set = false;
     std::time_t current_epoch_time;
 
     while (true)
     {
         current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
+
+        if (current_epoch_time >= this->time_wake)
+        {
+            this->time_wake += SECONDS_PER_DAY;
+            alarm_is_set = false;
+        }
+
+        if (not alarm_is_set)
+        {
+            this->set_alarm();
+            alarm_is_set = true;
+        }
 
         sleep(1);
     }

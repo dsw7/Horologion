@@ -13,13 +13,8 @@
 
 const unsigned int SECONDS_PER_DAY = 86400;
 
-// ----------------------------------------------------------------------------------------------------------
-
-void worker_run_command(std::string *target, std::string *command);
-
-// ----------------------------------------------------------------------------------------------------------
-
 void interrupt_signal_handler(int signum);
+void worker_run_command(std::string *target, std::string *command);
 
 class CommandLoop: public CommandBase
 {
@@ -29,8 +24,7 @@ class CommandLoop: public CommandBase
 
         void compute_wake_sleep_window();
         bool set_wake_duration();
-        void shift_window_by_one_day();
-        void log_window_limits();
+        void set_alarm();
         void deploy_jobs();
         void run_loop();
 
