@@ -76,8 +76,6 @@ void worker_run_command(std::string *target, std::string *command)
     }
 }
 
-// ----------------------------------------------------------------------------------------------------------
-
 bool CommandLoop::set_times()
 {
     this->time_wake = get_epoch_time_from_configs(
