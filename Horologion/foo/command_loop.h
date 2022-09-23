@@ -22,10 +22,10 @@ class CommandLoop: public CommandBase
 {
     private:
         std::time_t time_wake = 0;
+        std::time_t time_run_cmd = 0;
         std::time_t wake_duration = 0;
 
-        void compute_wake_sleep_window();
-        bool set_wake_duration();
+        bool set_times();
         void set_alarm();
         void deploy_jobs();
         void run_loop();

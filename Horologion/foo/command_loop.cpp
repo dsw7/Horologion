@@ -24,6 +24,8 @@ void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
 
     Logger::info_thread_safe("<target_0> Suspending system");
     suspend_system(*suspend_type);
+
+    Logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }
 
 void worker_run_command(std::string *target, std::string *command)
@@ -76,12 +78,18 @@ void worker_run_command(std::string *target, std::string *command)
 
 // ----------------------------------------------------------------------------------------------------------
 
-bool CommandLoop::set_wake_duration()
+bool CommandLoop::set_times()
 {
     this->time_wake = get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
         this->configs.time_wake.tm_sec  // set seconds to zero
+    );
+
+    this->time_run_cmd = get_epoch_time_from_configs(
+        this->configs.time_run_cmd.tm_hour,
+        this->configs.time_run_cmd.tm_min,
+        this->configs.time_run_cmd.tm_sec  // set seconds to zero
     );
 
     std::time_t time_sleep = get_epoch_time_from_configs(
@@ -155,11 +163,6 @@ void CommandLoop::run_loop()
         current_epoch_time = std::time(nullptr);
         Logger::info(std::to_string(current_epoch_time));
 
-        if (current_epoch_time == this->time_wake)
-        {
-            this->deploy_jobs();
-        }
-
         if (current_epoch_time > this->time_wake)
         {
             this->time_wake += SECONDS_PER_DAY;
@@ -170,6 +173,16 @@ void CommandLoop::run_loop()
         {
             this->set_alarm();
             alarm_is_set = true;
+        }
+
+        if (current_epoch_time == this->time_run_cmd)
+        {
+            this->deploy_jobs();
+        }
+
+        if (current_epoch_time > this->time_run_cmd)
+        {
+            this->time_run_cmd += SECONDS_PER_DAY;
         }
 
         sleep(1);
@@ -193,7 +206,7 @@ void CommandLoop::main()
         exit(EXIT_FAILURE);
     }
 
-    if (not this->set_wake_duration())
+    if (not this->set_times())
     {
         exit(EXIT_FAILURE);
     }
