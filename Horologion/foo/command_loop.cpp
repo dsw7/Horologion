@@ -98,17 +98,17 @@ bool CommandLoop::set_times()
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
-    this->wake_duration = time_sleep - this->time_wake;
-
-    if (this->wake_duration < 0)
+    if ((this->time_run_cmd - this->time_wake) < 60)
     {
-        Logger::error("Invalid sleep / wake time. Sleep time sooner than wake time");
+        Logger::error("The command run time should be at least one minute ahead of the wake time!");
         return false;
     }
 
-    if (this->wake_duration == 0)
+    this->wake_duration = time_sleep - this->time_run_cmd;
+
+    if (this->wake_duration < 60)
     {
-        Logger::error("Wake and sleep time cannot be identical!");
+        Logger::error("The sleep time should be at least one minute ahead of the command run time!");
         return false;
     }
 
