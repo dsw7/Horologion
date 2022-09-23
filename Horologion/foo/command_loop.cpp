@@ -9,13 +9,15 @@ void signal_handler(int signum)
     exit(signum);
 }
 
-void worker_stay_awake(std::time_t *duration)
+void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
 {
     Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*duration) + " seconds");
     std::this_thread::sleep_for(std::chrono::seconds(*duration));
 
     Logger::info_thread_safe("<target_0> " + std::to_string(*duration) + " seconds have elapsed");
     Logger::info_thread_safe("<target_0> Suspending system");
+
+    suspend_system(*suspend_type);
 }
 
 void worker_run_command(std::string *target, std::string *command)
@@ -113,7 +115,7 @@ void CommandLoop::deploy_jobs()
     unsigned int num_commands = this->configs.commands.size();
 
     std::vector<std::thread> jobs;
-    jobs.push_back(std::thread(worker_stay_awake, &this->wake_duration));
+    jobs.push_back(std::thread(worker_stay_awake, &this->wake_duration, &this->configs.suspend_type));
 
     if (num_commands > 0)
     {

@@ -15,7 +15,7 @@
 const unsigned int SECONDS_PER_DAY = 86400;
 
 void interrupt_signal_handler(int signum);
-void worker_stay_awake(std::time_t *duration);
+void worker_stay_awake(std::time_t *duration, std::string *suspend_type);
 void worker_run_command(std::string *target, std::string *command);
 
 class CommandLoop: public CommandBase
