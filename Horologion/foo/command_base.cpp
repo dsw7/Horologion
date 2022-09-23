@@ -99,5 +99,6 @@ bool CommandBase::is_config_file_input_sane()
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
-    return true;
+    Logger::info("Validating suspend type");
+    return is_valid_suspend_state(this->configs.suspend_type);
 }

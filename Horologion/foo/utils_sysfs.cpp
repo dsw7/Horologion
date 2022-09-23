@@ -15,3 +15,33 @@ bool set_rtc_alarm(unsigned int wake_time)
 
     return write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
+
+bool is_valid_suspend_state(std::string &state_from_ini)
+{
+    std::string sysfs_states, state;
+
+    if (not read_file(SYSFS_STATE, sysfs_states))
+    {
+        return false;
+    }
+
+    std::stringstream ss_states(sysfs_states);
+
+    bool is_valid_state = false;
+
+    while (ss_states >> state)
+    {
+        if (state_from_ini.compare(state) == 0)
+        {
+            is_valid_state = true;
+        }
+    }
+
+    if (not is_valid_state)
+    {
+        Logger::error("State \"" + state_from_ini + "\" not supported!");
+        Logger::error("Valid states are: " + sysfs_states);
+    }
+
+    return is_valid_state;
+}

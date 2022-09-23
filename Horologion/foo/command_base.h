@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "parse_config_file.h"
 #include "utils_file.h"
+#include "utils_sysfs.h"
 
 const std::string PROG_CONFIG = "/etc/horolog.ini";
 
