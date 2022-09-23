@@ -52,7 +52,7 @@ void worker_run_command(std::string *target, std::string *command)
 
 // ----------------------------------------------------------------------------------------------------------
 
-bool CommandLoop::set_window_limits()
+bool CommandLoop::set_wake_duration()
 {
     this->time_wake = get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
@@ -60,15 +60,23 @@ bool CommandLoop::set_window_limits()
         this->configs.time_wake.tm_sec  // set seconds to zero
     );
 
-    this->time_sleep = get_epoch_time_from_configs(
+    std::time_t time_sleep = get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec  // set seconds to zero
     );
 
-    if (this->time_wake >= this->time_sleep)
+    this->wake_duration = this->time_wake - time_sleep;
+
+    if (this->time_wake < 0)
     {
-        Logger::error("Sleep time cannot be sooner than or equal to wake time");
+        Logger::error("Invalid sleep / wake time. Sleep time sooner than wake time");
+        return false;
+    }
+
+    if (this->time_wake == 0)
+    {
+        Logger::error("Wake and sleep time cannot be identical!");
         return false;
     }
 
@@ -78,18 +86,14 @@ bool CommandLoop::set_window_limits()
 void CommandLoop::shift_window_by_one_day()
 {
     this->time_wake += SECONDS_PER_DAY;
-    this->time_sleep += SECONDS_PER_DAY;
 }
 
 void CommandLoop::log_window_limits()
 {
-    Logger::info("Next scheduled wake up / sleep times:");
+    Logger::info("Next scheduled wake up time:");
 
     Logger::info("The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake));
     Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
-
-    Logger::info("The machine will sleep at " + epoch_time_to_ascii_time(this->time_sleep));
-    Logger::info("The machine will sleep at " + std::to_string(this->time_sleep) + " seconds since Epoch");
 }
 
 void signal_handler(int signum)
@@ -161,7 +165,7 @@ void CommandLoop::main()
         exit(EXIT_FAILURE);
     }
 
-    if (not this->set_window_limits())
+    if (not this->set_wake_duration())
     {
         exit(EXIT_FAILURE);
     }

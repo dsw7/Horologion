@@ -26,9 +26,6 @@ struct Configs
 class CommandBase
 {
     protected:
-        std::time_t time_wake = 0;
-        std::time_t time_sleep = 0;
-
         bool is_running_as_root();
         bool read_configs_from_file();
         bool is_config_file_input_sane();

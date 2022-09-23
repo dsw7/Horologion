@@ -24,8 +24,11 @@ void interrupt_signal_handler(int signum);
 class CommandLoop: public CommandBase
 {
     private:
+        std::time_t time_wake = 0;
+        std::time_t wake_duration = 0;
+
         void compute_wake_sleep_window();
-        bool set_window_limits();
+        bool set_wake_duration();
         void shift_window_by_one_day();
         void log_window_limits();
         void deploy_jobs();
