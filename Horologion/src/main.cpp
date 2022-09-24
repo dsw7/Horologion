@@ -12,7 +12,9 @@ void help_commands(char *filename)
     "\e[1m\e[4mCommands:\e[0m\n\n"
     "  -h, --help    Print help information and exit.\n"
     "  loop          \e[1mStart the wake-sleep cycle.\e[0m This command should be run by\n"
-    "                systemd or some equivalent init system.";
+    "                systemd or some equivalent init system.\n"
+    "  plan          \e[1mPrint a schematic outlining current cycle plan.\e[0m Use this command\n"
+    "                to visually depict each cycle.";
 
     std::cerr << commands << std::endl;
 }
@@ -36,6 +38,9 @@ int main(int argc, char **argv)
     {
         CommandLoop command;
         command.main();
+    }
+    else if (command.compare("plan") == 0)
+    {
     }
     else
     {
