@@ -9,11 +9,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 - [How it works](#how-it-works)
 - [Setup](#setup)
   - [Step 1 - Run install script](#step-1---run-install-script)
-  - [Step 2 - Check that binary is ready](#step-2---check-that-binary-is-ready)
-  - [Step 3 - Set wake-sleep window](#step-3---set-wake-sleep-window)
-  - [Step 4 - Select the suspend type](#step-4---select-the-suspend-type)
-  - [Step 5 - Choose commands to run](#step-5---choose-commands-to-run)
-  - [Step 6 - Enable the trigger](#step-6---enable-the-trigger)
+  - [Step 2 - Set custom configurations](#step-2---set-custom-configurations)
 - [Teardown](#teardown)
 ## How it works
 To start, let's provide some definitions:
@@ -80,18 +76,21 @@ Select setup type:
 >
 ```
 Type 1 then press enter. The install script will compile a binary and position all requisite files.
-### Step 2 - Check that binary is ready
-Run the following:
-```
-horolog --help
-```
-Which should print a help menu.
-### Step 3 - Set wake-sleep window
+### Step 2 - Set custom configurations
 Open the software's configuration file:
 ```
 sudo vi /etc/horolog.ini
 ```
-And edit the following fields:
+#### Set critical times
+Start by setting the critical times. The critical times must adhere to the conditions set out in the [Setup](#setup)
+section. A mapping follows:
+
+| Variable | Field in `ini` file |
+| ---- | ---- |
+| $t_w$ | `time-wake-{hour,minute}` |
+| $t_c$ | `time-cmd-{hour,minute}` |
+| $t_s$ | `time-sleep-{hour,minute}` |
+
 ```ini
 # ----------------------------------------
 # When the machine should wake up
@@ -104,6 +103,16 @@ time-wake-hour = 8
 time-wake-minute = 0
 
 # ----------------------------------------
+# When the machine should run commands
+# ----------------------------------------
+
+# Specify hour [0-23]
+time-cmd-hour = 8
+
+# Specify minute [0-59]
+time-cmd-minute = 1
+
+# ----------------------------------------
 # When the machine should sleep
 # ----------------------------------------
 
@@ -111,11 +120,12 @@ time-wake-minute = 0
 time-sleep-hour = 8
 
 # Specify minute [0-59]
-time-sleep-minute = 5
+time-sleep-minute = 2
 ```
-The above defaults will wake the machine at 8:00 AM and suspend the system at 8:05 AM. All times are
-interpreted in the system's time zone setting.
-### Step 4 - Select the suspend type
+The above defaults will wake the machine at 8:00 AM, run all commands at 8:01 AM, and suspend the system at
+8:02 AM. All times are interpreted in the system's time zone setting.
+
+#### Set suspend types
 The suspend type will dictate the overall power savings when the machine is suspended.
 ```ini
 # Select one of:
@@ -129,7 +139,8 @@ The suspend type will dictate the overall power savings when the machine is susp
 suspend-type = mem
 ```
 ACPI state S4 (`disk`) provides the greatest power savings at the expense of the longest wake latency.
-### Step 5 - Choose commands to run
+
+#### Choose commands to run
 Locate the targets section in `horolog.ini` and choose some targets:
 ```ini
 # Specify targets following target_1 ... target_n
@@ -137,13 +148,8 @@ Locate the targets section in `horolog.ini` and choose some targets:
 target_1 = sleep 1
 target_2 = sleep 2
 ```
-The above two commands will be run 1 minute after the scheduled wake time (i.e. 8:01 AM). Both commands will
-be spawned as subprocesses.
-### Step 6 - Enable the trigger
-To enable the system, run:
-```
-sudo horolog enable
-```
+The above two commands will be run at time $t_c$ and will run concurrently.
+
 ## Teardown
 To uninstall the product, make the script executable:
 ```
