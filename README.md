@@ -12,6 +12,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
   - [Step 2 - Set custom configurations](#step-2---set-custom-configurations)
   - [Step 3 - Start service](#step-3---start-service)
 - [Teardown](#teardown)
+- [Files](#files)
 ## How it works
 To start, let's provide some definitions:
 | Variable | Description |
@@ -178,3 +179,14 @@ Select setup type:
 >
 ```
 Type 2 then press enter. The install script will uninstall all relevant files.
+
+## Files
+The following section describes the files associated with this project:
+
+| File | Description
+| ---- | ---- |
+| `/usr/bin/horolog` | The binary that spawns the `horolog` process |
+| `/etc/horolog.ini` | The `horolog` configuration file |
+| `/etc/systemd/system/horolog.service` | The `horolog` `systemd` unit file |
+| `/sys/class/rtc/rtc0/wakealarm` | The `sysfs` wakealarm file. `horolog` writes an Epoch time to this file indicating when machine should wake |
+| `/sys/power/state`` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
