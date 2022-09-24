@@ -1,7 +1,7 @@
 # Horologion
 An easy-to-use program for waking a Linux machine at a specific time of day, running some commands, then
-suspending the machine some time later. The program achieves this through a delicate interplay between `cron`
-and dynamically modifying the host's real time clock (RTC).
+suspending the machine some time later. The program achieves this by dynamically modifying the host's real
+time clock (RTC).
 > Why not just use `systemd`?
 
 I like `systemd`, but I felt `systemd` was a bit bloated for this task.
@@ -16,6 +16,20 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
   - [Step 6 - Enable the trigger](#step-6---enable-the-trigger)
 - [Teardown](#teardown)
 ## How it works
+The system operates using three critical points in time:
+| Time   | Description |
+| ------ | ------ |
+| $t_{w}$ | System wake up time |
+| $t_{c}$ | Command run time |
+| $t_{s}$ | System suspend time |
+
+The following conditions must hold:
+$$
+t_w < t_c < t_s
+$$
+
+
+
 The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
 host wakes up and is suspended, respectively. The system also assumes that $t_s$ does not cross into the
 next calendar day. The following cycle depicts the program's daily rhythm:
