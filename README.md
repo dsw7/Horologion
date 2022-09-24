@@ -15,6 +15,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 - [Files](#files)
 - [Logging](#logging)
 - [Disabling the software](#disabling-the-software)
+- [Visualizing what happens per cycle](#visualizing-what-happens-per-cycle)
 
 ## How it works
 To start, let's provide some definitions:
@@ -218,3 +219,31 @@ When the service is stopped in another tab:
 ```bash
 sudo systemctl stop horolog
 ```
+
+## Visualizing what happens per cycle
+To visualize when the next cycle will take place and what will happen during the cycle, run:
+```bash
+horolog plan
+```
+This command will read `/etc/horolog.ini` and return a "schematic" representation:
+```
+[Plan]:
+
+ ┌─{t_w}: Sat Sep DD 08:00:00 YYYY
+ │
+ │
+ ├─{t_c}: Sat Sep DD 08:01:00 YYYY -> [Commands]
+ │
+ │
+ └─{t_s}: Sat Sep DD 08:02:00 YYYY
+
+[Commands]: ─┬─ sleep 1
+             ├─ sleep 2
+             └─ sleep 3
+```
+The following mapping applies here:
+| Branch from `plan` command | Variable |
+| ---- | ---- |
+| `{t_w}` | $t_w$ |
+| `{t_c}` | $t_c$ |
+| `{t_s}` | $t_s$ |
