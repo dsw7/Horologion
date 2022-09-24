@@ -27,14 +27,46 @@ void CommandPlan::set_times()
 
 void CommandPlan::print_tree()
 {
-    std::cout << "\nPlan:\n";
+    std::cout << "\n[Plan]:\n\n";
     std::cout << " " + TL_ELBOW + H_LINE + "{t_w}: " + this->time_wake + "\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + V_LINE + "\n";
-    std::cout << " " + RIGHT_TEE + H_LINE + "{t_c}: " + this->time_run_cmd + "-> [Commands]\n";
+    std::cout << " " + RIGHT_TEE + H_LINE + "{t_c}: " + this->time_run_cmd + " -> [Commands]\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + BL_ELBOW + H_LINE + "{t_s}: " + this->time_sleep + "\n";
+    std::cout << std::endl;
+
+    unsigned int n = this->configs.commands.size();
+
+    if (n == 0)
+    {
+        std::cout << "[Commands]: None" << std::endl;
+        return;
+    }
+
+    if (n == 1)
+    {
+        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + this->configs.commands[0].second << std::endl;
+        return;
+    }
+
+    for (unsigned int i = 0; i < n; ++i)
+    {
+        if (i == 0)
+        {
+            std::cout << "[Commands]: " + H_LINE + DOWN_TEE + H_LINE + " " + this->configs.commands[i].second + "\n";
+        }
+        else if (i == n - 1)
+        {
+            std::cout << "             " + BL_ELBOW + H_LINE + " " + this->configs.commands[i].second + "\n";
+        }
+        else
+        {
+            std::cout << "             " + RIGHT_TEE + H_LINE + " " + this->configs.commands[i].second + "\n";
+        }
+    }
+
     std::cout << std::endl;
 }
 
