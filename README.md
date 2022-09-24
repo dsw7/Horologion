@@ -10,6 +10,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 - [Setup](#setup)
   - [Step 1 - Run install script](#step-1---run-install-script)
   - [Step 2 - Set custom configurations](#step-2---set-custom-configurations)
+  - [Step 3 - Start service](#step-3---start-service)
 - [Teardown](#teardown)
 ## How it works
 To start, let's provide some definitions:
@@ -149,6 +150,16 @@ target_1 = sleep 1
 target_2 = sleep 2
 ```
 The above two commands will be run at time $t_c$ and will run concurrently.
+
+### Step 3 - Start service
+Start the service:
+```
+sudo systemctl start horolog
+```
+Then check the service's status:
+```
+sudo systemctl status horolog
+```
 
 ## Teardown
 To uninstall the product, make the script executable:
