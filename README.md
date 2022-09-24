@@ -189,4 +189,4 @@ The following section describes the files associated with this project:
 | `/etc/horolog.ini` | The `horolog` configuration file |
 | `/etc/systemd/system/horolog.service` | The `horolog` `systemd` unit file |
 | `/sys/class/rtc/rtc0/wakealarm` | The `sysfs` wakealarm file. `horolog` writes an Epoch time to this file indicating when machine should wake |
-| `/sys/power/state`` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
+| `/sys/power/state` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
