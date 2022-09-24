@@ -25,7 +25,9 @@ The system operates using three critical points in time:
 
 The following conditions must hold:
 $$
+
 t_w < t_c < t_s
+
 $$
 
 
