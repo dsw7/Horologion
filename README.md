@@ -14,6 +14,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 - [Teardown](#teardown)
 - [Files](#files)
 - [Logging](#logging)
+- [Disabling the software](#disabling-the-software)
 
 ## How it works
 To start, let's provide some definitions:
@@ -197,4 +198,23 @@ The following section describes the files associated with this project:
 Logging is handled by `journald`. The view the logs produced by `horolog`, run:
 ```bash
 sudo journalctl -u horolog -f
+```
+
+## Disabling the software
+To disable the software, simply stop the `horolog` service. This will send a SIGTERM to the `horolog` process
+which will reset the `sysfs` wakealarm file. For example, monitoring the logs in one tab:
+```bash
+sudo journalctl -u horolog -f
+```
+Will log:
+```bash
+systemd[1]: Stopping Horolog Job Scheduling Software...
+horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Received signal 15
+horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Ending loop
+horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Unsetting alarm
+horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Will write "0" to /sys/class/rtc/rtc0/wakealarm
+```
+When the service is stopped in another tab:
+```bash
+sudo systemctl stop horolog
 ```
