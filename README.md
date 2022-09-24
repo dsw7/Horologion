@@ -24,10 +24,21 @@ The system operates using three critical points in time:
 | $t_{s}$ | System suspend time |
 
 The following conditions must hold:
+
+$$
+t_w < t_c < t_s
 $$
 
-t_w < t_c < t_s
+And,
 
+$$
+t_c - t_w \geq 60\ s
+$$
+
+And,
+
+$$
+t_s - t_c \geq 60\ s
 $$
 
 
