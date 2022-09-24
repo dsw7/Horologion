@@ -37,9 +37,7 @@ install()
     sed -i "s@execstart@${DST_BINARY}\/${BINARY_NAME} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
     systemctl daemon-reload
-    systemctl start ${SERVICE_NAME}
     systemctl enable ${SERVICE_NAME}
-    systemctl status ${SERVICE_NAME}
 }
 
 uninstall()
