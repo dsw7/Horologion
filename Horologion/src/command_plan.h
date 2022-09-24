@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <ctime>
 
+#include "utils_time.h"
 #include "command_base.h"
 
 const std::string V_LINE = "\u2502";
@@ -22,6 +24,11 @@ const std::string SQUARE = "\u25a0";
 class CommandPlan: public CommandBase
 {
     private:
+        std::string time_wake = "";
+        std::string time_run_cmd = "";
+        std::string time_sleep = "";
+
+        void set_times();
         void print_tree();
 
     public:
