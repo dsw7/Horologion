@@ -2,6 +2,7 @@
 #include <string>
 
 #include "command_loop.h"
+#include "command_plan.h"
 
 void help_commands(char *filename)
 {
@@ -41,6 +42,8 @@ int main(int argc, char **argv)
     }
     else if (command.compare("plan") == 0)
     {
+        CommandPlan command;
+        command.main();
     }
     else
     {

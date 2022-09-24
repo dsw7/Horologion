@@ -44,6 +44,7 @@ add_executable(
     "src/main.cpp"
     "src/command_base.cpp"
     "src/command_loop.cpp"
+    "src/command_plan.cpp"
     "src/parse_config_file.cpp"
     "src/utils_file.cpp"
     "src/utils_time.cpp"
