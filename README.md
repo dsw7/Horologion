@@ -62,11 +62,11 @@ Given the above conditions are met, the program will follow:
 ## Setup
 ### Step 1 - Run install script
 Make the script executable:
-```
+```bash
 chmod +x Horologion/install.sh
 ```
 Then run the script with elevated privileges:
-```
+```bash
 sudo ./Horologion/install.sh
 ```
 The following menu will appear:
@@ -79,7 +79,7 @@ Select setup type:
 Type 1 then press enter. The install script will compile a binary and position all requisite files.
 ### Step 2 - Set custom configurations
 Open the software's configuration file:
-```
+```bash
 sudo vi /etc/horolog.ini
 ```
 #### Set critical times
@@ -153,16 +153,16 @@ The above two commands will be run at time $t_c$ and will run concurrently.
 
 ### Step 3 - Start service
 Start the service:
-```
+```bash
 sudo systemctl start horolog
 ```
 Then check the service's status:
-```
+```bash
 sudo systemctl status horolog
 ```
 
 ## Teardown
-To uninstall the product, make the script executable:
+To uninstall the product, make the install script executable:
 ```
 chmod +x Horologion/install.sh
 ```
