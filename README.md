@@ -247,3 +247,5 @@ The following mapping applies here:
 | `{t_w}` | $t_w$ |
 | `{t_c}` | $t_c$ |
 | `{t_s}` | $t_s$ |
+
+This output can be interpreted as: "At time `t_c` the commands under the `[Commands]` tree will be executed.
