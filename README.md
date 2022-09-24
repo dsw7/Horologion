@@ -43,27 +43,23 @@ $$
 t_s - t_c \geq v
 $$
 
-The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
-host wakes up and is suspended, respectively. The system also assumes that $t_s$ does not cross into the
-next calendar day. The following cycle depicts the program's daily rhythm:
+The system also assumes that the interval bounded by $t_w$ and $t_s$ is bounded within the same calendar day.
+Given the above conditions are met, the program will follow:
 
 | Day | Time   | Action |
 | --- | ------ | ------ |
 | $1$ | $t_{w1}$ | System wakes up |
-| $1$ | $t_{w1} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| $1$ | $t_{w1} + 60\ s$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$ |
-| $1$ | $t_{w1} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $1$ | $t_{c1}$ | `horolog` process runs user defined commands |
+| $1$ | $t_{c1}$ | `horolog` process sets alarm for $t_{w1} + 86400\ s$, or $t_{w2}$ |
 | $1$ | $t_{s1}$ | `horolog` process sends ACPI suspend signal to machine |
-| $2$ | $t_{w2}$ | System wakes up (this value is equal to $t_{w1} + 86400\ s$) |
-| $2$ | $t_{w2} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| $2$ | $t_{w2} + 60\ s$ | `horolog` process sets alarm for $t_{w2} + 86400\ s$ |
-| $2$ | $t_{w2} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $2$ | $t_{w2}$ | System wakes up |
+| $2$ | $t_{c2}$ | `horolog` process runs user defined commands |
+| $2$ | $t_{c2}$ | `horolog` process sets alarm for $t_{w2} + 86400\ s$, or $t_{w3}$ |
 | $2$ | $t_{s2}$ | `horolog` process sends ACPI suspend signal to machine |
 | ... | ... | ... |
-| $n$ | $t_{wn}$ | System wakes up (this value is equal to $t_{wn - 1} + 86400\ s$) |
-| $n$ | $t_{wn} + 60\ s$ | `cron` job is triggered which runs `horolog` binary |
-| $n$ | $t_{wn} + 60\ s$ | `horolog` process sets alarm for $t_{wn} + 86400\ s$ |
-| $n$ | $t_{wn} + 60\ s$ | `horolog` process runs subprocesses (targets) |
+| $n$ | $t_{wn}$ | System wakes up |
+| $n$ | $t_{cn}$ | `horolog` process runs user defined commands |
+| $n$ | $t_{cn}$ | `horolog` process sets alarm for $t_{wn} + 86400\ s$, or $t_{wn + 1}$ |
 | $n$ | $t_{sn}$ | `horolog` process sends ACPI suspend signal to machine |
 
 ## Setup
