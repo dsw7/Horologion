@@ -16,12 +16,14 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
   - [Step 6 - Enable the trigger](#step-6---enable-the-trigger)
 - [Teardown](#teardown)
 ## How it works
-The system operates using three critical points in time:
-| Time   | Description |
-| ------ | ------ |
-| $t_{w}$ | System wake up time |
-| $t_{c}$ | Command run time |
-| $t_{s}$ | System suspend time |
+To start, let's provide some definitions:
+| Variable | Description |
+| ---- | ---- |
+| $t_w$ | System wake up time |
+| $t_c$ | Command run time |
+| $t_s$ | System suspend time |
+| $u$ | Difference between $t_w$ and $t_c$ |
+| $v$ | Difference between $t_c$ and $t_s$ |
 
 The following conditions must hold:
 
@@ -32,16 +34,14 @@ $$
 And,
 
 $$
-t_c - t_w \geq 60\ s
+t_c - t_w \geq u
 $$
 
 And,
 
 $$
-t_s - t_c \geq 60\ s
+t_s - t_c \geq v
 $$
-
-
 
 The system assumes two limits exist, $t_w$, and $t_s$, where $t_w$ and $t_s$ refer to the times that the
 host wakes up and is suspended, respectively. The system also assumes that $t_s$ does not cross into the
