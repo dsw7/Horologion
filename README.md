@@ -13,6 +13,8 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
   - [Step 3 - Start service](#step-3---start-service)
 - [Teardown](#teardown)
 - [Files](#files)
+- [Logging](#logging)
+
 ## How it works
 To start, let's provide some definitions:
 | Variable | Description |
@@ -190,3 +192,9 @@ The following section describes the files associated with this project:
 | `/etc/systemd/system/horolog.service` | The `horolog` `systemd` unit file |
 | `/sys/class/rtc/rtc0/wakealarm` | The `sysfs` wakealarm file. `horolog` writes an Epoch time to this file indicating when machine should wake |
 | `/sys/power/state` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
+
+## Logging
+Logging is handled by `journald`. The view the logs produced by `horolog`, run:
+```bash
+sudo journalctl -u horolog -f
+```
