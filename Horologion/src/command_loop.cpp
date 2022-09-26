@@ -23,6 +23,8 @@ void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
     }
 
     Logger::info_thread_safe("<target_0> Suspending system");
+    std::cout << std::flush;
+
     suspend_system(*suspend_type);
 
     Logger::info_thread_safe("<target_0> Waking system and terminating this thread");

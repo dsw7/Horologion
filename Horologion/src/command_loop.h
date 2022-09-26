@@ -6,6 +6,7 @@
 #include <chrono>
 #include <csignal>
 #include <thread>
+#include <iostream>
 #include <unistd.h>
 
 #include "command_base.h"
