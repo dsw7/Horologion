@@ -2,6 +2,7 @@
 #define UTILS_SYSFS_H
 
 #include <map>
+#include <iostream>
 #include <string>
 #include <sstream>
 
