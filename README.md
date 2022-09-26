@@ -11,6 +11,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
   - [Step 1 - Run install script](#step-1---run-install-script)
   - [Step 2 - Set custom configurations](#step-2---set-custom-configurations)
   - [Step 3 - Start service](#step-3---start-service)
+  - [Step 4 - Suspend the system](#step-4---suspend-the-system)
 - [Teardown](#teardown)
 - [Files](#files)
 - [Logging](#logging)
@@ -164,6 +165,15 @@ Then check the service's status:
 ```bash
 sudo systemctl status horolog
 ```
+
+### Step 4 - Suspend the system
+When work on the system is complete, suspend the system using `systemd`:
+```bash
+sudo systemctl suspend
+```
+The system should then wake at the next scheduled $t_w$ time and respect the configurations specified in
+`/etc/horolog.ini`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake
+at the next time $t_w$.
 
 ## Teardown
 To uninstall the product, make the install script executable:
