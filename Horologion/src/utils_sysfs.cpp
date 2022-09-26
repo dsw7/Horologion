@@ -66,6 +66,5 @@ bool suspend_system(std::string &suspend_type)
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     Logger::info("Suspending system to state " + suspend_types[suspend_type]);
 
-    std::cout << std::flush;
     return write_to_file(SYSFS_STATE, suspend_type);
 }
