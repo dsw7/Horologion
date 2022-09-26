@@ -16,7 +16,7 @@ void help_commands(char *filename)
     "  loop          \e[1mStart the wake-sleep cycle.\e[0m This command should be run by\n"
     "                systemd or some equivalent init system.\n"
     "  plan          \e[1mPrint a schematic outlining current cycle plan.\e[0m Use this command\n"
-    "                to visually depict each cycle."
+    "                to visually depict each cycle.\n"
     "  test          \e[1mRun targets specified in program configuration file.\e[0m This command should only \n"
     "                be used for debugging.";
 
