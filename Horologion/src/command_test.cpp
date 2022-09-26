@@ -1,5 +1,34 @@
 #include "command_test.h"
 
+void CommandTest::deploy_jobs()
+{
+    unsigned int num_commands = this->configs.commands.size();
+
+    if (num_commands < 1)
+    {
+        Logger::info("No targets specified. Exiting!");
+        exit(EXIT_SUCCESS);
+    }
+
+    std::vector<std::thread> jobs;
+
+    for (unsigned int i = 0; i < num_commands; ++i)
+    {
+        jobs.push_back(
+            std::thread(
+                worker_run_command,
+                &this->configs.commands.at(i).first,
+                &this->configs.commands.at(i).second
+            )
+        );
+    }
+
+    for (unsigned int i = 0; i < jobs.size(); ++i)
+    {
+        jobs.at(i).detach();
+    }
+}
+
 void CommandTest::main()
 {
     if (not this->is_running_as_root())
@@ -11,4 +40,6 @@ void CommandTest::main()
     {
         exit(EXIT_FAILURE);
     }
+
+    this->deploy_jobs();
 };
