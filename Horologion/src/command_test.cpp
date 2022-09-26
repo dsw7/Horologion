@@ -27,7 +27,7 @@ void CommandTest::deploy_jobs()
 
     for (unsigned int i = 0; i < jobs.size(); ++i)
     {
-        jobs.at(i).detach();
+        jobs.at(i).join();
     }
 }
 
