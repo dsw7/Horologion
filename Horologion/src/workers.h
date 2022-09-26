@@ -6,6 +6,7 @@
 #include <chrono>
 #include <thread>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "utils_sysfs.h"
 
