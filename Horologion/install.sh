@@ -1,7 +1,3 @@
-# ----------------------------------------
-# Horologion Sleep Wake Cycle Management Software
-# ----------------------------------------
-
 SRC_BINARY=$(dirname $0)/bin
 BINARY_NAME=horolog
 DST_BINARY=/usr/bin
