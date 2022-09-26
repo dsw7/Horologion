@@ -171,7 +171,7 @@ When work on the system is complete, suspend the system using `systemd`:
 ```bash
 sudo systemctl suspend
 ```
-The system should then wake at the next scheduled $t_w$ time and respect the configurations specified in
+The system should then wake at the next scheduled time $t_w$ and respect the configurations specified in
 `/etc/horolog.ini`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake
 at the next time $t_w$.
 
