@@ -50,6 +50,7 @@ add_executable(
     "src/utils_time.cpp"
     "src/utils_sysfs.cpp"
     "src/logger.cpp"
+    "src/workers.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)
