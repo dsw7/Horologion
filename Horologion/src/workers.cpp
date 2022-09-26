@@ -38,7 +38,6 @@ void worker_run_command(std::string *target, std::string *command)
 
     Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
 
-    setuid(1000);
     FILE* pipe = popen(command->c_str(), "r");
 
     if (!pipe)
@@ -66,5 +65,4 @@ void worker_run_command(std::string *target, std::string *command)
     {
         Logger::info_thread_safe("<" + *target + "> No output from target");
     }
-    setuid(0);
 }
