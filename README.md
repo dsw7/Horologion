@@ -89,8 +89,8 @@ Open the software's configuration file:
 sudo vi /etc/horolog.ini
 ```
 #### Set critical times
-Start by setting the critical times. The critical times must adhere to the conditions set out in the [Setup](#setup)
-section. A mapping follows:
+Start by setting the critical times. The critical times must adhere to the conditions set out in the
+[How it works](#how-it-works) section. A mapping follows:
 
 | Variable | Field in `ini` file |
 | ---- | ---- |
