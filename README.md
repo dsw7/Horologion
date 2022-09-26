@@ -137,7 +137,6 @@ The suspend type will dictate the overall power savings when the machine is susp
 # Select one of:
 
 # none    -> Do nothing (useful for troubleshooting)
-# freeze  -> Suspend-to-Idle     ACPI state S0
 # standby -> Power-On Suspend    ACPI state S1
 # mem     -> Suspend-to-RAM      ACPI state S3
 # disk    -> Suspend-to-Disk     ACPI state S4

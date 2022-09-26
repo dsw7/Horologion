@@ -58,7 +58,6 @@ bool suspend_system(std::string &suspend_type)
 
     static std::map<std::string, std::string> suspend_types =
     {
-        {"freeze", "S0 (Suspend-to-Idle)"},
         {"standby", "S1 (Power-On Suspend)"},
         {"mem", "S3 (Suspend-to-RAM)"},
         {"disk", "S4 (Suspend-to-Disk)"}
