@@ -42,11 +42,6 @@ uninstall()
     systemctl disable ${SERVICE_NAME}
     systemctl daemon-reload
 
-    local date_now=$(date -u)
-    local filename="${date_now// /_}_${CONFIG_FILE}"
-
-    cp --verbose ${DST_CONFIG}/${CONFIG_FILE} /tmp/${filename}
-
     rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
     rm --force --verbose ${DST_CONFIG}/${CONFIG_FILE}
     rm --force --verbose ${DST_BINARY}/${BINARY_NAME}
