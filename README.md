@@ -2,9 +2,10 @@
 An easy-to-use program for waking a Linux machine at a specific time of day, running some commands, then
 suspending the machine some time later. The program achieves this by dynamically modifying the host's real
 time clock (RTC).
-> Why not just use `systemd`?
 
-I like `systemd`, but I felt `systemd` was a bit bloated for this task.
+> Why not just use `systemd-sleep` or perhaps some `cron` / `rtcwake` combination?
+
+These solutions are recommended. However, I wanted a more user-friendly "self-contained" solution.
 ## Table of Contents
 - [How it works](#how-it-works)
 - [Setup](#setup)
