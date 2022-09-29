@@ -17,6 +17,7 @@ I like `systemd`, but I felt `systemd` was a bit bloated for this task.
 - [Logging](#logging)
 - [Disabling the software](#disabling-the-software)
 - [Visualizing what happens per cycle](#visualizing-what-happens-per-cycle)
+- [Limitations of this software](#limitations-of-this-software)
 
 ## How it works
 To start, let's provide some definitions:
@@ -258,3 +259,8 @@ The following mapping applies here:
 | `{t_s}` | $t_s$ |
 
 This output can be interpreted as: "At time `t_c`, the commands under the `[Commands]` tree will be executed."
+
+## Limitations of this software
+This software manipulates the `sysfs` pseudofilesystem which requires elevated privileges. Additionally, this
+software runs processes via `popen` system calls. It is recommended to limit root access to any machine
+running this software in addition to ensuring that `/etc/horolog.ini` is only root-writeable.
