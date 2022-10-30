@@ -28,6 +28,9 @@ set(CMAKE_CXX_STANDARD 17)
 # Lots of warnings + all warnings as errors
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
+# Relax when it comes to missing field initializers
+add_compile_options(-Wno-missing-field-initializers)
+
 # Support threading
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
