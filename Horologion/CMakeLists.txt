@@ -25,6 +25,9 @@ message(STATUS "Detected ${CMAKE_SYSTEM}")
 # Use C++ 17 or later
 set(CMAKE_CXX_STANDARD 17)
 
+# Lots of warnings + all warnings as errors
+add_compile_options(-Wall -Wextra -pedantic -Werror)
+
 # Support threading
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
