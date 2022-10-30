@@ -38,6 +38,9 @@ set(OUTPUT_NAME horolog)
 # Set full path to binary
 set(FULL_PATH_BINARY "${CMAKE_BINARY_DIR}/${OUTPUT_NAME}")
 
+# Compile with debug symbols
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
+
 message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
 
 include_directories("src")
