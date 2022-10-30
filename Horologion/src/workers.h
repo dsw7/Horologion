@@ -1,5 +1,4 @@
-#ifndef COMMAND_WORKERS_H
-#define COMMAND_WORKERS_H
+#pragma once
 
 #include <string>
 #include <ctime>
@@ -11,5 +10,3 @@
 
 void worker_stay_awake(std::time_t *duration, std::string *suspend_type);
 void worker_run_command(std::string *target, std::string *command);
-
-#endif

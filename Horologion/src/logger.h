@@ -1,5 +1,4 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -25,5 +24,3 @@ namespace Logger
 
     void debug_map(std::map<std::string, std::string> &map);
 }
-
-#endif

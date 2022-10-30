@@ -1,5 +1,4 @@
-#ifndef COMMAND_BASE_H
-#define COMMAND_BASE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -36,5 +35,3 @@ class CommandBase
         Configs configs;
         virtual void main() {};
 };
-
-#endif

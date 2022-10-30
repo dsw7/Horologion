@@ -1,5 +1,4 @@
-#ifndef COMMAND_RUN_LOOP_H
-#define COMMAND_RUN_LOOP_H
+#pragma once
 
 #include <string>
 #include <ctime>
@@ -30,5 +29,3 @@ class CommandLoop: public CommandBase
     public:
         void main();
 };
-
-#endif

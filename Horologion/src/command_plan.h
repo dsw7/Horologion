@@ -1,5 +1,4 @@
-#ifndef COMMAND_PLAN_H
-#define COMMAND_PLAN_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -28,5 +27,3 @@ class CommandPlan: public CommandBase
     public:
         void main();
 };
-
-#endif

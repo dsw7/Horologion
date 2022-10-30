@@ -1,5 +1,4 @@
-#ifndef COMMAND_TEST_H
-#define COMMAND_TEST_H
+#pragma once
 
 #include <vector>
 #include <thread>
@@ -16,5 +15,3 @@ class CommandTest: public CommandBase
     public:
         void main();
 };
-
-#endif
