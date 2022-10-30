@@ -7,17 +7,17 @@
 
 void help_commands(char *filename)
 {
-    std::cerr << "\e[1m\e[4mUsage:\e[0m\n\n";
+    std::cerr << "\033[1m\033[4mUsage:\033[0m\n\n";
     std::cerr << "  $ " << filename << " <command> [<options>]\n\n";
 
     std::string commands =
-    "\e[1m\e[4mCommands:\e[0m\n\n"
+    "\033[1m\033[4mCommands:\033[0m\n\n"
     "  -h, --help    Print help information and exit.\n"
-    "  loop          \e[1mStart the wake-sleep cycle.\e[0m This command should be run by\n"
+    "  loop          \033[1mStart the wake-sleep cycle.\033[0m This command should be run by\n"
     "                systemd or some equivalent init system.\n"
-    "  plan          \e[1mPrint a schematic outlining current cycle plan.\e[0m Use this command\n"
+    "  plan          \033[1mPrint a schematic outlining current cycle plan.\033[0m Use this command\n"
     "                to visually depict each cycle.\n"
-    "  test          \e[1mRun targets specified in program configuration file.\e[0m This command should only \n"
+    "  test          \033[1mRun targets specified in program configuration file.\033[0m This command should only\n"
     "                be used for debugging.";
 
     std::cerr << commands << std::endl;
