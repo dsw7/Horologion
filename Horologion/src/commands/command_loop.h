@@ -8,7 +8,7 @@
 #include "command_base.h"
 #include "utils_time.h"
 #include "utils_sysfs.h"
-#include "command_loop_workers.h"
+#include "workers.h"
 
 const unsigned int SECONDS_PER_DAY = 86400;
 
