@@ -145,4 +145,4 @@ void CommandLoop::main()
     signal(SIGTERM, signal_handler);
 
     this->run_loop();
-};
+}

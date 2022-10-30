@@ -46,4 +46,4 @@ void CommandTest::main()
     this->deploy_jobs();
 
     Logger::info("Finished running all targets");
-};
+}
