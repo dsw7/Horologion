@@ -84,4 +84,4 @@ void CommandPlan::main()
 
     this->set_times();
     this->print_tree();
-};
+}
