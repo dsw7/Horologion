@@ -9,6 +9,9 @@ const std::string TL_ELBOW = "\u250c";
 
 class CommandPlan: public CommandBase
 {
+    public:
+        void main();
+
     private:
         std::string time_wake = "";
         std::string time_run_cmd = "";
@@ -16,7 +19,4 @@ class CommandPlan: public CommandBase
 
         void set_times();
         void print_tree();
-
-    public:
-        void main();
 };

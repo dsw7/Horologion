@@ -10,6 +10,9 @@ void interrupt_signal_handler(int signum);
 
 class CommandLoop: public CommandBase
 {
+    public:
+        void main();
+
     private:
         std::time_t time_wake = 0;
         std::time_t time_run_cmd = 0;
@@ -19,7 +22,4 @@ class CommandLoop: public CommandBase
         void set_alarm();
         void deploy_jobs();
         void run_loop();
-
-    public:
-        void main();
 };

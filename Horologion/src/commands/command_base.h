@@ -16,12 +16,12 @@ struct Configs
 
 class CommandBase
 {
+    public:
+        Configs configs;
+        virtual void main() {};
+
     protected:
         bool is_running_as_root();
         bool read_configs_from_file();
         bool is_config_file_input_sane();
-
-    public:
-        Configs configs;
-        virtual void main() {};
 };
