@@ -1,3 +1,9 @@
+#include <vector>
+#include <thread>
+
+#include "command_base.h"
+#include "logger.h"
+#include "workers.h"
 #include "command_test.h"
 
 void CommandTest::deploy_jobs()

@@ -1,3 +1,12 @@
+#include <string>
+#include <ctime>
+#include <csignal>
+#include <thread>
+
+#include "utils_time.h"
+#include "utils_sysfs.h"
+#include "workers.h"
+#include "logger.h"
 #include "command_loop.h"
 
 void signal_handler(int signum)

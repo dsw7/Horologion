@@ -1,16 +1,6 @@
 #pragma once
 
-#include <string>
 #include <vector>
-#include <ctime>
-#include <map>
-#include <utility>
-#include <unistd.h>
-
-#include "logger.h"
-#include "parse_config_file.h"
-#include "utils_file.h"
-#include "utils_sysfs.h"
 
 const std::string PROG_CONFIG = "/etc/horolog.ini";
 

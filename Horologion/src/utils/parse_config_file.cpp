@@ -1,3 +1,7 @@
+#include <string>
+#include <map>
+#include <sstream>
+
 #include "parse_config_file.h"
 
 void strip_whitespace_from_left(std::string &str)

@@ -1,4 +1,12 @@
+#include <string>
+#include <ctime>
+#include <chrono>
+#include <thread>
+#include <stdio.h>
+
+#include "utils_sysfs.h"
 #include "workers.h"
+#include "logger.h"
 
 void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
 {

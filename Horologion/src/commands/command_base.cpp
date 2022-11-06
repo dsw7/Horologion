@@ -1,3 +1,14 @@
+#include <string>
+#include <vector>
+#include <ctime>
+#include <map>
+#include <utility>
+#include <unistd.h>
+
+#include "logger.h"
+#include "parse_config_file.h"
+#include "utils_file.h"
+#include "utils_sysfs.h"
 #include "command_base.h"
 
 bool CommandBase::is_running_as_root()

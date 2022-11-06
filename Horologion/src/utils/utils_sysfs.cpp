@@ -1,3 +1,9 @@
+#include <map>
+#include <string>
+#include <sstream>
+
+#include "logger.h"
+#include "utils_file.h"
 #include "utils_sysfs.h"
 
 bool unset_rtc_alarm()

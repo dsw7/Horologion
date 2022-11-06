@@ -1,12 +1,5 @@
 #pragma once
 
-#include <map>
-#include <string>
-#include <sstream>
-
-#include "utils_file.h"
-#include "logger.h"
-
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string SYSFS_STATE = "/sys/power/state";
 

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <map>
-#include <mutex>
 #include <unistd.h>
+#include <map>
+#include <string>
 
 std::string get_current_datetime_string();
 
@@ -14,6 +12,7 @@ const std::string LOG_ERROR = " " + std::to_string(getpid()) + " E ";
 
 namespace Logger
 {
+
     void info(const std::string &message);
     void warning(const std::string &message);
     void error(const std::string &message);
