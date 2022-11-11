@@ -22,7 +22,7 @@ void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
     }
 
     Logger::info_thread_safe("<target_0> Suspending system");
-    suspend_system(*suspend_type);
+    ::suspend_system(*suspend_type);
 
     Logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }
@@ -46,7 +46,7 @@ void worker_run_command(std::string *target, std::string *command)
 
     Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
 
-    FILE* pipe = popen(command->c_str(), "r");
+    FILE* pipe = ::popen(command->c_str(), "r");
 
     if (!pipe)
     {
@@ -54,13 +54,13 @@ void worker_run_command(std::string *target, std::string *command)
         return;
     }
 
-    while (fgets(buffer.data(), 128, pipe) != NULL)
+    while (::fgets(buffer.data(), 128, pipe) != NULL)
     {
         Logger::info_thread_safe("<" + *target + "> Reading output from target");
         subproc_output += buffer.data();
     }
 
-    if (pclose(pipe) != 0)
+    if (::pclose(pipe) != 0)
     {
         Logger::warning_thread_safe("<" + *target + "> Target exited with non-zero exit code");
     }

@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     if (argc < 2)
     {
-        help_commands(argv[0]);
+        ::help_commands(argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 
     if (command.compare("-h") == 0 or command.compare("--help") == 0)
     {
-        help_commands(argv[0]);
+        ::help_commands(argv[0]);
         return EXIT_SUCCESS;
     }
     else if (command.compare("loop") == 0)
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        help_commands(argv[0]);
+        ::help_commands(argv[0]);
         return EXIT_FAILURE;
     }
 

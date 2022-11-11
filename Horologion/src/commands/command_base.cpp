@@ -13,7 +13,7 @@
 
 bool CommandBase::is_running_as_root()
 {
-    if (getuid() != 0)
+    if (::getuid() != 0)
     {
         Logger::error("Not running as root. Additional privileges needed!");
         return false;
@@ -26,14 +26,14 @@ bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
 
-    if (not read_file(PROG_CONFIG, file_contents))
+    if (not ::read_file(PROG_CONFIG, file_contents))
     {
         Logger::error("Could not load configurations. Cannot continue");
         return false;
     }
 
     std::map<std::string, std::string> raw_configs;
-    parse_configs(file_contents, raw_configs);
+    ::parse_configs(file_contents, raw_configs);
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++)
     {
@@ -133,5 +133,5 @@ bool CommandBase::is_config_file_input_sane()
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
-    return is_valid_suspend_state(this->configs.suspend_type);
+    return ::is_valid_suspend_state(this->configs.suspend_type);
 }

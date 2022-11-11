@@ -25,5 +25,5 @@ std::time_t get_epoch_time_from_configs(int &hour, int &minute, int &second)
     tm_time->tm_min = minute;
     tm_time->tm_sec = second;
 
-    return mktime(tm_time);
+    return ::mktime(tm_time);
 }

@@ -11,7 +11,7 @@ bool unset_rtc_alarm()
     Logger::info("Unsetting alarm");
     std::string unset_str = "0";
 
-    return write_to_file(SYSFS_WAKEALARM, unset_str);
+    return ::write_to_file(::SYSFS_WAKEALARM, unset_str);
 }
 
 bool set_rtc_alarm(unsigned int wake_time)
@@ -19,7 +19,7 @@ bool set_rtc_alarm(unsigned int wake_time)
     Logger::info("Setting alarm");
     std::string str_wake_time = std::to_string(wake_time);
 
-    return write_to_file(SYSFS_WAKEALARM, str_wake_time);
+    return ::write_to_file(::SYSFS_WAKEALARM, str_wake_time);
 }
 
 bool is_valid_suspend_state(std::string &state_from_ini)
@@ -28,7 +28,7 @@ bool is_valid_suspend_state(std::string &state_from_ini)
 
     std::string sysfs_states, state;
 
-    if (not read_file(SYSFS_STATE, sysfs_states))
+    if (not ::read_file(::SYSFS_STATE, sysfs_states))
     {
         return false;
     }
@@ -72,5 +72,5 @@ bool suspend_system(std::string &suspend_type)
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     Logger::info("Suspending system to state " + suspend_types[suspend_type]);
 
-    return write_to_file(SYSFS_STATE, suspend_type);
+    return ::write_to_file(::SYSFS_STATE, suspend_type);
 }

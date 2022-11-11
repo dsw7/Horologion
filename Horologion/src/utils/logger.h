@@ -12,7 +12,6 @@ const std::string LOG_ERROR = " " + std::to_string(getpid()) + " E ";
 
 namespace Logger
 {
-
     void info(const std::string &message);
     void warning(const std::string &message);
     void error(const std::string &message);

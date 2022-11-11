@@ -15,7 +15,7 @@ void CommandTest::deploy_jobs()
     if (num_commands < 1)
     {
         Logger::info("No targets specified. Exiting!");
-        exit(EXIT_SUCCESS);
+        ::exit(EXIT_SUCCESS);
     }
 
     std::vector<std::thread> jobs;
@@ -41,12 +41,12 @@ void CommandTest::main()
 {
     if (not this->is_running_as_root())
     {
-        exit(EXIT_FAILURE);
+        ::exit(EXIT_FAILURE);
     }
 
     if (not this->read_configs_from_file())
     {
-        exit(EXIT_FAILURE);
+        ::exit(EXIT_FAILURE);
     }
 
     this->deploy_jobs();
