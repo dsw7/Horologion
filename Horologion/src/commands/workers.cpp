@@ -8,7 +8,7 @@
 #include "workers.h"
 #include "logger.h"
 
-void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
+void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
 {
     Logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*duration) + " seconds");
     std::this_thread::sleep_for(std::chrono::seconds(*duration));
@@ -27,7 +27,7 @@ void worker_stay_awake(std::time_t *duration, std::string *suspend_type)
     Logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }
 
-void worker_run_command(std::string *target, std::string *command)
+void worker_run_command(const std::string *target, std::string *command)
 {
     std::array<char, 128> buffer;
     std::string subproc_output;

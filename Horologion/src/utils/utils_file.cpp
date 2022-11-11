@@ -17,7 +17,7 @@ bool file_exists(const std::string &filepath)
     return true;
 }
 
-bool write_to_file(const std::string &filepath, std::string &message)
+bool write_to_file(const std::string &filepath, const std::string &message)
 {
     if (not ::file_exists(filepath))
     {

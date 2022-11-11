@@ -6,7 +6,7 @@
 
 const unsigned int SECONDS_PER_DAY = 86400;
 
-void interrupt_signal_handler(int signum);
+void interrupt_signal_handler(const int signum);
 
 class CommandLoop: public CommandBase
 {

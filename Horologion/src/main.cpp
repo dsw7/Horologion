@@ -5,7 +5,7 @@
 #include "command_plan.h"
 #include "command_test.h"
 
-void help_commands(char *filename)
+void help_commands(const char *filename)
 {
     std::cerr << "\033[1m\033[4mUsage:\033[0m\n\n";
     std::cerr << "  $ " << filename << " <command> [<options>]\n\n";

@@ -14,7 +14,7 @@ bool unset_rtc_alarm()
     return ::write_to_file(::SYSFS_WAKEALARM, unset_str);
 }
 
-bool set_rtc_alarm(unsigned int wake_time)
+bool set_rtc_alarm(const unsigned int wake_time)
 {
     Logger::info("Setting alarm");
     std::string str_wake_time = std::to_string(wake_time);
@@ -22,7 +22,7 @@ bool set_rtc_alarm(unsigned int wake_time)
     return ::write_to_file(::SYSFS_WAKEALARM, str_wake_time);
 }
 
-bool is_valid_suspend_state(std::string &state_from_ini)
+bool is_valid_suspend_state(const std::string &state_from_ini)
 {
     Logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
 
@@ -54,7 +54,7 @@ bool is_valid_suspend_state(std::string &state_from_ini)
     return is_valid_state;
 }
 
-bool suspend_system(std::string &suspend_type)
+bool suspend_system(const std::string &suspend_type)
 {
     if (suspend_type.compare("none") == 0)
     {

@@ -9,7 +9,7 @@
 #include "logger.h"
 #include "command_loop.h"
 
-void signal_handler(int signum)
+void signal_handler(const int signum)
 {
     Logger::info("Received signal " + std::to_string(signum));
     Logger::info("Ending loop");
