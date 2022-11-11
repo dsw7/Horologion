@@ -26,7 +26,7 @@ bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
 
-    if (not ::read_file(PROG_CONFIG, file_contents))
+    if (not ::read_file(::PROG_CONFIG, file_contents))
     {
         Logger::error("Could not load configurations. Cannot continue");
         return false;
