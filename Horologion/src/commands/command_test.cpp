@@ -1,10 +1,10 @@
-#include <vector>
-#include <thread>
+#include "command_test.h"
 
-#include "command_base.h"
 #include "logger.h"
 #include "workers.h"
-#include "command_test.h"
+
+#include <thread>
+#include <vector>
 
 void CommandTest::deploy_jobs()
 {

@@ -1,9 +1,9 @@
-#include <iostream>
-#include <string>
-
 #include "command_loop.h"
 #include "command_plan.h"
 #include "command_test.h"
+
+#include <iostream>
+#include <string>
 
 void help_commands(const char *filename)
 {

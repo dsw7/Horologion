@@ -1,8 +1,6 @@
-#include <string>
-#include <ctime>
+#include "utils_time.h"
 
 #include "logger.h"
-#include "utils_time.h"
 
 std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
 {

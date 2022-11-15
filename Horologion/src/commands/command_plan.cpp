@@ -1,10 +1,9 @@
-#include <iostream>
-#include <string>
-#include <ctime>
+#include "command_plan.h"
 
 #include "utils_time.h"
-#include "command_base.h"
-#include "command_plan.h"
+
+#include <ctime>
+#include <iostream>
 
 void CommandPlan::set_times()
 {

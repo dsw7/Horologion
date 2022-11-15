@@ -1,10 +1,10 @@
-#include <map>
-#include <string>
-#include <sstream>
+#include "utils_sysfs.h"
 
 #include "logger.h"
 #include "utils_file.h"
-#include "utils_sysfs.h"
+
+#include <map>
+#include <sstream>
 
 bool unset_rtc_alarm()
 {

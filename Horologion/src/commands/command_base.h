@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 const std::string PROG_CONFIG = "/etc/horolog.ini";

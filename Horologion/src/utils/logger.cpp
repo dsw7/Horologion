@@ -1,7 +1,7 @@
+#include "logger.h"
+
 #include <iostream>
 #include <mutex>
-
-#include "logger.h"
 
 // return pointer
 std::string get_current_datetime_string()

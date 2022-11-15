@@ -1,5 +1,9 @@
 #pragma once
 
+#include "command_base.h"
+
+#include <string>
+
 const std::string V_LINE = "\u2502";
 const std::string H_LINE = "\u2500";
 const std::string RIGHT_TEE = "\u251c";

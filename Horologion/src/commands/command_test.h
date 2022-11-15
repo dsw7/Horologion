@@ -1,5 +1,7 @@
 #pragma once
 
+#include "command_base.h"
+
 class CommandTest: public CommandBase
 {
     public:

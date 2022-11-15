@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ctime>
-
 #include "command_base.h"
+
+#include <ctime>
 
 const unsigned int SECONDS_PER_DAY = 86400;
 

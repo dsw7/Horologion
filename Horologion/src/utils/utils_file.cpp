@@ -1,9 +1,9 @@
-#include <string>
-#include <fstream>
-#include <sys/stat.h>
+#include "utils_file.h"
 
 #include "logger.h"
-#include "utils_file.h"
+
+#include <fstream>
+#include <sys/stat.h>
 
 bool file_exists(const std::string &filepath)
 {
