@@ -213,12 +213,16 @@ sudo journalctl -u horolog -f
 ```
 
 ## Disabling the software
-To disable the software, simply stop the `horolog` service. This will send a SIGTERM to the `horolog` process
-which will reset the `sysfs` wakealarm file. For example, monitoring the logs in one tab:
+To disable the software, simply stop the `horolog` service:
+```bash
+sudo systemctl stop horolog
+```
+This will send a SIGTERM to the `horolog` process which will reset the `sysfs` wakealarm file. Inspecting the
+logs using:
 ```bash
 sudo journalctl -u horolog -f
 ```
-Will log:
+Should reveal:
 ```bash
 systemd[1]: Stopping Horolog Job Scheduling Software...
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Received signal 15
@@ -226,9 +230,9 @@ horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Ending loop
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Unsetting alarm
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Will write "0" to /sys/class/rtc/rtc0/wakealarm
 ```
-When the service is stopped in another tab:
+To prevent the software from restarting when the machine is rebooted, run:
 ```bash
-sudo systemctl stop horolog
+sudo systemctl disable horolog
 ```
 
 ## Visualizing what happens per cycle
