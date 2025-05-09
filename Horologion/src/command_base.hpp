@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-const std::string PROG_CONFIG = "/etc/horolog.ini";
-
 struct Configs {
     std::vector<std::pair<std::string, std::string>> commands = {};
     std::string suspend_type = "mem";

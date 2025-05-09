@@ -5,6 +5,15 @@
 #include <ctime>
 #include <iostream>
 
+namespace {
+const std::string V_LINE = "\u2502";
+const std::string H_LINE = "\u2500";
+const std::string RIGHT_TEE = "\u251c";
+const std::string DOWN_TEE = "\u252c";
+const std::string BL_ELBOW = "\u2514";
+const std::string TL_ELBOW = "\u250c";
+} // namespace
+
 void CommandPlan::set_times()
 {
     std::time_t time_wake = utils::get_epoch_time_from_configs(

@@ -9,6 +9,10 @@
 #include <string>
 #include <thread>
 
+namespace {
+
+const unsigned int SECONDS_PER_DAY = 86400;
+
 void signal_handler(const int signum)
 {
     Logger::info("Received signal " + std::to_string(signum));
@@ -17,6 +21,8 @@ void signal_handler(const int signum)
     utils::unset_rtc_alarm();
     exit(signum);
 }
+
+} // namespace
 
 bool CommandLoop::set_times()
 {

@@ -2,19 +2,27 @@
 
 #include <iostream>
 #include <mutex>
+#include <unistd.h>
 
-// return pointer
+namespace {
+
+const std::string LOG_INFO = " " + std::to_string(getpid()) + " I ";
+const std::string LOG_WARNING = " " + std::to_string(getpid()) + " W ";
+const std::string LOG_ERROR = " " + std::to_string(getpid()) + " E ";
+
 std::string get_current_datetime_string()
 {
     time_t time_now = time(0);
     struct tm time_struct;
     char time_buffer[80];
 
-    time_struct = *::localtime(&time_now);
+    time_struct = *localtime(&time_now);
     strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%dT%X", &time_struct);
 
     return time_buffer;
 }
+
+} // namespace
 
 namespace Logger {
 
@@ -67,4 +75,5 @@ void debug_map(std::map<std::string, std::string> &map)
     }
     std::cout << "}" << std::endl;
 }
+
 } // namespace Logger

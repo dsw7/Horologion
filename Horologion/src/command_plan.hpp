@@ -4,13 +4,6 @@
 
 #include <string>
 
-const std::string V_LINE = "\u2502";
-const std::string H_LINE = "\u2500";
-const std::string RIGHT_TEE = "\u251c";
-const std::string DOWN_TEE = "\u252c";
-const std::string BL_ELBOW = "\u2514";
-const std::string TL_ELBOW = "\u250c";
-
 class CommandPlan: public CommandBase {
 public:
     void main();

@@ -50,12 +50,12 @@ void worker_run_command(const std::string *target, std::string *command)
     std::array<char, 128> buffer;
     std::string subproc_output;
 
-    while (::fgets(buffer.data(), 128, pipe) != NULL) {
+    while (fgets(buffer.data(), 128, pipe) != NULL) {
         Logger::info_thread_safe("<" + *target + "> Reading output from target");
         subproc_output += buffer.data();
     }
 
-    if (::pclose(pipe) != 0) {
+    if (pclose(pipe) != 0) {
         Logger::warning_thread_safe("<" + *target + "> Target exited with non-zero exit code");
     }
 

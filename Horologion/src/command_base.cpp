@@ -9,6 +9,10 @@
 #include <unistd.h>
 #include <utility>
 
+namespace {
+const std::string PROG_CONFIG = "/etc/horolog.ini";
+}
+
 bool CommandBase::is_running_as_root()
 {
     if (::getuid() != 0) {

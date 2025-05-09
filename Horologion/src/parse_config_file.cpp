@@ -2,9 +2,11 @@
 
 #include <sstream>
 
+namespace {
+
 void strip_whitespace_from_left(std::string &str)
 {
-    std::size_t found_ws = str.find_first_not_of(" ");
+    const std::size_t found_ws = str.find_first_not_of(" ");
 
     if (found_ws == std::string::npos) {
         return;
@@ -15,7 +17,7 @@ void strip_whitespace_from_left(std::string &str)
 
 void strip_whitespace_from_right(std::string &str)
 {
-    std::size_t found_ws = str.find_last_not_of(" ");
+    const std::size_t found_ws = str.find_last_not_of(" ");
 
     if (found_ws == std::string::npos) {
         return;
@@ -24,7 +26,9 @@ void strip_whitespace_from_right(std::string &str)
     str.erase(found_ws + 1);
 }
 
-void parse_configs(std::string &file_contents, std::map<std::string, std::string> &raw_configs)
+} // namespace
+
+void parse_configs(const std::string &file_contents, std::map<std::string, std::string> &raw_configs)
 {
     std::istringstream is_file(file_contents);
     std::string line;

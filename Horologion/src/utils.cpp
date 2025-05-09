@@ -57,8 +57,7 @@ bool read_file(const std::string &filepath, std::string &file_contents)
     std::ifstream filestream(filepath);
 
     std::string line;
-    while (getline(filestream, line)) // macro defined getline?
-    {
+    while (getline(filestream, line)) {
         file_contents += line + "\n";
     }
 
