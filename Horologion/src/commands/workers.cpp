@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "utils_sysfs.h"
 
+#include <array>
 #include <chrono>
 #include <stdio.h>
 #include <thread>
@@ -28,9 +29,6 @@ void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
 
 void worker_run_command(const std::string *target, std::string *command)
 {
-    std::array<char, 128> buffer;
-    std::string subproc_output;
-
     if (command->find_first_not_of(' ') == std::string::npos)
     {
         Logger::error_thread_safe("<" + *target + "> Found empty command. Doing nothing");
@@ -52,6 +50,9 @@ void worker_run_command(const std::string *target, std::string *command)
         Logger::error_thread_safe("<" + *target + "> Target could not be started");
         return;
     }
+
+    std::array<char, 128> buffer;
+    std::string subproc_output;
 
     while (::fgets(buffer.data(), 128, pipe) != NULL)
     {
