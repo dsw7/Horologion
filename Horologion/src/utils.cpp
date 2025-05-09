@@ -91,7 +91,7 @@ std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, cons
 bool unset_rtc_alarm()
 {
     logger::info("Unsetting alarm");
-    std::string unset_str = "0";
+    const std::string unset_str = "0";
 
     return utils::write_to_file(SYSFS_WAKEALARM, unset_str);
 }
@@ -99,7 +99,7 @@ bool unset_rtc_alarm()
 bool set_rtc_alarm(const unsigned int wake_time)
 {
     logger::info("Setting alarm");
-    std::string str_wake_time = std::to_string(wake_time);
+    const std::string str_wake_time = std::to_string(wake_time);
 
     return utils::write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
@@ -108,7 +108,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 {
     logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
 
-    std::string sysfs_states, state;
+    std::string sysfs_states;
 
     if (not utils::read_file(SYSFS_STATE, sysfs_states)) {
         return false;
@@ -117,6 +117,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
     std::stringstream ss_states(sysfs_states);
 
     bool is_valid_state = false;
+    std::string state;
 
     while (ss_states >> state) {
         if (state_from_ini.compare(state) == 0) {
