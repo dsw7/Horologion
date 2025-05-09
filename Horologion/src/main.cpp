@@ -31,16 +31,16 @@ int main(int argc, char **argv)
 
     std::string first_arg = std::string(argv[1]);
 
-    if (first_arg.compare("-h") == 0 or first_arg.compare("--help") == 0) {
+    if (first_arg == "-h" or first_arg == "--help") {
         help_commands(argv[0]);
         return EXIT_SUCCESS;
-    } else if (first_arg.compare("loop") == 0) {
+    } else if (first_arg == "loop") {
         CommandLoop command;
         command.main();
-    } else if (first_arg.compare("plan") == 0) {
+    } else if (first_arg == "plan") {
         CommandPlan command;
         command.main();
-    } else if (first_arg.compare("test") == 0) {
+    } else if (first_arg == "test") {
         CommandTest command;
         command.main();
     } else {

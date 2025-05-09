@@ -120,7 +120,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
     std::string state;
 
     while (ss_states >> state) {
-        if (state_from_ini.compare(state) == 0) {
+        if (state_from_ini == state) {
             is_valid_state = true;
         }
     }
@@ -135,7 +135,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
 bool suspend_system(const std::string &suspend_type)
 {
-    if (suspend_type.compare("none") == 0) {
+    if (suspend_type == "none") {
         logger::info("ACPI signal transmission disabled. Doing nothing");
         return true;
     }

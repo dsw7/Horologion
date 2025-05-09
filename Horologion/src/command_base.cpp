@@ -36,19 +36,19 @@ bool CommandBase::read_configs_from_file()
     parse_configs(file_contents, raw_configs);
 
     for (auto it = raw_configs.begin(); it != raw_configs.end(); it++) {
-        if (it->first.compare("time-wake-hour") == 0) {
+        if (it->first == "time-wake-hour") {
             this->configs.time_wake.tm_hour = atoi(it->second.c_str());
-        } else if (it->first.compare("time-wake-minute") == 0) {
+        } else if (it->first == "time-wake-minute") {
             this->configs.time_wake.tm_min = atoi(it->second.c_str());
-        } else if (it->first.compare("time-cmd-hour") == 0) {
+        } else if (it->first == "time-cmd-hour") {
             this->configs.time_run_cmd.tm_hour = atoi(it->second.c_str());
-        } else if (it->first.compare("time-cmd-minute") == 0) {
+        } else if (it->first == "time-cmd-minute") {
             this->configs.time_run_cmd.tm_min = atoi(it->second.c_str());
-        } else if (it->first.compare("time-sleep-hour") == 0) {
+        } else if (it->first == "time-sleep-hour") {
             this->configs.time_sleep.tm_hour = atoi(it->second.c_str());
-        } else if (it->first.compare("time-sleep-minute") == 0) {
+        } else if (it->first == "time-sleep-minute") {
             this->configs.time_sleep.tm_min = atoi(it->second.c_str());
-        } else if (it->first.compare("suspend-type") == 0) {
+        } else if (it->first == "suspend-type") {
             this->configs.suspend_type = it->second.c_str();
         } else if (it->first.find("target_") != std::string::npos) {
             std::pair<std::string, std::string> command;
