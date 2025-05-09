@@ -1,7 +1,7 @@
 #include "workers.hpp"
 
 #include "logger.hpp"
-#include "utils_sysfs.hpp"
+#include "utils.hpp"
 
 #include <array>
 #include <chrono>
@@ -21,7 +21,7 @@ void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
     }
 
     Logger::info_thread_safe("<target_0> Suspending system");
-    suspend_system(*suspend_type);
+    utils::suspend_system(*suspend_type);
 
     Logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }

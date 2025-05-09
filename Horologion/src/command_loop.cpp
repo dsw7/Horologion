@@ -1,8 +1,7 @@
 #include "command_loop.hpp"
 
 #include "logger.hpp"
-#include "utils_sysfs.hpp"
-#include "utils_time.hpp"
+#include "utils.hpp"
 #include "workers.hpp"
 
 #include <csignal>
@@ -15,25 +14,25 @@ void signal_handler(const int signum)
     Logger::info("Received signal " + std::to_string(signum));
     Logger::info("Ending loop");
 
-    unset_rtc_alarm();
+    utils::unset_rtc_alarm();
     exit(signum);
 }
 
 bool CommandLoop::set_times()
 {
-    this->time_wake = get_epoch_time_from_configs(
+    this->time_wake = utils::get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
         this->configs.time_wake.tm_sec // set seconds to zero
     );
 
-    this->time_run_cmd = get_epoch_time_from_configs(
+    this->time_run_cmd = utils::get_epoch_time_from_configs(
         this->configs.time_run_cmd.tm_hour,
         this->configs.time_run_cmd.tm_min,
         this->configs.time_run_cmd.tm_sec // set seconds to zero
     );
 
-    std::time_t time_sleep = get_epoch_time_from_configs(
+    std::time_t time_sleep = utils::get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec // set seconds to zero
@@ -57,10 +56,10 @@ bool CommandLoop::set_times()
 void CommandLoop::set_alarm()
 {
     Logger::info("Setting RTC alarm. Next scheduled wake up time:");
-    Logger::info("The machine will wake up at " + epoch_time_to_ascii_time(this->time_wake));
+    Logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(this->time_wake));
     Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
 
-    set_rtc_alarm(this->time_wake);
+    utils::set_rtc_alarm(this->time_wake);
 }
 
 void CommandLoop::deploy_jobs()

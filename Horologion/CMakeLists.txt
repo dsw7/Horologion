@@ -46,17 +46,15 @@ include_directories("src")
 
 add_executable(
   ${OUTPUT_NAME}
-  "src/main.cpp"
   "src/command_base.cpp"
   "src/command_loop.cpp"
   "src/command_plan.cpp"
   "src/command_test.cpp"
-  "src/workers.cpp"
-  "src/parse_config_file.cpp"
-  "src/utils_file.cpp"
-  "src/utils_time.cpp"
-  "src/utils_sysfs.cpp"
   "src/logger.cpp"
+  "src/main.cpp"
+  "src/parse_config_file.cpp"
+  "src/utils.cpp"
+  "src/workers.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)

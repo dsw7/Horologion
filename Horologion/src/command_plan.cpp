@@ -1,30 +1,30 @@
 #include "command_plan.hpp"
 
-#include "utils_time.hpp"
+#include "utils.hpp"
 
 #include <ctime>
 #include <iostream>
 
 void CommandPlan::set_times()
 {
-    std::time_t time_wake = get_epoch_time_from_configs(
+    std::time_t time_wake = utils::get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
         this->configs.time_wake.tm_sec);
 
-    std::time_t time_run_cmd = get_epoch_time_from_configs(
+    std::time_t time_run_cmd = utils::get_epoch_time_from_configs(
         this->configs.time_run_cmd.tm_hour,
         this->configs.time_run_cmd.tm_min,
         this->configs.time_run_cmd.tm_sec);
 
-    std::time_t time_sleep = get_epoch_time_from_configs(
+    std::time_t time_sleep = utils::get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec);
 
-    this->time_wake = epoch_time_to_ascii_time(time_wake);
-    this->time_run_cmd = epoch_time_to_ascii_time(time_run_cmd);
-    this->time_sleep = epoch_time_to_ascii_time(time_sleep);
+    this->time_wake = utils::epoch_time_to_ascii_time(time_wake);
+    this->time_run_cmd = utils::epoch_time_to_ascii_time(time_run_cmd);
+    this->time_sleep = utils::epoch_time_to_ascii_time(time_sleep);
 }
 
 void CommandPlan::print_tree()

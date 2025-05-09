@@ -2,8 +2,7 @@
 
 #include "logger.hpp"
 #include "parse_config_file.hpp"
-#include "utils_file.hpp"
-#include "utils_sysfs.hpp"
+#include "utils.hpp"
 
 #include <ctime>
 #include <map>
@@ -24,7 +23,7 @@ bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
 
-    if (not read_file(::PROG_CONFIG, file_contents)) {
+    if (not utils::read_file(::PROG_CONFIG, file_contents)) {
         Logger::error("Could not load configurations. Cannot continue");
         return false;
     }
@@ -106,5 +105,5 @@ bool CommandBase::is_config_file_input_sane()
     Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
     Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
-    return is_valid_suspend_state(this->configs.suspend_type);
+    return utils::is_valid_suspend_state(this->configs.suspend_type);
 }
