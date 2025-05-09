@@ -5,19 +5,15 @@ project(Horologion)
 # Unfortunately need to first check if UNIX then exit if Apple or Cygwin
 
 if(UNIX)
-    message(STATUS "Detected *nix platform. Proceeding.")
-
-    if (APPLE)
-        message(FATAL_ERROR "Detected Apple *nix platform. Cannot proceed!")
-    endif(APPLE)
-
-    if (CYGWIN)
-        message(FATAL_ERROR "Detected Cygwin *nix platform. Cannot proceed!")
-    endif(CYGWIN)
-
+  message(STATUS "Detected *nix platform. Proceeding.")
+  if (APPLE)
+    message(FATAL_ERROR "Detected Apple *nix platform. Cannot proceed!")
+  endif(APPLE)
+  if (CYGWIN)
+    message(FATAL_ERROR "Detected Cygwin *nix platform. Cannot proceed!")
+  endif(CYGWIN)
 else()
-    message(FATAL_ERROR "Cannot compile on non-*nix platform!")
-
+  message(FATAL_ERROR "Cannot compile on non-*nix platform!")
 endif(UNIX)
 
 message(STATUS "Detected ${CMAKE_SYSTEM}")
@@ -47,22 +43,18 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
 
 include_directories("src")
-include_directories("src/commands")
-include_directories("src/utils")
 
 add_executable(
-    ${OUTPUT_NAME}
-    "src/main.cpp"
-    "src/commands/command_base.cpp"
-    "src/commands/command_loop.cpp"
-    "src/commands/command_plan.cpp"
-    "src/commands/command_test.cpp"
-    "src/commands/workers.cpp"
-    "src/utils/parse_config_file.cpp"
-    "src/utils/utils_file.cpp"
-    "src/utils/utils_time.cpp"
-    "src/utils/utils_sysfs.cpp"
-    "src/utils/logger.cpp"
+  ${OUTPUT_NAME}
+  "src/command_base.cpp"
+  "src/command_loop.cpp"
+  "src/command_plan.cpp"
+  "src/command_test.cpp"
+  "src/logger.cpp"
+  "src/main.cpp"
+  "src/parse_config_file.cpp"
+  "src/utils.cpp"
+  "src/workers.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)

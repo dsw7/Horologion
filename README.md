@@ -71,11 +71,11 @@ Given the above conditions are met, the program will follow:
 ### Step 1 - Run install script
 Make the script executable:
 ```bash
-chmod +x Horologion/install.sh
+chmod +x Horologion/install
 ```
 Then run the script with elevated privileges:
 ```bash
-sudo ./Horologion/install.sh
+sudo ./Horologion/install
 ```
 The following menu will appear:
 ```
@@ -180,11 +180,11 @@ at the next time $t_w$.
 ## Teardown
 To uninstall the product, make the install script executable:
 ```
-chmod +x Horologion/install.sh
+chmod +x Horologion/install
 ```
 Then run the script with elevated privileges:
 ```
-sudo ./Horologion/install.sh
+sudo ./Horologion/install
 ```
 The following menu will appear:
 ```
