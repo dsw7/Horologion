@@ -8,12 +8,12 @@
 
 void CommandTest::deploy_jobs()
 {
-    Logger::info("Testing whether all targets are valid...");
+    logger::info("Testing whether all targets are valid...");
 
     unsigned int num_commands = this->configs.commands.size();
 
     if (num_commands < 1) {
-        Logger::info("No targets specified. Exiting!");
+        logger::info("No targets specified. Exiting!");
         exit(EXIT_SUCCESS);
     }
 
@@ -44,5 +44,5 @@ void CommandTest::main()
 
     this->deploy_jobs();
 
-    Logger::info("Finished running all targets");
+    logger::info("Finished running all targets");
 }

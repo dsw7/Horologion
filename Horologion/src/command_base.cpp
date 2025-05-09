@@ -16,7 +16,7 @@ const std::string PROG_CONFIG = "/etc/horolog.ini";
 bool CommandBase::is_running_as_root()
 {
     if (::getuid() != 0) {
-        Logger::error("Not running as root. Additional privileges needed!");
+        logger::error("Not running as root. Additional privileges needed!");
         return false;
     }
 
@@ -28,7 +28,7 @@ bool CommandBase::read_configs_from_file()
     std::string file_contents;
 
     if (not utils::read_file(::PROG_CONFIG, file_contents)) {
-        Logger::error("Could not load configurations. Cannot continue");
+        logger::error("Could not load configurations. Cannot continue");
         return false;
     }
 
@@ -58,12 +58,12 @@ bool CommandBase::read_configs_from_file()
 
             this->configs.commands.push_back(command);
         } else {
-            Logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
+            logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
         }
     }
 
-    Logger::info("Parsed raw configs: ");
-    Logger::debug_map(raw_configs);
+    logger::info("Parsed raw configs: ");
+    logger::debug_map(raw_configs);
 
     return true;
 }
@@ -71,43 +71,43 @@ bool CommandBase::read_configs_from_file()
 bool CommandBase::is_config_file_input_sane()
 {
     if (this->configs.time_wake.tm_hour < 0 or this->configs.time_wake.tm_hour > 23) {
-        Logger::error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
+        logger::error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
         return false;
     }
 
     if (this->configs.time_wake.tm_min < 0 or this->configs.time_wake.tm_min > 59) {
-        Logger::error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
+        logger::error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
         return false;
     }
 
     if (this->configs.time_run_cmd.tm_hour < 0 or this->configs.time_run_cmd.tm_hour > 23) {
-        Logger::error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
+        logger::error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
         return false;
     }
 
     if (this->configs.time_run_cmd.tm_min < 0 or this->configs.time_run_cmd.tm_min > 59) {
-        Logger::error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
+        logger::error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
         return false;
     }
 
     if (this->configs.time_sleep.tm_hour < 0 or this->configs.time_sleep.tm_hour > 23) {
-        Logger::error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
+        logger::error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
         return false;
     }
 
     if (this->configs.time_sleep.tm_min < 0 or this->configs.time_sleep.tm_min > 59) {
-        Logger::error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
+        logger::error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
         return false;
     }
 
-    Logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
-    Logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
+    logger::info("Parsed wake up hour (tm_hour): " + std::to_string(this->configs.time_wake.tm_hour));
+    logger::info("Parsed wake up minute (tm_min): " + std::to_string(this->configs.time_wake.tm_min));
 
-    Logger::info("Parsed command execution hour (tm_hour): " + std::to_string(this->configs.time_run_cmd.tm_hour));
-    Logger::info("Parsed command execution minute (tm_min): " + std::to_string(this->configs.time_run_cmd.tm_min));
+    logger::info("Parsed command execution hour (tm_hour): " + std::to_string(this->configs.time_run_cmd.tm_hour));
+    logger::info("Parsed command execution minute (tm_min): " + std::to_string(this->configs.time_run_cmd.tm_min));
 
-    Logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
-    Logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
+    logger::info("Parsed sleep hour (tm_hour): " + std::to_string(this->configs.time_sleep.tm_hour));
+    logger::info("Parsed sleep minute (tm_min): " + std::to_string(this->configs.time_sleep.tm_min));
 
     return utils::is_valid_suspend_state(this->configs.suspend_type);
 }

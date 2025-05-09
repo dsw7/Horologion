@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-namespace Logger {
+namespace logger {
 
 void info(const std::string &message);
 void warning(const std::string &message);
@@ -15,4 +15,4 @@ void error_thread_safe(const std::string &message);
 
 void debug_map(std::map<std::string, std::string> &map);
 
-} // namespace Logger
+} // namespace logger

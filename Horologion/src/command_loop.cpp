@@ -15,8 +15,8 @@ const unsigned int SECONDS_PER_DAY = 86400;
 
 void signal_handler(const int signum)
 {
-    Logger::info("Received signal " + std::to_string(signum));
-    Logger::info("Ending loop");
+    logger::info("Received signal " + std::to_string(signum));
+    logger::info("Ending loop");
 
     utils::unset_rtc_alarm();
     exit(signum);
@@ -45,14 +45,14 @@ bool CommandLoop::set_times()
     );
 
     if ((this->time_run_cmd - this->time_wake) < 60) {
-        Logger::error("The command run time should be at least one minute ahead of the wake time!");
+        logger::error("The command run time should be at least one minute ahead of the wake time!");
         return false;
     }
 
     this->wake_duration = time_sleep - this->time_run_cmd;
 
     if (this->wake_duration < 60) {
-        Logger::error("The sleep time should be at least one minute ahead of the command run time!");
+        logger::error("The sleep time should be at least one minute ahead of the command run time!");
         return false;
     }
 
@@ -61,9 +61,9 @@ bool CommandLoop::set_times()
 
 void CommandLoop::set_alarm()
 {
-    Logger::info("Setting RTC alarm. Next scheduled wake up time:");
-    Logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(this->time_wake));
-    Logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
+    logger::info("Setting RTC alarm. Next scheduled wake up time:");
+    logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(this->time_wake));
+    logger::info("The machine will wake up at " + std::to_string(this->time_wake) + " seconds since Epoch");
 
     utils::set_rtc_alarm(this->time_wake);
 }
@@ -92,7 +92,7 @@ void CommandLoop::deploy_jobs()
 
 void CommandLoop::run_loop()
 {
-    Logger::info("Starting loop");
+    logger::info("Starting loop");
 
     bool alarm_is_set = false;
     std::time_t current_epoch_time;

@@ -24,7 +24,7 @@ std::string get_current_datetime_string()
 
 } // namespace
 
-namespace Logger {
+namespace logger {
 
 void info(const std::string &message)
 {
@@ -76,4 +76,4 @@ void debug_map(std::map<std::string, std::string> &map)
     std::cout << "}" << std::endl;
 }
 
-} // namespace Logger
+} // namespace logger

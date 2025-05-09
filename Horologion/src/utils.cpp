@@ -30,11 +30,11 @@ namespace utils {
 bool write_to_file(const std::string &filepath, const std::string &message)
 {
     if (not file_exists(filepath)) {
-        Logger::error("File \"" + filepath + "\" does not exist!");
+        logger::error("File \"" + filepath + "\" does not exist!");
         return false;
     }
 
-    Logger::info("Will write \"" + message + "\" to " + filepath);
+    logger::info("Will write \"" + message + "\" to " + filepath);
 
     std::ofstream file;
 
@@ -48,11 +48,11 @@ bool write_to_file(const std::string &filepath, const std::string &message)
 bool read_file(const std::string &filepath, std::string &file_contents)
 {
     if (not file_exists(filepath)) {
-        Logger::error("File \"" + filepath + "\" does not exist!");
+        logger::error("File \"" + filepath + "\" does not exist!");
         return false;
     }
 
-    Logger::info("Reading " + filepath);
+    logger::info("Reading " + filepath);
 
     std::ifstream filestream(filepath);
 
@@ -90,7 +90,7 @@ std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, cons
 
 bool unset_rtc_alarm()
 {
-    Logger::info("Unsetting alarm");
+    logger::info("Unsetting alarm");
     std::string unset_str = "0";
 
     return utils::write_to_file(::SYSFS_WAKEALARM, unset_str);
@@ -98,7 +98,7 @@ bool unset_rtc_alarm()
 
 bool set_rtc_alarm(const unsigned int wake_time)
 {
-    Logger::info("Setting alarm");
+    logger::info("Setting alarm");
     std::string str_wake_time = std::to_string(wake_time);
 
     return utils::write_to_file(::SYSFS_WAKEALARM, str_wake_time);
@@ -106,7 +106,7 @@ bool set_rtc_alarm(const unsigned int wake_time)
 
 bool is_valid_suspend_state(const std::string &state_from_ini)
 {
-    Logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
+    logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
 
     std::string sysfs_states, state;
 
@@ -125,8 +125,8 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
     }
 
     if (not is_valid_state) {
-        Logger::error("State \"" + state_from_ini + "\" not supported!");
-        Logger::error("Valid states are: " + sysfs_states);
+        logger::error("State \"" + state_from_ini + "\" not supported!");
+        logger::error("Valid states are: " + sysfs_states);
     }
 
     return is_valid_state;
@@ -135,7 +135,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 bool suspend_system(const std::string &suspend_type)
 {
     if (suspend_type.compare("none") == 0) {
-        Logger::info("ACPI signal transmission disabled. Doing nothing");
+        logger::info("ACPI signal transmission disabled. Doing nothing");
         return true;
     }
 
@@ -146,7 +146,7 @@ bool suspend_system(const std::string &suspend_type)
     };
 
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
-    Logger::info("Suspending system to state " + suspend_types[suspend_type]);
+    logger::info("Suspending system to state " + suspend_types[suspend_type]);
 
     return utils::write_to_file(::SYSFS_STATE, suspend_type);
 }
