@@ -28,8 +28,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
     std::string sysfs_states, state;
 
-    if (not ::read_file(::SYSFS_STATE, sysfs_states))
-    {
+    if (not ::read_file(::SYSFS_STATE, sysfs_states)) {
         return false;
     }
 
@@ -37,16 +36,13 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
     bool is_valid_state = false;
 
-    while (ss_states >> state)
-    {
-        if (state_from_ini.compare(state) == 0)
-        {
+    while (ss_states >> state) {
+        if (state_from_ini.compare(state) == 0) {
             is_valid_state = true;
         }
     }
 
-    if (not is_valid_state)
-    {
+    if (not is_valid_state) {
         Logger::error("State \"" + state_from_ini + "\" not supported!");
         Logger::error("Valid states are: " + sysfs_states);
     }
@@ -56,17 +52,15 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
 bool suspend_system(const std::string &suspend_type)
 {
-    if (suspend_type.compare("none") == 0)
-    {
+    if (suspend_type.compare("none") == 0) {
         Logger::info("ACPI signal transmission disabled. Doing nothing");
         return true;
     }
 
-    static std::map<std::string, std::string> suspend_types =
-    {
-        {"standby", "S1 (Power-On Suspend)"},
-        {"mem", "S3 (Suspend-to-RAM)"},
-        {"disk", "S4 (Suspend-to-Disk)"}
+    static std::map<std::string, std::string> suspend_types = {
+        { "standby", "S1 (Power-On Suspend)" },
+        { "mem", "S3 (Suspend-to-RAM)" },
+        { "disk", "S4 (Suspend-to-Disk)" }
     };
 
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section

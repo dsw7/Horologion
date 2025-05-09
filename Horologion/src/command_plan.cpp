@@ -10,20 +10,17 @@ void CommandPlan::set_times()
     std::time_t time_wake = ::get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
-        this->configs.time_wake.tm_sec
-    );
+        this->configs.time_wake.tm_sec);
 
     std::time_t time_run_cmd = ::get_epoch_time_from_configs(
         this->configs.time_run_cmd.tm_hour,
         this->configs.time_run_cmd.tm_min,
-        this->configs.time_run_cmd.tm_sec
-    );
+        this->configs.time_run_cmd.tm_sec);
 
     std::time_t time_sleep = ::get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
-        this->configs.time_sleep.tm_sec
-    );
+        this->configs.time_sleep.tm_sec);
 
     this->time_wake = ::epoch_time_to_ascii_time(time_wake);
     this->time_run_cmd = ::epoch_time_to_ascii_time(time_run_cmd);
@@ -44,30 +41,22 @@ void CommandPlan::print_tree()
 
     unsigned int n = this->configs.commands.size();
 
-    if (n == 0)
-    {
+    if (n == 0) {
         std::cout << "[Commands]: None" << std::endl;
         return;
     }
 
-    if (n == 1)
-    {
+    if (n == 1) {
         std::cout << "[Commands]: " + ::H_LINE + ::H_LINE + ::H_LINE + " " + this->configs.commands[0].second << std::endl;
         return;
     }
 
-    for (unsigned int i = 0; i < n; ++i)
-    {
-        if (i == 0)
-        {
+    for (unsigned int i = 0; i < n; ++i) {
+        if (i == 0) {
             std::cout << "[Commands]: " + ::H_LINE + ::DOWN_TEE + ::H_LINE + " " + this->configs.commands[i].second + "\n";
-        }
-        else if (i == n - 1)
-        {
+        } else if (i == n - 1) {
             std::cout << "             " + ::BL_ELBOW + ::H_LINE + " " + this->configs.commands[i].second + "\n";
-        }
-        else
-        {
+        } else {
             std::cout << "             " + ::RIGHT_TEE + ::H_LINE + " " + this->configs.commands[i].second + "\n";
         }
     }
@@ -77,13 +66,11 @@ void CommandPlan::print_tree()
 
 void CommandPlan::main()
 {
-    if (not this->read_configs_from_file())
-    {
+    if (not this->read_configs_from_file()) {
         ::exit(EXIT_FAILURE);
     }
 
-    if (not this->is_config_file_input_sane())
-    {
+    if (not this->is_config_file_input_sane()) {
         ::exit(EXIT_FAILURE);
     }
 

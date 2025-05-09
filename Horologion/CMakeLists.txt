@@ -43,22 +43,20 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
 
 include_directories("src")
-include_directories("src/commands")
-include_directories("src/utils")
 
 add_executable(
   ${OUTPUT_NAME}
   "src/main.cpp"
-  "src/commands/command_base.cpp"
-  "src/commands/command_loop.cpp"
-  "src/commands/command_plan.cpp"
-  "src/commands/command_test.cpp"
-  "src/commands/workers.cpp"
-  "src/utils/parse_config_file.cpp"
-  "src/utils/utils_file.cpp"
-  "src/utils/utils_time.cpp"
-  "src/utils/utils_sysfs.cpp"
-  "src/utils/logger.cpp"
+  "src/command_base.cpp"
+  "src/command_loop.cpp"
+  "src/command_plan.cpp"
+  "src/command_test.cpp"
+  "src/workers.cpp"
+  "src/parse_config_file.cpp"
+  "src/utils_file.cpp"
+  "src/utils_time.cpp"
+  "src/utils_sysfs.cpp"
+  "src/logger.cpp"
 )
 
 target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)

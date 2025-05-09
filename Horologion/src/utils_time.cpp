@@ -6,8 +6,7 @@ std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
 {
     std::string ascii_time = std::string(std::asctime(std::localtime(&epoch_time)));
 
-    if (not ascii_time.empty() and ascii_time[ascii_time.length() - 1] == '\n')
-    {
+    if (not ascii_time.empty() and ascii_time[ascii_time.length() - 1] == '\n') {
         ascii_time.erase(ascii_time.length() - 1);
     }
 
