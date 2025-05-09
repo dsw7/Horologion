@@ -19,7 +19,7 @@ void help_commands(const char *filename)
                            "  test          \033[1mRun targets specified in program configuration file.\033[0m This command should only\n"
                            "                be used for debugging.";
 
-    std::cerr << commands << std::endl;
+    std::cerr << commands << '\n';
 }
 
 int main(int argc, char **argv)

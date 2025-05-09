@@ -46,17 +46,17 @@ void CommandPlan::print_tree()
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + BL_ELBOW + H_LINE + "{t_s}: " + this->time_sleep + "\n";
-    std::cout << std::endl;
+    std::cout << '\n';
 
     unsigned int n = this->configs.commands.size();
 
     if (n == 0) {
-        std::cout << "[Commands]: None" << std::endl;
+        std::cout << "[Commands]: None\n";
         return;
     }
 
     if (n == 1) {
-        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + this->configs.commands[0].second << std::endl;
+        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + this->configs.commands[0].second << '\n';
         return;
     }
 
@@ -70,7 +70,7 @@ void CommandPlan::print_tree()
         }
     }
 
-    std::cout << std::endl;
+    std::cout << '\n';
 }
 
 void CommandPlan::main()
