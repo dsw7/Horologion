@@ -42,15 +42,15 @@ void parse_configs(std::string &file_contents, std::map<std::string, std::string
 
         // then for the extracted line, is_line, we read from the beginning of the line to =
         if (std::getline(is_line, key, '=')) {
-            ::strip_whitespace_from_left(key);
-            ::strip_whitespace_from_right(key);
+            strip_whitespace_from_left(key);
+            strip_whitespace_from_right(key);
 
             std::string value;
 
             // then we read between = and \n
             if (std::getline(is_line, value)) {
-                ::strip_whitespace_from_left(value);
-                ::strip_whitespace_from_right(value);
+                strip_whitespace_from_left(value);
+                strip_whitespace_from_right(value);
 
                 raw_configs[key] = value;
             }

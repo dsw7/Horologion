@@ -21,7 +21,7 @@ void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
     }
 
     Logger::info_thread_safe("<target_0> Suspending system");
-    ::suspend_system(*suspend_type);
+    suspend_system(*suspend_type);
 
     Logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }
@@ -40,7 +40,7 @@ void worker_run_command(const std::string *target, std::string *command)
 
     Logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
 
-    FILE *pipe = ::popen(command->c_str(), "r");
+    FILE *pipe = popen(command->c_str(), "r");
 
     if (!pipe) {
         Logger::error_thread_safe("<" + *target + "> Target could not be started");

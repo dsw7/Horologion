@@ -25,14 +25,14 @@ void help_commands(const char *filename)
 int main(int argc, char **argv)
 {
     if (argc < 2) {
-        ::help_commands(argv[0]);
+        help_commands(argv[0]);
         return EXIT_FAILURE;
     }
 
     std::string command = std::string(argv[1]);
 
     if (command.compare("-h") == 0 or command.compare("--help") == 0) {
-        ::help_commands(argv[0]);
+        help_commands(argv[0]);
         return EXIT_SUCCESS;
     } else if (command.compare("loop") == 0) {
         CommandLoop command;
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
         CommandTest command;
         command.main();
     } else {
-        ::help_commands(argv[0]);
+        help_commands(argv[0]);
         return EXIT_FAILURE;
     }
 
