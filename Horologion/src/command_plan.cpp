@@ -1,6 +1,6 @@
-#include "command_plan.h"
+#include "command_plan.hpp"
 
-#include "utils_time.h"
+#include "utils_time.hpp"
 
 #include <ctime>
 #include <iostream>

@@ -1,6 +1,6 @@
-#include "command_loop.h"
-#include "command_plan.h"
-#include "command_test.h"
+#include "command_loop.hpp"
+#include "command_plan.hpp"
+#include "command_test.hpp"
 
 #include <iostream>
 #include <string>

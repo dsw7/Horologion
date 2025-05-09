@@ -1,9 +1,9 @@
-#include "command_loop.h"
+#include "command_loop.hpp"
 
-#include "logger.h"
-#include "utils_sysfs.h"
-#include "utils_time.h"
-#include "workers.h"
+#include "logger.hpp"
+#include "utils_sysfs.hpp"
+#include "utils_time.hpp"
+#include "workers.hpp"
 
 #include <csignal>
 #include <ctime>

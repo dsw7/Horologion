@@ -1,7 +1,7 @@
-#include "command_test.h"
+#include "command_test.hpp"
 
-#include "logger.h"
-#include "workers.h"
+#include "logger.hpp"
+#include "workers.hpp"
 
 #include <thread>
 #include <vector>

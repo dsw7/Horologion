@@ -1,6 +1,6 @@
 #pragma once
 
-#include "command_base.h"
+#include "command_base.hpp"
 
 class CommandTest: public CommandBase {
 public:

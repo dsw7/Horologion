@@ -1,7 +1,7 @@
-#include "workers.h"
+#include "workers.hpp"
 
-#include "logger.h"
-#include "utils_sysfs.h"
+#include "logger.hpp"
+#include "utils_sysfs.hpp"
 
 #include <array>
 #include <chrono>

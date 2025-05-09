@@ -1,4 +1,4 @@
-#include "parse_config_file.h"
+#include "parse_config_file.hpp"
 
 #include <sstream>
 

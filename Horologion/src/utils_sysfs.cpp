@@ -1,7 +1,7 @@
-#include "utils_sysfs.h"
+#include "utils_sysfs.hpp"
 
-#include "logger.h"
-#include "utils_file.h"
+#include "logger.hpp"
+#include "utils_file.hpp"
 
 #include <map>
 #include <sstream>

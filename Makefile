@@ -19,7 +19,7 @@ help:
 	@echo "$$HELP_LIST_TARGETS"
 
 format:
-	@clang-format -i --verbose --style=file Horologion/src/*.cpp Horologion/src/*.h
+	@clang-format -i --verbose --style=file Horologion/src/*.cpp Horologion/src/*.hpp
 
 compile:
 	@cmake -S Horologion -B $(BUILD_DIR)

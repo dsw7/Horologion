@@ -1,9 +1,9 @@
-#include "command_base.h"
+#include "command_base.hpp"
 
-#include "logger.h"
-#include "parse_config_file.h"
-#include "utils_file.h"
-#include "utils_sysfs.h"
+#include "logger.hpp"
+#include "parse_config_file.hpp"
+#include "utils_file.hpp"
+#include "utils_sysfs.hpp"
 
 #include <ctime>
 #include <map>
