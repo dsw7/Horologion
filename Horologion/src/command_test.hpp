@@ -4,7 +4,7 @@
 
 class CommandTest: public CommandBase {
 public:
-    void main();
+    void main() override;
 
 private:
     void deploy_jobs();

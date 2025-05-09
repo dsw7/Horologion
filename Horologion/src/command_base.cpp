@@ -15,7 +15,7 @@ const std::string PROG_CONFIG = "/etc/horolog.ini";
 
 bool CommandBase::is_running_as_root()
 {
-    if (::getuid() != 0) {
+    if (getuid() != 0) {
         logger::error("Not running as root. Additional privileges needed!");
         return false;
     }
@@ -27,7 +27,7 @@ bool CommandBase::read_configs_from_file()
 {
     std::string file_contents;
 
-    if (not utils::read_file(::PROG_CONFIG, file_contents)) {
+    if (not utils::read_file(PROG_CONFIG, file_contents)) {
         logger::error("Could not load configurations. Cannot continue");
         return false;
     }

@@ -16,7 +16,7 @@ bool file_exists(const std::string &filepath)
 {
     struct stat info;
 
-    if (::stat(filepath.c_str(), &info) != 0) {
+    if (stat(filepath.c_str(), &info) != 0) {
         return false;
     }
 
@@ -93,7 +93,7 @@ bool unset_rtc_alarm()
     logger::info("Unsetting alarm");
     std::string unset_str = "0";
 
-    return utils::write_to_file(::SYSFS_WAKEALARM, unset_str);
+    return utils::write_to_file(SYSFS_WAKEALARM, unset_str);
 }
 
 bool set_rtc_alarm(const unsigned int wake_time)
@@ -101,7 +101,7 @@ bool set_rtc_alarm(const unsigned int wake_time)
     logger::info("Setting alarm");
     std::string str_wake_time = std::to_string(wake_time);
 
-    return utils::write_to_file(::SYSFS_WAKEALARM, str_wake_time);
+    return utils::write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
 
 bool is_valid_suspend_state(const std::string &state_from_ini)
@@ -110,7 +110,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
     std::string sysfs_states, state;
 
-    if (not utils::read_file(::SYSFS_STATE, sysfs_states)) {
+    if (not utils::read_file(SYSFS_STATE, sysfs_states)) {
         return false;
     }
 
@@ -148,7 +148,7 @@ bool suspend_system(const std::string &suspend_type)
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     logger::info("Suspending system to state " + suspend_types[suspend_type]);
 
-    return utils::write_to_file(::SYSFS_STATE, suspend_type);
+    return utils::write_to_file(SYSFS_STATE, suspend_type);
 }
 
 } // namespace utils

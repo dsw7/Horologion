@@ -71,7 +71,7 @@ void debug_map(std::map<std::string, std::string> &map)
     std::map<std::string, std::string>::iterator it = map.begin();
     while (it != map.end()) {
         std::cout << "    \"" << it->first << "\": \"" << it->second << "\",\n";
-        it++;
+        ++it;
     }
 
     std::cout << "}\n";

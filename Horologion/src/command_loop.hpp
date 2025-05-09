@@ -6,7 +6,7 @@
 
 class CommandLoop: public CommandBase {
 public:
-    void main();
+    void main() override;
 
 private:
     std::time_t time_wake = 0;

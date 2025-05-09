@@ -29,18 +29,18 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    std::string command = std::string(argv[1]);
+    std::string first_arg = std::string(argv[1]);
 
-    if (command.compare("-h") == 0 or command.compare("--help") == 0) {
+    if (first_arg.compare("-h") == 0 or first_arg.compare("--help") == 0) {
         help_commands(argv[0]);
         return EXIT_SUCCESS;
-    } else if (command.compare("loop") == 0) {
+    } else if (first_arg.compare("loop") == 0) {
         CommandLoop command;
         command.main();
-    } else if (command.compare("plan") == 0) {
+    } else if (first_arg.compare("plan") == 0) {
         CommandPlan command;
         command.main();
-    } else if (command.compare("test") == 0) {
+    } else if (first_arg.compare("test") == 0) {
         CommandTest command;
         command.main();
     } else {

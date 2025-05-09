@@ -16,24 +16,24 @@ const std::string TL_ELBOW = "\u250c";
 
 void CommandPlan::set_times()
 {
-    std::time_t time_wake = utils::get_epoch_time_from_configs(
+    const std::time_t time_wake_t = utils::get_epoch_time_from_configs(
         this->configs.time_wake.tm_hour,
         this->configs.time_wake.tm_min,
         this->configs.time_wake.tm_sec);
 
-    std::time_t time_run_cmd = utils::get_epoch_time_from_configs(
+    const std::time_t time_run_cmd_t = utils::get_epoch_time_from_configs(
         this->configs.time_run_cmd.tm_hour,
         this->configs.time_run_cmd.tm_min,
         this->configs.time_run_cmd.tm_sec);
 
-    std::time_t time_sleep = utils::get_epoch_time_from_configs(
+    const std::time_t time_sleep_t = utils::get_epoch_time_from_configs(
         this->configs.time_sleep.tm_hour,
         this->configs.time_sleep.tm_min,
         this->configs.time_sleep.tm_sec);
 
-    this->time_wake = utils::epoch_time_to_ascii_time(time_wake);
-    this->time_run_cmd = utils::epoch_time_to_ascii_time(time_run_cmd);
-    this->time_sleep = utils::epoch_time_to_ascii_time(time_sleep);
+    this->time_wake = utils::epoch_time_to_ascii_time(time_wake_t);
+    this->time_run_cmd = utils::epoch_time_to_ascii_time(time_run_cmd_t);
+    this->time_sleep = utils::epoch_time_to_ascii_time(time_sleep_t);
 }
 
 void CommandPlan::print_tree()
