@@ -140,8 +140,8 @@ The suspend type will dictate the overall power savings when the machine is susp
 # standby -> Power-On Suspend    ACPI state S1
 # mem     -> Suspend-to-RAM      ACPI state S3
 # disk    -> Suspend-to-Disk     ACPI state S4
-...
-suspend-type = mem
+# ...
+suspend-type = "mem"
 ```
 ACPI state S4 (`disk`) provides the greatest power savings at the expense of the longest wake latency.
 
