@@ -28,8 +28,7 @@ void run_command(const std::string &prog, const std::string &first_arg)
     if (first_arg == "-h" or first_arg == "--help") {
         help_commands(prog);
     } else if (first_arg == "loop") {
-        CommandLoop command;
-        command.main();
+        commands::loop();
     } else if (first_arg == "plan") {
         CommandPlan command;
         command.main();
