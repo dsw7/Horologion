@@ -21,7 +21,7 @@ help:
 format:
 	@clang-format -i --verbose --style=file Horologion/src/*.cpp Horologion/src/*.hpp
 
-compile:
+compile: format
 	@cmake -S Horologion -B $(BUILD_DIR)
 	@make --jobs=12 --directory=$(BUILD_DIR)
 
