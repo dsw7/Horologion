@@ -33,8 +33,7 @@ void run_command(const std::string &prog, const std::string &first_arg)
         CommandPlan command;
         command.main();
     } else if (first_arg == "test") {
-        CommandTest command;
-        command.main();
+        commands::test();
     } else {
         help_commands(prog);
     }

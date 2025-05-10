@@ -1,12 +1,5 @@
 #pragma once
 
-#include "configs.hpp"
-
-class CommandTest {
-public:
-    void main();
-
-private:
-    Configs configs;
-    void deploy_jobs();
-};
+namespace commands {
+void test();
+}
