@@ -67,7 +67,7 @@ void parse_configs(const std::string &file_contents, std::map<std::string, std::
     }
 }
 
-bool is_unit_out_of_bounds(int unit, int max)
+bool is_unit_out_of_bounds(const int unit, const int max)
 {
     if (unit < 0 or unit > max) {
         return true;
