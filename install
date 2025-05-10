@@ -31,6 +31,7 @@ install()
   path_bin="/home/${SUDO_USER}/.local/bin/horolog"
 
   sed -i "s@execstart@${path_bin} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+  sed -i "s@datadir@${dst_cfg}@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
   systemctl daemon-reload
   systemctl enable ${SERVICE_NAME}

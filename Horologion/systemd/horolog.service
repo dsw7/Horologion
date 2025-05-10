@@ -2,11 +2,12 @@
 Description=Horolog Job Scheduling Software
 
 [Service]
-Type=simple
+Environment="HOROLOG_DATADIR=datadir"
+ExecStart=execstart
 Restart=always
 RestartSec=1
+Type=simple
 User=root
-ExecStart=execstart
 
 [Install]
 WantedBy=multi-user.target
