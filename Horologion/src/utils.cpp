@@ -14,19 +14,6 @@ namespace {
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string SYSFS_STATE = "/sys/power/state";
 
-} // namespace
-
-namespace utils {
-
-void is_running_as_root()
-{
-    if (getuid() == 0) {
-        return;
-    }
-
-    throw std::runtime_error("Not running as root. Additional privileges needed!");
-}
-
 bool write_to_file(const std::string &filepath, const std::string &message)
 {
     if (not std::filesystem::exists(filepath)) {
@@ -65,6 +52,19 @@ bool read_file(const std::string &filepath, std::string &file_contents)
     return true;
 }
 
+} // namespace
+
+namespace utils {
+
+void is_running_as_root()
+{
+    if (getuid() == 0) {
+        return;
+    }
+
+    throw std::runtime_error("Not running as root. Additional privileges needed!");
+}
+
 std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
 {
     std::string ascii_time = std::string(std::asctime(std::localtime(&epoch_time)));
@@ -93,7 +93,7 @@ bool unset_rtc_alarm()
     logger::info("Unsetting alarm");
     const std::string unset_str = "0";
 
-    return utils::write_to_file(SYSFS_WAKEALARM, unset_str);
+    return write_to_file(SYSFS_WAKEALARM, unset_str);
 }
 
 bool set_rtc_alarm(const unsigned int wake_time)
@@ -101,7 +101,7 @@ bool set_rtc_alarm(const unsigned int wake_time)
     logger::info("Setting alarm");
     const std::string str_wake_time = std::to_string(wake_time);
 
-    return utils::write_to_file(SYSFS_WAKEALARM, str_wake_time);
+    return write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
 
 bool is_valid_suspend_state(const std::string &state_from_ini)
@@ -110,7 +110,7 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 
     std::string sysfs_states;
 
-    if (not utils::read_file(SYSFS_STATE, sysfs_states)) {
+    if (not read_file(SYSFS_STATE, sysfs_states)) {
         return false;
     }
 
@@ -149,7 +149,7 @@ bool suspend_system(const std::string &suspend_type)
     // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
     logger::info("Suspending system to state " + suspend_types[suspend_type]);
 
-    return utils::write_to_file(SYSFS_STATE, suspend_type);
+    return write_to_file(SYSFS_STATE, suspend_type);
 }
 
 } // namespace utils

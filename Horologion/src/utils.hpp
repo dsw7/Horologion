@@ -7,9 +7,6 @@ namespace utils {
 
 void is_running_as_root();
 
-bool write_to_file(const std::string &filepath, const std::string &message);
-bool read_file(const std::string &filepath, std::string &file_contents);
-
 std::string epoch_time_to_ascii_time(const std::time_t &epoch_time);
 std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, const int &second);
 
