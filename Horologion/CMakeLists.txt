@@ -18,34 +18,44 @@ endif(UNIX)
 
 message(STATUS "Detected ${CMAKE_SYSTEM}")
 
-# Use C++ 17 or later
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-# Lots of warnings + all warnings as errors
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 # Relax when it comes to missing field initializers
 add_compile_options(-Wno-missing-field-initializers)
 
-# Support threading
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-# Set binary name
-set(OUTPUT_NAME horolog)
+# -----------------------------------------------------------------------------------------------------------
+# toml++
 
-# Set full path to binary
-set(FULL_PATH_BINARY "${CMAKE_BINARY_DIR}/${OUTPUT_NAME}")
+message(STATUS "Checking for toml++ header file")
 
-# Compile with debug symbols
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
+set(TOMLPLUSPLUS_HPP "${CMAKE_SOURCE_DIR}/external/toml.hpp")
 
-message(STATUS "Compiled binary will be ${FULL_PATH_BINARY}")
+if(NOT EXISTS ${TOMLPLUSPLUS_HPP})
+  message(STATUS "Downloading toml.hpp")
+  file(
+    DOWNLOAD
+    "https://raw.githubusercontent.com/marzer/tomlplusplus/master/toml.hpp"
+    ${TOMLPLUSPLUS_HPP}
+    SHOW_PROGRESS
+  )
+else()
+  message(STATUS "toml.hpp already exists. Skipping download")
+endif()
 
-include_directories("src")
+# -----------------------------------------------------------------------------------------------------------
 
+include_directories(
+  "src"
+  "external"
+)
 add_executable(
-  ${OUTPUT_NAME}
+  "horolog"
   "src/command_loop.cpp"
   "src/command_plan.cpp"
   "src/command_test.cpp"
@@ -56,4 +66,4 @@ add_executable(
   "src/workers.cpp"
 )
 
-target_link_libraries(${OUTPUT_NAME} PRIVATE Threads::Threads)
+target_link_libraries("horolog" PRIVATE Threads::Threads)

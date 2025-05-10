@@ -64,17 +64,4 @@ void error_thread_safe(const std::string &message)
     mu.unlock();
 }
 
-void debug_map(std::map<std::string, std::string> &map)
-{
-    std::cout << get_current_datetime_string() + LOG_INFO + "{\n";
-
-    std::map<std::string, std::string>::iterator it = map.begin();
-    while (it != map.end()) {
-        std::cout << "    \"" << it->first << "\": \"" << it->second << "\",\n";
-        ++it;
-    }
-
-    std::cout << "}\n";
-}
-
 } // namespace logger

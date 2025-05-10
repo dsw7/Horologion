@@ -26,24 +26,19 @@ void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
     logger::info_thread_safe("<target_0> Waking system and terminating this thread");
 }
 
-void worker_run_command(const std::string *target, std::string *command)
+void worker_run_command(std::string *command)
 {
-    if (command->find_first_not_of(' ') == std::string::npos) {
-        logger::error_thread_safe("<" + *target + "> Found empty command. Doing nothing");
-        return;
-    }
-
     if (command->find(" 2>&1") == std::string::npos) {
         // stderr will otherwise leak out to terminal
         *command += " 2>&1";
     }
 
-    logger::info_thread_safe("<" + *target + "> Deploying target. Command: \"" + *command + "\"");
+    logger::info_thread_safe("Deploying command: \"" + *command + "\"");
 
     FILE *pipe = popen(command->c_str(), "r");
 
     if (!pipe) {
-        logger::error_thread_safe("<" + *target + "> Target could not be started");
+        logger::error_thread_safe("Could not start command: \"" + *command + "\"");
         return;
     }
 
@@ -51,17 +46,17 @@ void worker_run_command(const std::string *target, std::string *command)
     std::string subproc_output;
 
     while (fgets(buffer.data(), 128, pipe) != NULL) {
-        logger::info_thread_safe("<" + *target + "> Reading output from target");
+        logger::info_thread_safe("Reading output from command: \"" + *command + "\"");
         subproc_output += buffer.data();
     }
 
     if (pclose(pipe) != 0) {
-        logger::warning_thread_safe("<" + *target + "> Target exited with non-zero exit code");
+        logger::warning_thread_safe("Command \"" + *command + "\" exited with non-zero exit code");
     }
 
     if (subproc_output.size() > 0) {
-        logger::info_thread_safe("<" + *target + "> Output from target:\n" + subproc_output);
+        logger::info_thread_safe("Output from command: \"" + *command + "\" -> " + subproc_output);
     } else {
-        logger::info_thread_safe("<" + *target + "> No output from target");
+        logger::info_thread_safe("Output from command: \"" + *command + "\" -> None");
     }
 }

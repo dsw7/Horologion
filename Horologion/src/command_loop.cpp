@@ -76,18 +76,14 @@ void set_alarm(const std::time_t wake_time)
 
 void deploy_jobs(Configs &configs, const std::time_t wake_duration)
 {
-    unsigned int num_commands = configs.commands.size();
+    unsigned int n = configs.commands.size();
 
     std::vector<std::thread> jobs;
     jobs.push_back(std::thread(worker_stay_awake, &wake_duration, &configs.suspend_type));
 
-    if (num_commands > 0) {
-        for (unsigned int i = 0; i < num_commands; ++i) {
-            jobs.push_back(
-                std::thread(
-                    worker_run_command,
-                    &configs.commands.at(i).first,
-                    &configs.commands.at(i).second));
+    if (n > 0) {
+        for (unsigned int i = 0; i < n; ++i) {
+            jobs.push_back(std::thread(worker_run_command, &configs.commands[i]));
         }
     }
 

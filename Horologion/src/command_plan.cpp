@@ -5,6 +5,8 @@
 
 #include <ctime>
 #include <iostream>
+#include <string>
+#include <vector>
 
 namespace {
 
@@ -46,7 +48,7 @@ Times set_times(const Configs &configs)
     return times;
 }
 
-void print_tree(const Configs &configs, const Times &times)
+void print_tree(const std::vector<std::string> &commands, const Times &times)
 {
     std::cout << "\n[Plan]:\n\n";
     std::cout << " " + TL_ELBOW + H_LINE + "{t_w}: " + times.time_wake + "\n";
@@ -58,7 +60,7 @@ void print_tree(const Configs &configs, const Times &times)
     std::cout << " " + BL_ELBOW + H_LINE + "{t_s}: " + times.time_sleep + "\n";
     std::cout << '\n';
 
-    unsigned int n = configs.commands.size();
+    unsigned int n = commands.size();
 
     if (n == 0) {
         std::cout << "[Commands]: None\n";
@@ -66,17 +68,17 @@ void print_tree(const Configs &configs, const Times &times)
     }
 
     if (n == 1) {
-        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + configs.commands[0].second << '\n';
+        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + commands[0] << '\n';
         return;
     }
 
     for (unsigned int i = 0; i < n; ++i) {
         if (i == 0) {
-            std::cout << "[Commands]: " + H_LINE + DOWN_TEE + H_LINE + " " + configs.commands[i].second + "\n";
+            std::cout << "[Commands]: " + H_LINE + DOWN_TEE + H_LINE + " " + commands[i] + "\n";
         } else if (i == n - 1) {
-            std::cout << "             " + BL_ELBOW + H_LINE + " " + configs.commands[i].second + "\n";
+            std::cout << "             " + BL_ELBOW + H_LINE + " " + commands[i] + "\n";
         } else {
-            std::cout << "             " + RIGHT_TEE + H_LINE + " " + configs.commands[i].second + "\n";
+            std::cout << "             " + RIGHT_TEE + H_LINE + " " + commands[i] + "\n";
         }
     }
 
@@ -91,7 +93,7 @@ void plan()
 {
     Configs configs = read_configs_from_file();
     Times times = set_times(configs);
-    print_tree(configs, times);
+    print_tree(configs.commands, times);
 }
 
 } // namespace commands

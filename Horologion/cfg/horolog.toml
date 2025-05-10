@@ -1,0 +1,50 @@
+# Horologian configuration file
+# See https://github.com/dsw7/Horologion
+
+# Select one of:
+# none    -> Do nothing (useful for troubleshooting)
+# standby -> Power-On Suspend    ACPI state S1
+# mem     -> Suspend-to-RAM      ACPI state S3
+# disk    -> Suspend-to-Disk     ACPI state S4
+
+# System will exit if any of standby, mem or disk is not supported
+# See https://www.kernel.org/doc/Documentation/power/states.txt for more information
+suspend-type = "mem"
+
+# Specify commands to run
+targets = [
+  "whoami && id $(whoami)",
+  "sleep 2",
+  "sleep 3",
+  # "ls -ltr"
+  # ...
+]
+
+[times]
+
+[times.wake]
+# When the machine should wake up
+
+# Specify hour [0-23]
+hour = 8
+
+# Specify minute [0-59]
+minute = 0
+
+[times.cmd]
+# When the machine should run commands
+
+# Specify hour [0-23]
+hour = 8
+
+# Specify minute [0-59]
+minute = 1
+
+[times.sleep]
+# When the machine should sleep
+
+# Specify hour [0-23]
+hour = 8
+
+# Specify minute [0-59]
+minute = 2
