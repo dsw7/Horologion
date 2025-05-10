@@ -2,28 +2,17 @@
 
 #include "logger.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <sstream>
 #include <stdexcept>
-#include <sys/stat.h>
 #include <unistd.h>
 
 namespace {
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const std::string SYSFS_STATE = "/sys/power/state";
-
-bool file_exists(const std::string &filepath)
-{
-    struct stat info;
-
-    if (stat(filepath.c_str(), &info) != 0) {
-        return false;
-    }
-
-    return true;
-}
 
 } // namespace
 
@@ -40,7 +29,7 @@ void is_running_as_root()
 
 bool write_to_file(const std::string &filepath, const std::string &message)
 {
-    if (not file_exists(filepath)) {
+    if (not std::filesystem::exists(filepath)) {
         logger::error("File \"" + filepath + "\" does not exist!");
         return false;
     }
@@ -58,7 +47,7 @@ bool write_to_file(const std::string &filepath, const std::string &message)
 
 bool read_file(const std::string &filepath, std::string &file_contents)
 {
-    if (not file_exists(filepath)) {
+    if (not std::filesystem::exists(filepath)) {
         logger::error("File \"" + filepath + "\" does not exist!");
         return false;
     }

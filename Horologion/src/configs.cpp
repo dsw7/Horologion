@@ -3,6 +3,7 @@
 #include "logger.hpp"
 #include "utils.hpp"
 
+#include <filesystem>
 #include <stdexcept>
 #include <toml.hpp>
 
@@ -11,8 +12,12 @@ namespace {
 void read_project_toml(Configs &configs)
 {
     static std::string prog_config = "/etc/horolog.toml";
-    toml::table table = toml::parse_file(prog_config);
 
+    if (not std::filesystem::exists(prog_config)) {
+        throw std::runtime_error("Configuration file \"" + prog_config + "\" does not exist");
+    }
+
+    toml::table table = toml::parse_file(prog_config);
     configs.time_wake.tm_hour = table["times"]["wake"]["hour"].value_or<int>(8);
     configs.time_wake.tm_min = table["times"]["wake"]["minute"].value_or<int>(0);
     configs.time_run_cmd.tm_hour = table["times"]["cmd"]["hour"].value_or<int>(8);
