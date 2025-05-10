@@ -128,10 +128,6 @@ void CommandLoop::main()
     utils::is_running_as_root();
     this->configs = read_configs_from_file();
 
-    if (not this->is_config_file_input_sane()) {
-        exit(EXIT_FAILURE);
-    }
-
     if (not this->set_times()) {
         exit(EXIT_FAILURE);
     }

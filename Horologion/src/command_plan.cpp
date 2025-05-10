@@ -77,11 +77,6 @@ void CommandPlan::print_tree()
 void CommandPlan::main()
 {
     this->configs = read_configs_from_file();
-
-    if (not this->is_config_file_input_sane()) {
-        exit(EXIT_FAILURE);
-    }
-
     this->set_times();
     this->print_tree();
 }

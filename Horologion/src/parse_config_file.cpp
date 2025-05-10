@@ -67,6 +67,46 @@ void parse_configs(const std::string &file_contents, std::map<std::string, std::
     }
 }
 
+void is_config_file_input_sane(const Configs &configs)
+{
+    if (configs.time_wake.tm_hour < 0 or configs.time_wake.tm_hour > 23) {
+        throw std::runtime_error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
+    }
+
+    if (configs.time_wake.tm_min < 0 or configs.time_wake.tm_min > 59) {
+        throw std::runtime_error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
+    }
+
+    if (configs.time_run_cmd.tm_hour < 0 or configs.time_run_cmd.tm_hour > 23) {
+        throw std::runtime_error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
+    }
+
+    if (configs.time_run_cmd.tm_min < 0 or configs.time_run_cmd.tm_min > 59) {
+        throw std::runtime_error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
+    }
+
+    if (configs.time_sleep.tm_hour < 0 or configs.time_sleep.tm_hour > 23) {
+        throw std::runtime_error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
+    }
+
+    if (configs.time_sleep.tm_min < 0 or configs.time_sleep.tm_min > 59) {
+        throw std::runtime_error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
+    }
+
+    logger::info("Parsed wake up hour (tm_hour): " + std::to_string(configs.time_wake.tm_hour));
+    logger::info("Parsed wake up minute (tm_min): " + std::to_string(configs.time_wake.tm_min));
+
+    logger::info("Parsed command execution hour (tm_hour): " + std::to_string(configs.time_run_cmd.tm_hour));
+    logger::info("Parsed command execution minute (tm_min): " + std::to_string(configs.time_run_cmd.tm_min));
+
+    logger::info("Parsed sleep hour (tm_hour): " + std::to_string(configs.time_sleep.tm_hour));
+    logger::info("Parsed sleep minute (tm_min): " + std::to_string(configs.time_sleep.tm_min));
+
+    if (not utils::is_valid_suspend_state(configs.suspend_type)) {
+        throw std::runtime_error("Invalid suspend type");
+    }
+}
+
 } // namespace
 
 Configs read_configs_from_file()
@@ -109,6 +149,8 @@ Configs read_configs_from_file()
             logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
         }
     }
+
+    is_config_file_input_sane(configs);
 
     return configs;
 }
