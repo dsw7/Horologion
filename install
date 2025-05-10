@@ -2,7 +2,6 @@
 
 SERVICE_FILE=horolog.service
 SERVICE_NAME=horolog.service
-SRC_SERVICE_FILE=$(dirname "$0")/systemd
 DST_SERVICE_FILE=/etc/systemd/system
 
 if [ "$(id --user)" -ne 0 ];
@@ -17,14 +16,16 @@ install()
   local src_cfg
   local dst_cfg
 
-  src_cfg=$(dirname "$0")/cfg/horolog.toml
+  src_cfg=Horologion/cfg/horolog.toml
   dst_cfg="/home/${SUDO_USER}/.horolog"
 
   mkdir -vp "$dst_cfg"
   cp --verbose "${src_cfg}" "${dst_cfg}/"
   chown --recursive --verbose "$SUDO_USER:$SUDO_USER" "$dst_cfg"
 
-  cp --verbose "${SRC_SERVICE_FILE}/${SERVICE_FILE}" ${DST_SERVICE_FILE}/
+  local src_service_file
+  src_service_file=Horologion/systemd/${SERVICE_FILE}
+  cp --verbose "${src_service_file}" ${DST_SERVICE_FILE}/
 
   local user
   user="$(whoami)"

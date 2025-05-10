@@ -71,11 +71,11 @@ Given the above conditions are met, the program will follow:
 ### Step 1 - Run install script
 Make the script executable:
 ```bash
-chmod +x Horologion/install
+chmod +x install
 ```
 Then run the script with elevated privileges:
 ```bash
-sudo ./Horologion/install
+sudo ./install
 ```
 The following menu will appear:
 ```
