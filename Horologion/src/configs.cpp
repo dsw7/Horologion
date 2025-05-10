@@ -5,13 +5,38 @@
 
 #include <filesystem>
 #include <stdexcept>
+#include <stdlib.h>
 #include <toml.hpp>
 
 namespace {
 
+std::filesystem::path get_proj_data_dir()
+{
+    // i.e. program running via systemd and the HOROLOG_DATADIR
+    // env var was set by Environment= directive
+    const char *horolog_datadir = std::getenv("HOROLOG_DATADIR");
+    if (horolog_datadir) {
+        return std::filesystem::path(horolog_datadir);
+    }
+
+    // i.e. program running as sudoer and the HOROLOG_DATADIR env var is unset
+    const char *sudo_user = std::getenv("SUDO_USER");
+    if (sudo_user) {
+        return std::filesystem::path("/home") / sudo_user / ".horolog";
+    }
+
+    // If all else fails... try to read HOME env var
+    const char *home_dir = std::getenv("HOME");
+    if (not home_dir) {
+        throw std::runtime_error("Could not locate user home directory!");
+    }
+
+    return std::filesystem::path(home_dir) / ".horolog";
+}
+
 void read_project_toml(Configs &configs)
 {
-    static std::string prog_config = "/etc/horolog.toml";
+    static std::string prog_config = get_proj_data_dir() / "horolog.toml";
 
     if (not std::filesystem::exists(prog_config)) {
         throw std::runtime_error("Configuration file \"" + prog_config + "\" does not exist");
