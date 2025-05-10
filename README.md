@@ -88,55 +88,52 @@ Type 1 then press enter. The install script will compile a binary and position a
 ### Step 2 - Set custom configurations
 Open the software's configuration file:
 ```bash
-sudo vi /etc/horolog.ini
+sudo vi /etc/horolog.toml
 ```
 #### Set critical times
 Start by setting the critical times. The critical times must adhere to the conditions set out in the
 [How it works](#how-it-works) section. A mapping follows:
 
-| Variable | Field in `ini` file |
+| Variable | Field in `toml` file |
 | ---- | ---- |
-| $t_w$ | `time-wake-{hour,minute}` |
-| $t_c$ | `time-cmd-{hour,minute}` |
-| $t_s$ | `time-sleep-{hour,minute}` |
+| $t_w$ | `[times.wake] -> hour + minute` |
+| $t_c$ | `[times.cmd] -> hour + minute` |
+| $t_s$ | `[times.sleep] -> hour + minute` |
 
-```ini
-# ----------------------------------------
+```toml
+[times.wake]
 # When the machine should wake up
-# ----------------------------------------
 
 # Specify hour [0-23]
-time-wake-hour = 8
+hour = 8
 
 # Specify minute [0-59]
-time-wake-minute = 0
+minute = 0
 
-# ----------------------------------------
+[times.cmd]
 # When the machine should run commands
-# ----------------------------------------
 
 # Specify hour [0-23]
-time-cmd-hour = 8
+hour = 8
 
 # Specify minute [0-59]
-time-cmd-minute = 1
+minute = 1
 
-# ----------------------------------------
+[times.sleep]
 # When the machine should sleep
-# ----------------------------------------
 
 # Specify hour [0-23]
-time-sleep-hour = 8
+hour = 8
 
 # Specify minute [0-59]
-time-sleep-minute = 2
+minute = 2
 ```
 The above defaults will wake the machine at 8:00 AM, run all commands at 8:01 AM, and suspend the system at
 8:02 AM. All times are interpreted in the system's time zone setting.
 
 #### Set suspend types
 The suspend type will dictate the overall power savings when the machine is suspended.
-```ini
+```toml
 # Select one of:
 
 # none    -> Do nothing (useful for troubleshooting)
@@ -149,12 +146,12 @@ suspend-type = mem
 ACPI state S4 (`disk`) provides the greatest power savings at the expense of the longest wake latency.
 
 #### Choose commands to run
-Locate the targets section in `horolog.ini` and choose some targets:
-```ini
-# Specify targets following target_1 ... target_n
-
-target_1 = sleep 1
-target_2 = sleep 2
+Locate the targets section in `horolog.toml` and choose some targets:
+```toml
+targets = [
+  "sleep 1",
+  "sleep 2",
+]
 ```
 The above two commands will be run at time $t_c$ and will run concurrently.
 
@@ -174,7 +171,7 @@ When work on the system is complete, suspend the system using `systemd`:
 sudo systemctl suspend
 ```
 The system should then wake at the next scheduled time $t_w$ and respect the configurations specified in
-`/etc/horolog.ini`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake
+`/etc/horolog.toml`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake
 at the next time $t_w$.
 
 ## Teardown
@@ -201,7 +198,7 @@ The following section describes the files associated with this project:
 | File | Description
 | ---- | ---- |
 | `/usr/bin/horolog` | The binary that spawns the `horolog` process |
-| `/etc/horolog.ini` | The `horolog` configuration file |
+| `/etc/horolog.toml` | The `horolog` configuration file |
 | `/etc/systemd/system/horolog.service` | The `horolog` `systemd` unit file |
 | `/sys/class/rtc/rtc0/wakealarm` | The `sysfs` wakealarm file. `horolog` writes an Epoch time to this file indicating when machine should wake |
 | `/sys/power/state` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
@@ -240,7 +237,7 @@ To visualize when the next cycle will take place and what will happen during the
 ```bash
 horolog plan
 ```
-This command will read `/etc/horolog.ini` and return a "schematic" representation:
+This command will read `/etc/horolog.toml` and return a "schematic" representation:
 ```
 [Plan]:
 
