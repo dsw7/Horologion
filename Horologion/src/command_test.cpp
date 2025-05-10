@@ -1,6 +1,7 @@
 #include "command_test.hpp"
 
 #include "logger.hpp"
+#include "utils.hpp"
 #include "workers.hpp"
 
 #include <thread>
@@ -34,9 +35,7 @@ void CommandTest::deploy_jobs()
 
 void CommandTest::main()
 {
-    if (not this->is_running_as_root()) {
-        exit(EXIT_FAILURE);
-    }
+    utils::is_running_as_root();
 
     if (not this->read_configs_from_file()) {
         exit(EXIT_FAILURE);
