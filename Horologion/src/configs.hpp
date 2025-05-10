@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include <string>
+#include <utility>
 #include <vector>
 
 struct Configs {
@@ -13,13 +14,4 @@ struct Configs {
     struct tm time_sleep = { 0 };
 };
 
-class CommandBase {
-public:
-    Configs configs;
-    virtual void main() {};
-
-protected:
-    bool is_running_as_root();
-    bool read_configs_from_file();
-    bool is_config_file_input_sane();
-};
+Configs read_configs_from_file();

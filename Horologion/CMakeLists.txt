@@ -46,13 +46,12 @@ include_directories("src")
 
 add_executable(
   ${OUTPUT_NAME}
-  "src/command_base.cpp"
   "src/command_loop.cpp"
   "src/command_plan.cpp"
   "src/command_test.cpp"
+  "src/configs.cpp"
   "src/logger.cpp"
   "src/main.cpp"
-  "src/parse_config_file.cpp"
   "src/utils.cpp"
   "src/workers.cpp"
 )

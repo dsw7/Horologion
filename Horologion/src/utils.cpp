@@ -5,7 +5,9 @@
 #include <fstream>
 #include <map>
 #include <sstream>
+#include <stdexcept>
 #include <sys/stat.h>
+#include <unistd.h>
 
 namespace {
 
@@ -26,6 +28,15 @@ bool file_exists(const std::string &filepath)
 } // namespace
 
 namespace utils {
+
+void is_running_as_root()
+{
+    if (getuid() == 0) {
+        return;
+    }
+
+    throw std::runtime_error("Not running as root. Additional privileges needed!");
+}
 
 bool write_to_file(const std::string &filepath, const std::string &message)
 {
