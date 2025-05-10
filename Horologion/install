@@ -1,9 +1,6 @@
 #!/bin/bash
 
-BINARY_NAME=horolog
-DST_BINARY=/usr/bin
-
-CONFIG_FILE=horolog.ini
+CONFIG_FILE=horolog.toml
 SRC_CONFIG=$(dirname "$0")/cfg
 DST_CONFIG=/etc
 
@@ -11,8 +8,6 @@ SERVICE_FILE=horolog.service
 SERVICE_NAME=horolog.service
 SRC_SERVICE_FILE=$(dirname "$0")/systemd
 DST_SERVICE_FILE=/etc/systemd/system
-
-echo -e "\e[1m\e[4mHorologion Sleep Wake Cycle Management Software\e[0m\n"
 
 if [ "$(id --user)" -ne 0 ];
   then echo "Please run as root!"
@@ -28,8 +23,12 @@ install()
 
   local user
   user="$(whoami)"
+
+  local path_bin
+  path_bin="/home/${SUDO_USER}/.local/bin/horolog"
+
   sed -i "s/username/${user}/" ${DST_SERVICE_FILE}/${SERVICE_FILE}
-  sed -i "s@execstart@${DST_BINARY}\/${BINARY_NAME} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+  sed -i "s@execstart@${path_bin} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
   systemctl daemon-reload
   systemctl enable ${SERVICE_NAME}
@@ -41,9 +40,12 @@ uninstall()
   systemctl disable ${SERVICE_NAME}
   systemctl daemon-reload
 
+  local path_bin
+  path_bin="/home/${SUDO_USER}/.local/bin/horolog"
+
   rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
   rm --force --verbose ${DST_CONFIG}/${CONFIG_FILE}
-  rm --force --verbose ${DST_BINARY}/${BINARY_NAME}
+  rm --force --verbose "${path_bin}"
 }
 
 echo "Select setup type:"
