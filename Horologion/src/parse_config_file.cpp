@@ -67,29 +67,38 @@ void parse_configs(const std::string &file_contents, std::map<std::string, std::
     }
 }
 
+bool is_unit_out_of_bounds(int unit, int max)
+{
+    if (unit < 0 or unit > max) {
+        return true;
+    }
+
+    return false;
+}
+
 void is_config_file_input_sane(const Configs &configs)
 {
-    if (configs.time_wake.tm_hour < 0 or configs.time_wake.tm_hour > 23) {
+    if (is_unit_out_of_bounds(configs.time_wake.tm_hour, 23)) {
         throw std::runtime_error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
     }
 
-    if (configs.time_wake.tm_min < 0 or configs.time_wake.tm_min > 59) {
+    if (is_unit_out_of_bounds(configs.time_wake.tm_min, 59)) {
         throw std::runtime_error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
     }
 
-    if (configs.time_run_cmd.tm_hour < 0 or configs.time_run_cmd.tm_hour > 23) {
+    if (is_unit_out_of_bounds(configs.time_run_cmd.tm_hour, 23)) {
         throw std::runtime_error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
     }
 
-    if (configs.time_run_cmd.tm_min < 0 or configs.time_run_cmd.tm_min > 59) {
+    if (is_unit_out_of_bounds(configs.time_run_cmd.tm_min, 59)) {
         throw std::runtime_error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
     }
 
-    if (configs.time_sleep.tm_hour < 0 or configs.time_sleep.tm_hour > 23) {
+    if (is_unit_out_of_bounds(configs.time_sleep.tm_hour, 23)) {
         throw std::runtime_error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
     }
 
-    if (configs.time_sleep.tm_min < 0 or configs.time_sleep.tm_min > 59) {
+    if (is_unit_out_of_bounds(configs.time_sleep.tm_min, 59)) {
         throw std::runtime_error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
     }
 
