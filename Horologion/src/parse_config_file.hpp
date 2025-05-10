@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ctime>
-#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,4 +14,4 @@ struct Configs {
     struct tm time_sleep = { 0 };
 };
 
-void parse_configs(const std::string &file_contents, std::map<std::string, std::string> &raw_configs);
+Configs read_configs_from_file();

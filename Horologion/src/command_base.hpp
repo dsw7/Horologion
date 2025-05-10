@@ -8,6 +8,5 @@ public:
     virtual void main() {};
 
 protected:
-    bool read_configs_from_file();
     bool is_config_file_input_sane();
 };

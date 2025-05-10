@@ -1,8 +1,15 @@
 #include "parse_config_file.hpp"
 
+#include "logger.hpp"
+#include "utils.hpp"
+
+#include <map>
 #include <sstream>
+#include <stdexcept>
 
 namespace {
+
+const std::string PROG_CONFIG = "/etc/horolog.ini";
 
 void strip_whitespace_from_left(std::string &str)
 {
@@ -25,8 +32,6 @@ void strip_whitespace_from_right(std::string &str)
 
     str.erase(found_ws + 1);
 }
-
-} // namespace
 
 void parse_configs(const std::string &file_contents, std::map<std::string, std::string> &raw_configs)
 {
@@ -60,4 +65,50 @@ void parse_configs(const std::string &file_contents, std::map<std::string, std::
             }
         }
     }
+}
+
+} // namespace
+
+Configs read_configs_from_file()
+{
+    std::string file_contents;
+
+    if (not utils::read_file(PROG_CONFIG, file_contents)) {
+        throw std::runtime_error("Could not load configurations. Cannot continue");
+    }
+
+    std::map<std::string, std::string> raw_configs;
+    parse_configs(file_contents, raw_configs);
+
+    logger::info("Parsed raw configs: ");
+    logger::debug_map(raw_configs);
+
+    Configs configs;
+
+    for (auto it = raw_configs.begin(); it != raw_configs.end(); it++) {
+        if (it->first == "time-wake-hour") {
+            configs.time_wake.tm_hour = atoi(it->second.c_str());
+        } else if (it->first == "time-wake-minute") {
+            configs.time_wake.tm_min = atoi(it->second.c_str());
+        } else if (it->first == "time-cmd-hour") {
+            configs.time_run_cmd.tm_hour = atoi(it->second.c_str());
+        } else if (it->first == "time-cmd-minute") {
+            configs.time_run_cmd.tm_min = atoi(it->second.c_str());
+        } else if (it->first == "time-sleep-hour") {
+            configs.time_sleep.tm_hour = atoi(it->second.c_str());
+        } else if (it->first == "time-sleep-minute") {
+            configs.time_sleep.tm_min = atoi(it->second.c_str());
+        } else if (it->first == "suspend-type") {
+            configs.suspend_type = it->second.c_str();
+        } else if (it->first.find("target_") != std::string::npos) {
+            std::pair<std::string, std::string> command;
+            command.first = it->first;
+            command.second = it->second;
+            configs.commands.push_back(command);
+        } else {
+            logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
+        }
+    }
+
+    return configs;
 }

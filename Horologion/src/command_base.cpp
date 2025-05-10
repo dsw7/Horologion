@@ -1,61 +1,11 @@
 #include "command_base.hpp"
 
 #include "logger.hpp"
-#include "parse_config_file.hpp"
 #include "utils.hpp"
 
 #include <ctime>
 #include <map>
 #include <utility>
-
-namespace {
-const std::string PROG_CONFIG = "/etc/horolog.ini";
-}
-
-bool CommandBase::read_configs_from_file()
-{
-    std::string file_contents;
-
-    if (not utils::read_file(PROG_CONFIG, file_contents)) {
-        logger::error("Could not load configurations. Cannot continue");
-        return false;
-    }
-
-    std::map<std::string, std::string> raw_configs;
-    parse_configs(file_contents, raw_configs);
-
-    for (auto it = raw_configs.begin(); it != raw_configs.end(); it++) {
-        if (it->first == "time-wake-hour") {
-            this->configs.time_wake.tm_hour = atoi(it->second.c_str());
-        } else if (it->first == "time-wake-minute") {
-            this->configs.time_wake.tm_min = atoi(it->second.c_str());
-        } else if (it->first == "time-cmd-hour") {
-            this->configs.time_run_cmd.tm_hour = atoi(it->second.c_str());
-        } else if (it->first == "time-cmd-minute") {
-            this->configs.time_run_cmd.tm_min = atoi(it->second.c_str());
-        } else if (it->first == "time-sleep-hour") {
-            this->configs.time_sleep.tm_hour = atoi(it->second.c_str());
-        } else if (it->first == "time-sleep-minute") {
-            this->configs.time_sleep.tm_min = atoi(it->second.c_str());
-        } else if (it->first == "suspend-type") {
-            this->configs.suspend_type = it->second.c_str();
-        } else if (it->first.find("target_") != std::string::npos) {
-            std::pair<std::string, std::string> command;
-
-            command.first = it->first;
-            command.second = it->second;
-
-            this->configs.commands.push_back(command);
-        } else {
-            logger::warning("Found unknown entry in config file: \"" + it->first + "\"");
-        }
-    }
-
-    logger::info("Parsed raw configs: ");
-    logger::debug_map(raw_configs);
-
-    return true;
-}
 
 bool CommandBase::is_config_file_input_sane()
 {

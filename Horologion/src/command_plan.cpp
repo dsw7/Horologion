@@ -1,5 +1,6 @@
 #include "command_plan.hpp"
 
+#include "parse_config_file.hpp"
 #include "utils.hpp"
 
 #include <ctime>
@@ -75,9 +76,7 @@ void CommandPlan::print_tree()
 
 void CommandPlan::main()
 {
-    if (not this->read_configs_from_file()) {
-        exit(EXIT_FAILURE);
-    }
+    this->configs = read_configs_from_file();
 
     if (not this->is_config_file_input_sane()) {
         exit(EXIT_FAILURE);

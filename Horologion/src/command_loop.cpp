@@ -1,6 +1,7 @@
 #include "command_loop.hpp"
 
 #include "logger.hpp"
+#include "parse_config_file.hpp"
 #include "utils.hpp"
 #include "workers.hpp"
 
@@ -125,10 +126,7 @@ void CommandLoop::run_loop()
 void CommandLoop::main()
 {
     utils::is_running_as_root();
-
-    if (not this->read_configs_from_file()) {
-        exit(EXIT_FAILURE);
-    }
+    this->configs = read_configs_from_file();
 
     if (not this->is_config_file_input_sane()) {
         exit(EXIT_FAILURE);
