@@ -27,13 +27,9 @@ install()
   src_service_file=Horologion/systemd/${SERVICE_FILE}
   cp --verbose "${src_service_file}" ${DST_SERVICE_FILE}/
 
-  local user
-  user="$(whoami)"
-
   local path_bin
   path_bin="/home/${SUDO_USER}/.local/bin/horolog"
 
-  sed -i "s/username/${user}/" ${DST_SERVICE_FILE}/${SERVICE_FILE}
   sed -i "s@execstart@${path_bin} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
   systemctl daemon-reload

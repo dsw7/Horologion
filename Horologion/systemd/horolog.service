@@ -5,7 +5,7 @@ Description=Horolog Job Scheduling Software
 Type=simple
 Restart=always
 RestartSec=1
-User=username
+User=root
 ExecStart=execstart
 
 [Install]
