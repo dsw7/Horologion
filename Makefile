@@ -23,7 +23,7 @@ format:
 
 compile: format
 	@cmake -S Horologion -B $(BUILD_DIR)
-	@make --jobs=12 --directory=$(BUILD_DIR)
+	@make --jobs=12 --directory=$(BUILD_DIR) install
 
 clean:
 	@rm -rfv $(BUILD_DIR)

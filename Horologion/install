@@ -1,6 +1,5 @@
 #!/bin/bash
 
-SRC_BINARY=$(dirname "$0")/bin
 BINARY_NAME=horolog
 DST_BINARY=/usr/bin
 
@@ -24,9 +23,6 @@ set -e
 
 install()
 {
-  cmake -S "$(dirname "$0")" -B "${SRC_BINARY}"
-  make --jobs=12 -C "${SRC_BINARY}"
-  cp --verbose "${SRC_BINARY}/${BINARY_NAME}" ${DST_BINARY}/
   cp --verbose "${SRC_CONFIG}/${CONFIG_FILE}" ${DST_CONFIG}/
   cp --verbose "${SRC_SERVICE_FILE}/${SERVICE_FILE}" ${DST_SERVICE_FILE}/
 
