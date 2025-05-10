@@ -30,8 +30,7 @@ void run_command(const std::string &prog, const std::string &first_arg)
     } else if (first_arg == "loop") {
         commands::loop();
     } else if (first_arg == "plan") {
-        CommandPlan command;
-        command.main();
+        commands::plan();
     } else if (first_arg == "test") {
         commands::test();
     } else {
