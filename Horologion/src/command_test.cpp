@@ -1,7 +1,7 @@
 #include "command_test.hpp"
 
+#include "configs.hpp"
 #include "logger.hpp"
-#include "parse_config_file.hpp"
 #include "utils.hpp"
 #include "workers.hpp"
 

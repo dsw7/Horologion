@@ -1,11 +1,12 @@
 #pragma once
 
-#include "command_base.hpp"
+#include "configs.hpp"
 
-class CommandTest: public CommandBase {
+class CommandTest {
 public:
-    void main() override;
+    void main();
 
 private:
+    Configs configs;
     void deploy_jobs();
 };
