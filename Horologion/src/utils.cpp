@@ -26,21 +26,16 @@ void is_running_as_root()
     throw std::runtime_error("Not running as root. Additional privileges needed!");
 }
 
-bool write_to_file(const std::string &filepath, const std::string &message)
+void write_to_file(const std::string &filepath, const std::string &contents)
 {
     if (not std::filesystem::exists(filepath)) {
-        logger::error("File \"" + filepath + "\" does not exist!");
-        return false;
+        throw std::runtime_error("File \"" + filepath + "\" does not exist!");
     }
-
-    logger::info("Will write \"" + message + "\" to " + filepath);
 
     std::ofstream file;
     file.open(filepath);
-    file << message;
+    file << contents;
     file.close();
-
-    return true;
 }
 
 std::string read_from_file(const std::string &filepath)
@@ -84,20 +79,20 @@ std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, cons
     return mktime(tm_time);
 }
 
-bool unset_rtc_alarm()
+void unset_rtc_alarm()
 {
     logger::info("Unsetting alarm");
     const std::string unset_str = "0";
 
-    return write_to_file(SYSFS_WAKEALARM, unset_str);
+    write_to_file(SYSFS_WAKEALARM, unset_str);
 }
 
-bool set_rtc_alarm(const unsigned int wake_time)
+void set_rtc_alarm(const unsigned int wake_time)
 {
     logger::info("Setting alarm");
     const std::string str_wake_time = std::to_string(wake_time);
 
-    return write_to_file(SYSFS_WAKEALARM, str_wake_time);
+    write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
 
 bool is_valid_suspend_state(const std::string &state_from_ini)
