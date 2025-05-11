@@ -13,26 +13,6 @@ namespace {
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 
-bool read_file(const std::string &filepath, std::string &file_contents)
-{
-    if (not std::filesystem::exists(filepath)) {
-        logger::error("File \"" + filepath + "\" does not exist!");
-        return false;
-    }
-
-    logger::info("Reading " + filepath);
-
-    std::ifstream filestream(filepath);
-
-    std::string line;
-    while (getline(filestream, line)) {
-        file_contents += line + "\n";
-    }
-
-    filestream.close();
-    return true;
-}
-
 } // namespace
 
 namespace utils {
@@ -61,6 +41,24 @@ bool write_to_file(const std::string &filepath, const std::string &message)
     file.close();
 
     return true;
+}
+
+std::string read_from_file(const std::string &filepath)
+{
+    if (not std::filesystem::exists(filepath)) {
+        throw std::runtime_error("File \"" + filepath + "\" does not exist!");
+    }
+
+    std::ifstream filestream(filepath);
+    std::string line;
+    std::string contents;
+
+    while (getline(filestream, line)) {
+        contents += line + "\n";
+    }
+
+    filestream.close();
+    return contents;
 }
 
 std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
@@ -106,12 +104,8 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
 {
     logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
 
-    std::string sysfs_states;
     static std::string sysfs_state_file = "/sys/power/state";
-
-    if (not read_file(sysfs_state_file, sysfs_states)) {
-        return false;
-    }
+    std::string sysfs_states = read_from_file(sysfs_state_file);
 
     std::stringstream ss_states(sysfs_states);
 
