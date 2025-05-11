@@ -5,5 +5,5 @@
 
 namespace workers {
 void worker_stay_awake(const std::time_t *duration, std::string *suspend_type);
-void worker_run_command(std::string *command);
+void run_command(const std::string &command);
 } // namespace workers

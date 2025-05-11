@@ -5,7 +5,9 @@
 
 #include <array>
 #include <chrono>
+#include <cstdio>
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <stdio.h>
 #include <thread>
@@ -53,38 +55,33 @@ void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
     logger::info_thread_safe("<wake> Waking system and terminating this thread");
 }
 
-void worker_run_command(std::string *command)
+void run_command(const std::string &command)
 {
-    if (command->find(" 2>&1") == std::string::npos) {
-        // stderr will otherwise leak out to terminal
-        *command += " 2>&1";
+    std::string command_r = command;
+
+    if (command_r.find(" 2>&1") == std::string::npos) {
+        command_r += " 2>&1";
     }
 
-    logger::info_thread_safe("Deploying command: \"" + *command + "\"");
+    logger::info_thread_safe("Deploying command: \"" + command_r + "\"");
 
-    FILE *pipe = popen(command->c_str(), "r");
+    std::array<char, 128> buffer;
+    std::string command_stdout;
 
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command_r.c_str(), "r"), pclose);
     if (!pipe) {
-        logger::error_thread_safe("Could not start command: \"" + *command + "\"");
+        logger::error_thread_safe("Could not start command");
         return;
     }
 
-    std::array<char, 128> buffer;
-    std::string subproc_output;
-
-    while (fgets(buffer.data(), 128, pipe) != NULL) {
-        logger::info_thread_safe("Reading output from command: \"" + *command + "\"");
-        subproc_output += buffer.data();
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        command_stdout += buffer.data();
     }
 
-    if (pclose(pipe) != 0) {
-        logger::warning_thread_safe("Command \"" + *command + "\" exited with non-zero exit code");
-    }
-
-    if (subproc_output.size() > 0) {
-        logger::info_thread_safe("Output from command: \"" + *command + "\" -> " + subproc_output);
+    if (command_stdout.empty()) {
+        logger::info_thread_safe("No output from command");
     } else {
-        logger::info_thread_safe("Output from command: \"" + *command + "\" -> None");
+        logger::info_thread_safe("Output from command:\n" + command_stdout);
     }
 }
 

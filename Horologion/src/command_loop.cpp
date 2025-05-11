@@ -53,7 +53,7 @@ void deploy_jobs(Configs &configs, const std::time_t wake_duration)
 
     if (n > 0) {
         for (unsigned int i = 0; i < n; ++i) {
-            jobs.push_back(std::thread(workers::worker_run_command, &configs.commands[i]));
+            jobs.push_back(std::thread(workers::run_command, configs.commands[i]));
         }
     }
 
