@@ -1,6 +1,7 @@
 #include "command_loop.hpp"
 #include "command_plan.hpp"
 #include "command_test.hpp"
+#include "logger.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -50,7 +51,7 @@ int main(int argc, char **argv)
     try {
         run_command(prog, std::string(argv[1]));
     } catch (const std::runtime_error &e) {
-        std::cerr << e.what() << '\n';
+        logger::error(e.what());
         return EXIT_FAILURE;
     }
 

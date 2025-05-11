@@ -4,6 +4,7 @@
 #include "utils.hpp"
 
 #include <filesystem>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <stdlib.h>
@@ -94,6 +95,17 @@ void read_project_toml(Configs &configs)
     }
 }
 
+void is_valid_schedule(const Configs &configs)
+{
+    if (configs.time_cmd_e - configs.time_wake_e < 60) {
+        throw std::runtime_error("The [times.cmd] time must be at least 60 seconds ahead of [times.wake]");
+    }
+
+    if (configs.time_sleep_e - configs.time_cmd_e < 60) {
+        throw std::runtime_error("The [times.sleep] time must be at least 60 seconds ahead of [times.cmd]");
+    }
+}
+
 void is_valid_suspend_state(const std::string &suspend_type)
 {
     logger::info("Checking whether \"" + suspend_type + "\" is a supported suspend state");
@@ -130,6 +142,7 @@ Configs read_configs_from_file()
         throw std::runtime_error(e.what());
     }
 
+    is_valid_schedule(configs);
     is_valid_suspend_state(configs.suspend_type);
     return configs;
 }
