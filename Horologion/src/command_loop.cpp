@@ -5,6 +5,7 @@
 #include "utils.hpp"
 #include "workers.hpp"
 
+#include <atomic>
 #include <csignal>
 #include <ctime>
 #include <stdexcept>
@@ -14,13 +15,11 @@
 namespace {
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
-const unsigned int SECONDS_PER_DAY = 86400;
 
 void set_rtc_alarm(const std::time_t wake_time)
 {
     logger::info("Setting RTC alarm. Next scheduled wake up time:");
     logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(wake_time));
-    logger::info("The machine will wake up at " + std::to_string(wake_time) + " seconds since Epoch");
     utils::write_to_file(SYSFS_WAKEALARM, std::to_string(wake_time));
 }
 
@@ -28,15 +27,6 @@ void unset_rtc_alarm()
 {
     logger::info("Unsetting RTC alarm");
     utils::write_to_file(SYSFS_WAKEALARM, "0");
-}
-
-void signal_handler(const int signum)
-{
-    logger::info("Received signal " + std::to_string(signum));
-    logger::info("Ending loop");
-
-    unset_rtc_alarm();
-    exit(signum);
 }
 
 std::time_t get_wake_duration(const Configs &configs)
@@ -62,14 +52,26 @@ void deploy_jobs(Configs &configs, const std::time_t wake_duration)
     }
 }
 
+std::atomic<bool> SIG_RECEIVED(false);
+
+void signal_handler(__attribute__((unused)) const int signum)
+{
+    SIG_RECEIVED.store(true);
+}
+
+const int SECONDS_PER_DAY = 86400;
+
 void run_loop(Configs &configs)
 {
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+
     logger::info("Starting loop");
 
     bool alarm_is_set = false;
     std::time_t current_epoch_time;
 
-    while (true) {
+    while (not SIG_RECEIVED.load()) {
         current_epoch_time = std::time(nullptr);
 
         if (current_epoch_time > configs.time_wake_e) {
@@ -92,6 +94,9 @@ void run_loop(Configs &configs)
 
         sleep(1);
     }
+
+    unset_rtc_alarm();
+    logger::info("Ending loop");
 }
 
 } // namespace
@@ -102,10 +107,6 @@ void loop()
 {
     utils::is_running_as_root();
     Configs configs = read_configs_from_file();
-
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-
     run_loop(configs);
 }
 
