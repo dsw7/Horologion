@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
-#include <sstream>
 #include <stdexcept>
 #include <unistd.h>
 
@@ -71,32 +70,6 @@ std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, cons
     tm_time->tm_sec = second;
 
     return mktime(tm_time);
-}
-
-bool is_valid_suspend_state(const std::string &state_from_ini)
-{
-    logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
-
-    static std::string sysfs_state_file = "/sys/power/state";
-    std::string sysfs_states = read_from_file(sysfs_state_file);
-
-    std::stringstream ss_states(sysfs_states);
-
-    bool is_valid_state = false;
-    std::string state;
-
-    while (ss_states >> state) {
-        if (state_from_ini == state) {
-            is_valid_state = true;
-        }
-    }
-
-    if (not is_valid_state) {
-        logger::error("State \"" + state_from_ini + "\" not supported!");
-        logger::error("Valid states are: " + sysfs_states);
-    }
-
-    return is_valid_state;
 }
 
 } // namespace utils

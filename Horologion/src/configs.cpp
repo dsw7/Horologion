@@ -4,6 +4,7 @@
 #include "utils.hpp"
 
 #include <filesystem>
+#include <sstream>
 #include <stdexcept>
 #include <stdlib.h>
 #include <toml.hpp>
@@ -93,6 +94,28 @@ void read_project_toml(Configs &configs)
     }
 }
 
+void is_valid_suspend_state(const std::string &suspend_type)
+{
+    logger::info("Checking whether \"" + suspend_type + "\" is a supported suspend state");
+
+    static std::string sysfs_state_file = "/sys/power/state";
+    std::string sysfs_states = utils::read_from_file(sysfs_state_file);
+
+    bool is_valid_state = false;
+    std::stringstream ss_states(sysfs_states);
+    std::string state;
+
+    while (ss_states >> state) {
+        if (suspend_type == state) {
+            is_valid_state = true;
+        }
+    }
+
+    if (not is_valid_state) {
+        throw std::runtime_error("Suspend type \"" + suspend_type + "\" not supported!\nValid states are: " + sysfs_states);
+    }
+}
+
 } // namespace
 
 Configs read_configs_from_file()
@@ -107,9 +130,6 @@ Configs read_configs_from_file()
         throw std::runtime_error(e.what());
     }
 
-    if (not utils::is_valid_suspend_state(configs.suspend_type)) {
-        throw std::runtime_error("Invalid suspend type");
-    }
-
+    is_valid_suspend_state(configs.suspend_type);
     return configs;
 }
