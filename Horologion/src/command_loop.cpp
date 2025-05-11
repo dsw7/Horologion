@@ -13,24 +13,30 @@
 
 namespace {
 
+const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 const unsigned int SECONDS_PER_DAY = 86400;
+
+void set_rtc_alarm(const std::time_t wake_time)
+{
+    logger::info("Setting RTC alarm. Next scheduled wake up time:");
+    logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(wake_time));
+    logger::info("The machine will wake up at " + std::to_string(wake_time) + " seconds since Epoch");
+    utils::write_to_file(SYSFS_WAKEALARM, std::to_string(wake_time));
+}
+
+void unset_rtc_alarm()
+{
+    logger::info("Unsetting RTC alarm");
+    utils::write_to_file(SYSFS_WAKEALARM, "0");
+}
 
 void signal_handler(const int signum)
 {
     logger::info("Received signal " + std::to_string(signum));
     logger::info("Ending loop");
 
-    utils::unset_rtc_alarm();
+    unset_rtc_alarm();
     exit(signum);
-}
-
-void set_alarm(const std::time_t wake_time)
-{
-    logger::info("Setting RTC alarm. Next scheduled wake up time:");
-    logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(wake_time));
-    logger::info("The machine will wake up at " + std::to_string(wake_time) + " seconds since Epoch");
-
-    utils::set_rtc_alarm(wake_time);
 }
 
 std::time_t get_wake_duration(const Configs &configs)
@@ -72,7 +78,7 @@ void run_loop(Configs &configs)
         }
 
         if (not alarm_is_set) {
-            set_alarm(configs.time_wake_e);
+            set_rtc_alarm(configs.time_wake_e);
             alarm_is_set = true;
         }
 

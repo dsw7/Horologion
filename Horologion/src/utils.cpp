@@ -9,12 +9,6 @@
 #include <stdexcept>
 #include <unistd.h>
 
-namespace {
-
-const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
-
-} // namespace
-
 namespace utils {
 
 void is_running_as_root()
@@ -77,22 +71,6 @@ std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, cons
     tm_time->tm_sec = second;
 
     return mktime(tm_time);
-}
-
-void unset_rtc_alarm()
-{
-    logger::info("Unsetting alarm");
-    const std::string unset_str = "0";
-
-    write_to_file(SYSFS_WAKEALARM, unset_str);
-}
-
-void set_rtc_alarm(const unsigned int wake_time)
-{
-    logger::info("Setting alarm");
-    const std::string str_wake_time = std::to_string(wake_time);
-
-    write_to_file(SYSFS_WAKEALARM, str_wake_time);
 }
 
 bool is_valid_suspend_state(const std::string &state_from_ini)
