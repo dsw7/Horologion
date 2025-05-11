@@ -59,18 +59,6 @@ void read_project_toml(Configs &configs)
     }
 }
 
-void log_parsed_times(const Configs &configs)
-{
-    logger::info("Parsed wake up hour (tm_hour): " + std::to_string(configs.time_wake.tm_hour));
-    logger::info("Parsed wake up minute (tm_min): " + std::to_string(configs.time_wake.tm_min));
-
-    logger::info("Parsed command execution hour (tm_hour): " + std::to_string(configs.time_cmd.tm_hour));
-    logger::info("Parsed command execution minute (tm_min): " + std::to_string(configs.time_cmd.tm_min));
-
-    logger::info("Parsed sleep hour (tm_hour): " + std::to_string(configs.time_sleep.tm_hour));
-    logger::info("Parsed sleep minute (tm_min): " + std::to_string(configs.time_sleep.tm_min));
-}
-
 void is_valid_hour(const int hour)
 {
     if (hour < 0 or hour > 23) {
@@ -98,8 +86,6 @@ Configs read_configs_from_file()
     } catch (const std::out_of_range &e) {
         throw std::runtime_error(e.what());
     }
-
-    log_parsed_times(configs);
 
     is_valid_hour(configs.time_wake.tm_hour);
     is_valid_minute(configs.time_wake.tm_min);
