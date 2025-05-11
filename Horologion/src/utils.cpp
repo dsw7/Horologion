@@ -60,16 +60,4 @@ std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
     return ascii_time;
 }
 
-std::time_t get_epoch_time_from_configs(const int &hour, const int &minute, const int &second)
-{
-    std::time_t now = std::time(nullptr);
-    std::tm *tm_time = std::localtime(&now);
-
-    tm_time->tm_hour = hour;
-    tm_time->tm_min = minute;
-    tm_time->tm_sec = second;
-
-    return mktime(tm_time);
-}
-
 } // namespace utils
