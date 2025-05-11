@@ -8,7 +8,7 @@ struct Configs {
     std::string suspend_type;
     std::vector<std::string> commands;
 
-    struct tm time_run_cmd = { 0 };
+    struct tm time_cmd = { 0 };
     struct tm time_sleep = { 0 };
     struct tm time_wake = { 0 };
 };

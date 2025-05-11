@@ -26,7 +26,7 @@ void signal_handler(const int signum)
 
 struct Times {
     std::time_t time_wake = 0;
-    std::time_t time_run_cmd = 0;
+    std::time_t time_cmd = 0;
     std::time_t wake_duration = 0;
 };
 
@@ -40,10 +40,10 @@ Times set_times(const Configs &configs)
         configs.time_wake.tm_sec // set seconds to zero
     );
 
-    times.time_run_cmd = utils::get_epoch_time_from_configs(
-        configs.time_run_cmd.tm_hour,
-        configs.time_run_cmd.tm_min,
-        configs.time_run_cmd.tm_sec // set seconds to zero
+    times.time_cmd = utils::get_epoch_time_from_configs(
+        configs.time_cmd.tm_hour,
+        configs.time_cmd.tm_min,
+        configs.time_cmd.tm_sec // set seconds to zero
     );
 
     std::time_t time_sleep = utils::get_epoch_time_from_configs(
@@ -52,11 +52,11 @@ Times set_times(const Configs &configs)
         configs.time_sleep.tm_sec // set seconds to zero
     );
 
-    if ((times.time_run_cmd - times.time_wake) < 60) {
+    if ((times.time_cmd - times.time_wake) < 60) {
         throw std::runtime_error("The command run time should be at least one minute ahead of the wake time!");
     }
 
-    times.wake_duration = time_sleep - times.time_run_cmd;
+    times.wake_duration = time_sleep - times.time_cmd;
 
     if (times.wake_duration < 60) {
         throw std::runtime_error("The sleep time should be at least one minute ahead of the command run time!");
@@ -112,12 +112,12 @@ void run_loop(Configs &configs, Times &times)
             alarm_is_set = true;
         }
 
-        if (current_epoch_time == times.time_run_cmd) {
+        if (current_epoch_time == times.time_cmd) {
             deploy_jobs(configs, times.wake_duration);
         }
 
-        if (current_epoch_time > times.time_run_cmd) {
-            times.time_run_cmd += SECONDS_PER_DAY;
+        if (current_epoch_time > times.time_cmd) {
+            times.time_cmd += SECONDS_PER_DAY;
         }
 
         sleep(1);

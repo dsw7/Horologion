@@ -19,7 +19,7 @@ const std::string TL_ELBOW = "\u250c";
 
 struct Times {
     std::string time_wake;
-    std::string time_run_cmd;
+    std::string time_cmd;
     std::string time_sleep;
 };
 
@@ -30,10 +30,10 @@ Times set_times(const Configs &configs)
         configs.time_wake.tm_min,
         configs.time_wake.tm_sec);
 
-    const std::time_t time_run_cmd_t = utils::get_epoch_time_from_configs(
-        configs.time_run_cmd.tm_hour,
-        configs.time_run_cmd.tm_min,
-        configs.time_run_cmd.tm_sec);
+    const std::time_t time_cmd_t = utils::get_epoch_time_from_configs(
+        configs.time_cmd.tm_hour,
+        configs.time_cmd.tm_min,
+        configs.time_cmd.tm_sec);
 
     const std::time_t time_sleep_t = utils::get_epoch_time_from_configs(
         configs.time_sleep.tm_hour,
@@ -42,7 +42,7 @@ Times set_times(const Configs &configs)
 
     Times times;
     times.time_wake = utils::epoch_time_to_ascii_time(time_wake_t);
-    times.time_run_cmd = utils::epoch_time_to_ascii_time(time_run_cmd_t);
+    times.time_cmd = utils::epoch_time_to_ascii_time(time_cmd_t);
     times.time_sleep = utils::epoch_time_to_ascii_time(time_sleep_t);
 
     return times;
@@ -54,7 +54,7 @@ void print_tree(const std::vector<std::string> &commands, const Times &times)
     std::cout << " " + TL_ELBOW + H_LINE + "{t_w}: " + times.time_wake + "\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + V_LINE + "\n";
-    std::cout << " " + RIGHT_TEE + H_LINE + "{t_c}: " + times.time_run_cmd + " -> [Commands]\n";
+    std::cout << " " + RIGHT_TEE + H_LINE + "{t_c}: " + times.time_cmd + " -> [Commands]\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + V_LINE + "\n";
     std::cout << " " + BL_ELBOW + H_LINE + "{t_s}: " + times.time_sleep + "\n";

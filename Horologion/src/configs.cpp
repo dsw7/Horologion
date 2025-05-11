@@ -45,8 +45,8 @@ void read_project_toml(Configs &configs)
     toml::table table = toml::parse_file(prog_config);
     configs.time_wake.tm_hour = table["times"]["wake"]["hour"].value_or<int>(8);
     configs.time_wake.tm_min = table["times"]["wake"]["minute"].value_or<int>(0);
-    configs.time_run_cmd.tm_hour = table["times"]["cmd"]["hour"].value_or<int>(8);
-    configs.time_run_cmd.tm_min = table["times"]["cmd"]["minute"].value_or<int>(1);
+    configs.time_cmd.tm_hour = table["times"]["cmd"]["hour"].value_or<int>(8);
+    configs.time_cmd.tm_min = table["times"]["cmd"]["minute"].value_or<int>(1);
     configs.time_sleep.tm_hour = table["times"]["sleep"]["hour"].value_or<int>(8);
     configs.time_sleep.tm_min = table["times"]["sleep"]["minute"].value_or<int>(2);
     configs.suspend_type = table["suspend-type"].value_or<std::string>("mem");
@@ -64,8 +64,8 @@ void log_parsed_times(const Configs &configs)
     logger::info("Parsed wake up hour (tm_hour): " + std::to_string(configs.time_wake.tm_hour));
     logger::info("Parsed wake up minute (tm_min): " + std::to_string(configs.time_wake.tm_min));
 
-    logger::info("Parsed command execution hour (tm_hour): " + std::to_string(configs.time_run_cmd.tm_hour));
-    logger::info("Parsed command execution minute (tm_min): " + std::to_string(configs.time_run_cmd.tm_min));
+    logger::info("Parsed command execution hour (tm_hour): " + std::to_string(configs.time_cmd.tm_hour));
+    logger::info("Parsed command execution minute (tm_min): " + std::to_string(configs.time_cmd.tm_min));
 
     logger::info("Parsed sleep hour (tm_hour): " + std::to_string(configs.time_sleep.tm_hour));
     logger::info("Parsed sleep minute (tm_min): " + std::to_string(configs.time_sleep.tm_min));
@@ -103,8 +103,8 @@ Configs read_configs_from_file()
 
     is_valid_hour(configs.time_wake.tm_hour);
     is_valid_minute(configs.time_wake.tm_min);
-    is_valid_hour(configs.time_run_cmd.tm_hour);
-    is_valid_minute(configs.time_run_cmd.tm_min);
+    is_valid_hour(configs.time_cmd.tm_hour);
+    is_valid_minute(configs.time_cmd.tm_min);
     is_valid_hour(configs.time_sleep.tm_hour);
     is_valid_minute(configs.time_sleep.tm_min);
 
