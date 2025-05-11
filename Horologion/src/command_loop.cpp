@@ -36,19 +36,15 @@ std::time_t get_wake_duration(const Configs &configs)
 
 void deploy_jobs(Configs &configs, const std::time_t wake_duration)
 {
-    unsigned int n = configs.commands.size();
-
     std::vector<std::thread> jobs;
     jobs.push_back(std::thread(workers::stay_awake, wake_duration, configs.suspend_type));
 
-    if (n > 0) {
-        for (unsigned int i = 0; i < n; ++i) {
-            jobs.push_back(std::thread(workers::run_command, configs.commands[i]));
-        }
+    for (auto &command: configs.commands) {
+        jobs.push_back(std::thread(workers::run_command, command));
     }
 
-    for (unsigned int i = 0; i < jobs.size(); ++i) {
-        jobs.at(i).detach();
+    for (auto &job: jobs) {
+        job.detach();
     }
 }
 

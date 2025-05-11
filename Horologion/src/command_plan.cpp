@@ -34,19 +34,19 @@ void print_schedule(const Configs &configs)
 
 void print_pstree(const Configs &configs)
 {
-    unsigned int n = configs.commands.size();
-
-    if (n == 0) {
+    if (configs.commands.empty()) {
         std::cout << "[Commands]: None\n";
         return;
     }
+
+    int n = configs.commands.size();
 
     if (n == 1) {
         std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + configs.commands[0] << '\n';
         return;
     }
 
-    for (unsigned int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         if (i == 0) {
             std::cout << "[Commands]: " + H_LINE + DOWN_TEE + H_LINE + " " + configs.commands[i] + "\n";
         } else if (i == n - 1) {
