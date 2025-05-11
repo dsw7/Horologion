@@ -34,6 +34,35 @@ std::filesystem::path get_proj_data_dir()
     return std::filesystem::path(home_dir) / ".horolog";
 }
 
+void is_valid_hour(const int hour)
+{
+    if (hour < 0 or hour > 23) {
+        throw std::runtime_error("All configured hour values must be between 0 and 23");
+    }
+}
+
+void is_valid_minute(const int minute)
+{
+    if (minute < 0 or minute > 59) {
+        throw std::runtime_error("All configured minute values must be between 0 and 59");
+    }
+}
+
+std::time_t config_time_to_epoch_time(const int hour, const int minute)
+{
+    is_valid_hour(hour);
+    is_valid_minute(minute);
+
+    std::time_t now = std::time(nullptr);
+    std::tm *tm_time = std::localtime(&now);
+
+    tm_time->tm_hour = hour;
+    tm_time->tm_min = minute;
+    tm_time->tm_sec = 0;
+
+    return mktime(tm_time);
+}
+
 void read_project_toml(Configs &configs)
 {
     static std::string prog_config = get_proj_data_dir() / "horolog.toml";
@@ -43,6 +72,17 @@ void read_project_toml(Configs &configs)
     }
 
     toml::table table = toml::parse_file(prog_config);
+
+    configs.time_wake_e = config_time_to_epoch_time(
+        table["times"]["wake"]["hour"].value_or<int>(8),
+        table["times"]["wake"]["minute"].value_or<int>(0));
+    configs.time_cmd_e = config_time_to_epoch_time(
+        table["times"]["cmd"]["hour"].value_or<int>(8),
+        table["times"]["cmd"]["minute"].value_or<int>(1));
+    configs.time_sleep_e = config_time_to_epoch_time(
+        table["times"]["sleep"]["hour"].value_or<int>(8),
+        table["times"]["sleep"]["minute"].value_or<int>(2));
+
     configs.time_wake.tm_hour = table["times"]["wake"]["hour"].value_or<int>(8);
     configs.time_wake.tm_min = table["times"]["wake"]["minute"].value_or<int>(0);
     configs.time_cmd.tm_hour = table["times"]["cmd"]["hour"].value_or<int>(8);
@@ -56,20 +96,6 @@ void read_project_toml(Configs &configs)
         for (auto it = targets.as_array()->begin(); it < targets.as_array()->end(); ++it) {
             configs.commands.push_back(it->as_string()->get());
         }
-    }
-}
-
-void is_valid_hour(const int hour)
-{
-    if (hour < 0 or hour > 23) {
-        throw std::runtime_error("All configured hour values must be between 0 and 23");
-    }
-}
-
-void is_valid_minute(const int minute)
-{
-    if (minute < 0 or minute > 59) {
-        throw std::runtime_error("All configured minute values must be between 0 and 59");
     }
 }
 

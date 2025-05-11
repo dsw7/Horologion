@@ -11,6 +11,10 @@ struct Configs {
     struct tm time_cmd = { 0 };
     struct tm time_sleep = { 0 };
     struct tm time_wake = { 0 };
+
+    std::time_t time_wake_e = 0;
+    std::time_t time_cmd_e = 0;
+    std::time_t time_sleep_e = 0;
 };
 
 Configs read_configs_from_file();
