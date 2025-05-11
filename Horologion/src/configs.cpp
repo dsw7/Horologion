@@ -83,12 +83,6 @@ void read_project_toml(Configs &configs)
         table["times"]["sleep"]["hour"].value_or<int>(8),
         table["times"]["sleep"]["minute"].value_or<int>(2));
 
-    configs.time_wake.tm_hour = table["times"]["wake"]["hour"].value_or<int>(8);
-    configs.time_wake.tm_min = table["times"]["wake"]["minute"].value_or<int>(0);
-    configs.time_cmd.tm_hour = table["times"]["cmd"]["hour"].value_or<int>(8);
-    configs.time_cmd.tm_min = table["times"]["cmd"]["minute"].value_or<int>(1);
-    configs.time_sleep.tm_hour = table["times"]["sleep"]["hour"].value_or<int>(8);
-    configs.time_sleep.tm_min = table["times"]["sleep"]["minute"].value_or<int>(2);
     configs.suspend_type = table["suspend-type"].value_or<std::string>("mem");
 
     const auto &targets = table["targets"];
@@ -112,13 +106,6 @@ Configs read_configs_from_file()
     } catch (const std::out_of_range &e) {
         throw std::runtime_error(e.what());
     }
-
-    is_valid_hour(configs.time_wake.tm_hour);
-    is_valid_minute(configs.time_wake.tm_min);
-    is_valid_hour(configs.time_cmd.tm_hour);
-    is_valid_minute(configs.time_cmd.tm_min);
-    is_valid_hour(configs.time_sleep.tm_hour);
-    is_valid_minute(configs.time_sleep.tm_min);
 
     if (not utils::is_valid_suspend_state(configs.suspend_type)) {
         throw std::runtime_error("Invalid suspend type");
