@@ -37,20 +37,20 @@ void suspend_system(const std::string &suspend_type)
 
 namespace workers {
 
-void stay_awake(const std::time_t *duration, std::string *suspend_type)
+void stay_awake(const std::time_t duration, const std::string &suspend_type)
 {
-    logger::info_thread_safe("Keeping system awake for " + std::to_string(*duration) + " seconds");
-    std::this_thread::sleep_for(std::chrono::seconds(*duration));
+    logger::info_thread_safe("Keeping system awake for " + std::to_string(duration) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(duration));
 
-    logger::info_thread_safe(std::to_string(*duration) + " seconds have elapsed");
+    logger::info_thread_safe(std::to_string(duration) + " seconds have elapsed");
 
-    if (*suspend_type == "none") {
+    if (suspend_type == "none") {
         logger::info_thread_safe("ACPI signal transmission disabled. Doing nothing");
         return;
     }
 
     logger::info_thread_safe("Suspending system");
-    suspend_system(*suspend_type);
+    suspend_system(suspend_type);
 
     logger::info_thread_safe("Waking system and terminating this thread");
 }

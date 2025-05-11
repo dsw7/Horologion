@@ -49,7 +49,7 @@ void deploy_jobs(Configs &configs, const std::time_t wake_duration)
     unsigned int n = configs.commands.size();
 
     std::vector<std::thread> jobs;
-    jobs.push_back(std::thread(workers::stay_awake, &wake_duration, &configs.suspend_type));
+    jobs.push_back(std::thread(workers::stay_awake, wake_duration, configs.suspend_type));
 
     if (n > 0) {
         for (unsigned int i = 0; i < n; ++i) {
