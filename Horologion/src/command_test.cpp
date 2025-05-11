@@ -25,7 +25,7 @@ void deploy_jobs(std::vector<std::string> &commands)
     std::vector<std::thread> jobs;
 
     for (unsigned int i = 0; i < n; ++i) {
-        jobs.push_back(std::thread(worker_run_command, &commands[i]));
+        jobs.push_back(std::thread(workers::worker_run_command, &commands[i]));
     }
 
     for (unsigned int i = 0; i < jobs.size(); ++i) {

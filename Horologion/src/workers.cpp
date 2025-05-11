@@ -5,25 +5,52 @@
 
 #include <array>
 #include <chrono>
+#include <map>
+#include <stdexcept>
 #include <stdio.h>
 #include <thread>
 
+namespace {
+
+void suspend_system(const std::string &suspend_type)
+{
+    static std::map<std::string, std::string> suspend_types = {
+        { "standby", "S1 (Power-On Suspend)" },
+        { "mem", "S3 (Suspend-to-RAM)" },
+        { "disk", "S4 (Suspend-to-Disk)" }
+    };
+
+    if (not suspend_types.count(suspend_type)) {
+        throw std::runtime_error("Invalid suspend type: \"" + suspend_type + "\"");
+    }
+
+    // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
+    logger::info_thread_safe("Suspending system to state " + suspend_types[suspend_type]);
+
+    static std::string sysfs_state_file = "/sys/power/state";
+    utils::write_to_file(sysfs_state_file, suspend_type);
+}
+
+} // namespace
+
+namespace workers {
+
 void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
 {
-    logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*duration) + " seconds");
+    logger::info_thread_safe("<wake> Keeping system awake for " + std::to_string(*duration) + " seconds");
     std::this_thread::sleep_for(std::chrono::seconds(*duration));
 
-    logger::info_thread_safe("<target_0> " + std::to_string(*duration) + " seconds have elapsed");
+    logger::info_thread_safe("<wake> " + std::to_string(*duration) + " seconds have elapsed");
 
     if (*suspend_type == "none") {
-        logger::info_thread_safe("<target_0> Suspend disabled. Doing nothing");
+        logger::info_thread_safe("<wake> ACPI signal transmission disabled. Doing nothing");
         return;
     }
 
-    logger::info_thread_safe("<target_0> Suspending system");
-    utils::suspend_system(*suspend_type);
+    logger::info_thread_safe("<wake> Suspending system");
+    suspend_system(*suspend_type);
 
-    logger::info_thread_safe("<target_0> Waking system and terminating this thread");
+    logger::info_thread_safe("<wake> Waking system and terminating this thread");
 }
 
 void worker_run_command(std::string *command)
@@ -60,3 +87,5 @@ void worker_run_command(std::string *command)
         logger::info_thread_safe("Output from command: \"" + *command + "\" -> None");
     }
 }
+
+} // namespace workers

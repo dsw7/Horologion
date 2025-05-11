@@ -12,25 +12,6 @@
 namespace {
 
 const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
-const std::string SYSFS_STATE = "/sys/power/state";
-
-bool write_to_file(const std::string &filepath, const std::string &message)
-{
-    if (not std::filesystem::exists(filepath)) {
-        logger::error("File \"" + filepath + "\" does not exist!");
-        return false;
-    }
-
-    logger::info("Will write \"" + message + "\" to " + filepath);
-
-    std::ofstream file;
-
-    file.open(filepath);
-    file << message;
-    file.close();
-
-    return true;
-}
 
 bool read_file(const std::string &filepath, std::string &file_contents)
 {
@@ -63,6 +44,23 @@ void is_running_as_root()
     }
 
     throw std::runtime_error("Not running as root. Additional privileges needed!");
+}
+
+bool write_to_file(const std::string &filepath, const std::string &message)
+{
+    if (not std::filesystem::exists(filepath)) {
+        logger::error("File \"" + filepath + "\" does not exist!");
+        return false;
+    }
+
+    logger::info("Will write \"" + message + "\" to " + filepath);
+
+    std::ofstream file;
+    file.open(filepath);
+    file << message;
+    file.close();
+
+    return true;
 }
 
 std::string epoch_time_to_ascii_time(const std::time_t &epoch_time)
@@ -109,8 +107,9 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
     logger::info("Checking whether \"" + state_from_ini + "\" is a supported suspend state");
 
     std::string sysfs_states;
+    static std::string sysfs_state_file = "/sys/power/state";
 
-    if (not read_file(SYSFS_STATE, sysfs_states)) {
+    if (not read_file(sysfs_state_file, sysfs_states)) {
         return false;
     }
 
@@ -131,25 +130,6 @@ bool is_valid_suspend_state(const std::string &state_from_ini)
     }
 
     return is_valid_state;
-}
-
-bool suspend_system(const std::string &suspend_type)
-{
-    if (suspend_type == "none") {
-        logger::info("ACPI signal transmission disabled. Doing nothing");
-        return true;
-    }
-
-    static std::map<std::string, std::string> suspend_types = {
-        { "standby", "S1 (Power-On Suspend)" },
-        { "mem", "S3 (Suspend-to-RAM)" },
-        { "disk", "S4 (Suspend-to-Disk)" }
-    };
-
-    // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
-    logger::info("Suspending system to state " + suspend_types[suspend_type]);
-
-    return write_to_file(SYSFS_STATE, suspend_type);
 }
 
 } // namespace utils
