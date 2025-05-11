@@ -59,41 +59,8 @@ void read_project_toml(Configs &configs)
     }
 }
 
-bool is_unit_out_of_bounds(const int unit, const int max)
+void log_parsed_times(const Configs &configs)
 {
-    if (unit < 0 or unit > max) {
-        return true;
-    }
-
-    return false;
-}
-
-void is_config_file_input_sane(const Configs &configs)
-{
-    if (is_unit_out_of_bounds(configs.time_wake.tm_hour, 23)) {
-        throw std::runtime_error("Invalid input for \"time-wake-hour\" field. Input must be between [0, 23] hours");
-    }
-
-    if (is_unit_out_of_bounds(configs.time_wake.tm_min, 59)) {
-        throw std::runtime_error("Invalid input for \"time-wake-minute\" field. Input must be between [0, 59] minutes");
-    }
-
-    if (is_unit_out_of_bounds(configs.time_run_cmd.tm_hour, 23)) {
-        throw std::runtime_error("Invalid input for \"time-cmd-hour\" field. Input must be between [0, 23] hours");
-    }
-
-    if (is_unit_out_of_bounds(configs.time_run_cmd.tm_min, 59)) {
-        throw std::runtime_error("Invalid input for \"time-cmd-minute\" field. Input must be between [0, 59] minutes");
-    }
-
-    if (is_unit_out_of_bounds(configs.time_sleep.tm_hour, 23)) {
-        throw std::runtime_error("Invalid input for \"time-sleep-hour\" field. Input must be between [0, 23] hours");
-    }
-
-    if (is_unit_out_of_bounds(configs.time_sleep.tm_min, 59)) {
-        throw std::runtime_error("Invalid input for \"time-sleep-minute\" field. Input must be between [0, 59] minutes");
-    }
-
     logger::info("Parsed wake up hour (tm_hour): " + std::to_string(configs.time_wake.tm_hour));
     logger::info("Parsed wake up minute (tm_min): " + std::to_string(configs.time_wake.tm_min));
 
@@ -102,9 +69,19 @@ void is_config_file_input_sane(const Configs &configs)
 
     logger::info("Parsed sleep hour (tm_hour): " + std::to_string(configs.time_sleep.tm_hour));
     logger::info("Parsed sleep minute (tm_min): " + std::to_string(configs.time_sleep.tm_min));
+}
 
-    if (not utils::is_valid_suspend_state(configs.suspend_type)) {
-        throw std::runtime_error("Invalid suspend type");
+void is_valid_hour(const int hour)
+{
+    if (hour < 0 or hour > 23) {
+        throw std::runtime_error("All configured hour values must be between 0 and 23");
+    }
+}
+
+void is_valid_minute(const int minute)
+{
+    if (minute < 0 or minute > 59) {
+        throw std::runtime_error("All configured minute values must be between 0 and 59");
     }
 }
 
@@ -122,6 +99,18 @@ Configs read_configs_from_file()
         throw std::runtime_error(e.what());
     }
 
-    is_config_file_input_sane(configs);
+    log_parsed_times(configs);
+
+    is_valid_hour(configs.time_wake.tm_hour);
+    is_valid_minute(configs.time_wake.tm_min);
+    is_valid_hour(configs.time_run_cmd.tm_hour);
+    is_valid_minute(configs.time_run_cmd.tm_min);
+    is_valid_hour(configs.time_sleep.tm_hour);
+    is_valid_minute(configs.time_sleep.tm_min);
+
+    if (not utils::is_valid_suspend_state(configs.suspend_type)) {
+        throw std::runtime_error("Invalid suspend type");
+    }
+
     return configs;
 }
