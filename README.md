@@ -14,11 +14,9 @@ These solutions are recommended. However, I wanted a more user-friendly "self-co
   - [Step 3 - Start service](#step-3---start-service)
   - [Step 4 - Suspend the system](#step-4---suspend-the-system)
 - [Teardown](#teardown)
-- [Files](#files)
 - [Logging](#logging)
 - [Disabling the software](#disabling-the-software)
 - [Visualizing what happens per cycle](#visualizing-what-happens-per-cycle)
-- [Limitations of this software](#limitations-of-this-software)
 
 ## How it works
 To start, let's provide some definitions:
@@ -73,9 +71,9 @@ Make the script executable:
 ```bash
 chmod +x install
 ```
-Then run the script with elevated privileges:
+Then run the script:
 ```bash
-sudo ./install
+./install
 ```
 The following menu will appear:
 ```
@@ -84,11 +82,11 @@ Select setup type:
 [2] -> Uninstall product
 >
 ```
-Type 1 then press enter. The install script will compile a binary and position all requisite files.
+Type 1 then press enter. The install script will prompt for the user's password for `sudo`.
 ### Step 2 - Set custom configurations
 Open the software's configuration file:
 ```bash
-sudo vi /etc/horolog.toml
+vi $HOME/.horolog/horolog.toml
 ```
 #### Set critical times
 Start by setting the critical times. The critical times must adhere to the conditions set out in the
@@ -171,17 +169,17 @@ When work on the system is complete, suspend the system using `systemd`:
 sudo systemctl suspend
 ```
 The system should then wake at the next scheduled time $t_w$ and respect the configurations specified in
-`/etc/horolog.toml`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake
-at the next time $t_w$.
+`horolog.toml`. **NOTE:** A power down (i.e. via `shutdown`) will result in a system that does not wake at the
+next time $t_w$.
 
 ## Teardown
 To uninstall the product, make the install script executable:
 ```
-chmod +x Horologion/install
+chmod +x install
 ```
 Then run the script with elevated privileges:
 ```
-sudo ./Horologion/install
+./install
 ```
 The following menu will appear:
 ```
@@ -190,18 +188,7 @@ Select setup type:
 [2] -> Uninstall product
 >
 ```
-Type 2 then press enter. The install script will uninstall all relevant files.
-
-## Files
-The following section describes the files associated with this project:
-
-| File | Description
-| ---- | ---- |
-| `/usr/bin/horolog` | The binary that spawns the `horolog` process |
-| `/etc/horolog.toml` | The `horolog` configuration file |
-| `/etc/systemd/system/horolog.service` | The `horolog` `systemd` unit file |
-| `/sys/class/rtc/rtc0/wakealarm` | The `sysfs` wakealarm file. `horolog` writes an Epoch time to this file indicating when machine should wake |
-| `/sys/power/state` | The `sysfs` sleep state file. `horolog` writes to this file to suspend the system |
+Type 2 then press enter. The install script will uninstall all relevant files and the `horolog` service.
 
 ## Logging
 Logging is handled by `journald`. The view the logs produced by `horolog`, run:
@@ -237,7 +224,7 @@ To visualize when the next cycle will take place and what will happen during the
 ```bash
 horolog plan
 ```
-This command will read `/etc/horolog.toml` and return a "schematic" representation:
+This command will read `horolog.toml` and return a "schematic" representation:
 ```
 [Plan]:
 
@@ -261,8 +248,3 @@ The following mapping applies here:
 | `{t_s}` | $t_s$ |
 
 This output can be interpreted as: "At time `t_c`, the commands under the `[Commands]` tree will be executed."
-
-## Limitations of this software
-This software manipulates the `sysfs` pseudofilesystem which requires elevated privileges. Additionally, this
-software runs processes via `popen` system calls. It is recommended to limit root access to any machine
-running this software in addition to ensuring that `/etc/horolog.ini` is only root-writeable.
