@@ -6,6 +6,7 @@ time clock (RTC).
 > Why not just use `systemd-sleep` or perhaps some `cron` / `rtcwake` combination?
 
 These solutions are recommended. However, I wanted a more user-friendly "self-contained" solution.
+
 ## Table of Contents
 - [How it works](#how-it-works)
 - [Setup](#setup)
@@ -66,28 +67,33 @@ Given the above conditions are met, the program will follow:
 | $n$ | $t_{sn}$ | `horolog` process sends ACPI suspend signal to machine |
 
 ## Setup
+
 ### Step 1 - Run install script
 Make the script executable:
-```bash
+```console
 chmod +x install
 ```
 Then run the script:
-```bash
+```console
 ./install
 ```
 The following menu will appear:
-```
+```plaintext
 Select setup type:
 [1] -> Install product
 [2] -> Uninstall product
 >
 ```
-Type 1 then press enter. The install script will prompt for the user's password for `sudo`.
+Select <kbd>1</kbd>.
+> [!NOTE]
+> The install procedure will prompt for the user's `sudo` password.
+
 ### Step 2 - Set custom configurations
 Open the software's configuration file:
-```bash
+```console
 vi $HOME/.horolog/horolog.toml
 ```
+
 #### Set critical times
 Start by setting the critical times. The critical times must adhere to the conditions set out in the
 [How it works](#how-it-works) section. A mapping follows:
@@ -155,17 +161,17 @@ The above two commands will be run at time $t_c$ and will run concurrently.
 
 ### Step 3 - Start service
 Start the service:
-```bash
+```console
 sudo systemctl start horolog
 ```
 Then check the service's status:
-```bash
+```console
 sudo systemctl status horolog
 ```
 
 ### Step 4 - Suspend the system
 When work on the system is complete, suspend the system using `systemd`:
-```bash
+```console
 sudo systemctl suspend
 ```
 The system should then wake at the next scheduled time $t_w$ and respect the configurations specified in
@@ -174,59 +180,59 @@ next time $t_w$.
 
 ## Teardown
 To uninstall the product, make the install script executable:
-```
+```console
 chmod +x install
 ```
 Then run the script:
-```
+```console
 ./install
 ```
 The following menu will appear:
-```
+```plaintext
 Select setup type:
 [1] -> Install product
 [2] -> Uninstall product
 >
 ```
-Type 2 then press enter. The install script will uninstall all relevant files and the `horolog` service. Note
-that this will require the user's `sudo` password.
+Select <kbd>2</kbd>. The install script will uninstall all relevant files and the `horolog` service.
+> [!NOTE]
+> The uninstall procedure will prompt for the user's `sudo` password.
 
 ## Logging
 Logging is handled by `journald`. The view the logs produced by `horolog`, run:
-```bash
+```console
 sudo journalctl -u horolog -f
 ```
 
 ## Disabling the software
 To disable the software, simply stop the `horolog` service:
-```bash
+```console
 sudo systemctl stop horolog
 ```
 This will send a SIGTERM to the `horolog` process which will reset the `sysfs` wakealarm file. Inspecting the
 logs using:
-```bash
+```console
 sudo journalctl -u horolog -f
 ```
 Should reveal:
-```bash
+```console
 systemd[1]: Stopping Horolog Job Scheduling Software...
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Received signal 15
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Ending loop
 horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Unsetting alarm
-horolog[21086]: YYYY-MM-DDTHH:mm:ss 21086 I Will write "0" to /sys/class/rtc/rtc0/wakealarm
 ```
 To prevent the software from restarting when the machine is rebooted, run:
-```bash
+```console
 sudo systemctl disable horolog
 ```
 
 ## Visualizing what happens per cycle
 To visualize when the next cycle will take place and what will happen during the cycle, run:
-```bash
+```console
 horolog plan
 ```
 This command will read `horolog.toml` and return a "schematic" representation:
-```
+```plaintext
 [Plan]:
 
  ┌─{t_w}: Sat Sep DD 08:00:00 YYYY
