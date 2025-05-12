@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <mutex>
+#include <thread>
 #include <unistd.h>
 
 namespace {
 
-const std::string LOG_INFO = " " + std::to_string(getpid()) + " I ";
-const std::string LOG_WARNING = " " + std::to_string(getpid()) + " W ";
-const std::string LOG_ERROR = " " + std::to_string(getpid()) + " E ";
+std::mutex LOCK;
+const pid_t PID = getpid();
 
 std::string get_current_datetime_string()
 {
@@ -28,40 +28,38 @@ namespace logger {
 
 void info(const std::string &message)
 {
-    std::cout << get_current_datetime_string() + LOG_INFO + message << '\n';
+    std::cout << get_current_datetime_string() << " " << PID << " I " << message << '\n';
 }
 
 void warning(const std::string &message)
 {
-    std::cout << get_current_datetime_string() + LOG_WARNING + message << '\n';
+    std::cout << get_current_datetime_string() << " " << PID << " W " << message << '\n';
 }
 
 void error(const std::string &message)
 {
-    std::cerr << get_current_datetime_string() + LOG_ERROR + message << '\n';
+    std::cerr << get_current_datetime_string() << " " << PID << " E " << message << '\n';
 }
-
-std::mutex mu;
 
 void info_thread_safe(const std::string &message)
 {
-    mu.lock();
-    std::cout << get_current_datetime_string() + LOG_INFO + message << '\n';
-    mu.unlock();
+    const std::lock_guard<std::mutex> lock(LOCK);
+    std::thread::id id = std::this_thread::get_id();
+    std::cout << get_current_datetime_string() << " (" << id << ") " << PID << " I " << message << '\n';
 }
 
 void warning_thread_safe(const std::string &message)
 {
-    mu.lock();
-    std::cout << get_current_datetime_string() + LOG_WARNING + message << '\n';
-    mu.unlock();
+    const std::lock_guard<std::mutex> lock(LOCK);
+    std::thread::id id = std::this_thread::get_id();
+    std::cout << get_current_datetime_string() << " (" << id << ") " << PID << " W " << message << '\n';
 }
 
 void error_thread_safe(const std::string &message)
 {
-    mu.lock();
-    std::cerr << get_current_datetime_string() + LOG_ERROR + message << '\n';
-    mu.unlock();
+    const std::lock_guard<std::mutex> lock(LOCK);
+    std::thread::id id = std::this_thread::get_id();
+    std::cerr << get_current_datetime_string() << " (" << id << ") " << PID << " E " << message << '\n';
 }
 
 } // namespace logger

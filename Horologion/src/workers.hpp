@@ -3,5 +3,7 @@
 #include <ctime>
 #include <string>
 
-void worker_stay_awake(const std::time_t *duration, std::string *suspend_type);
-void worker_run_command(std::string *command);
+namespace workers {
+void stay_awake(const std::time_t duration, const std::string &suspend_type);
+void run_command(const std::string &command);
+} // namespace workers

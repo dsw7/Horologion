@@ -67,3 +67,6 @@ add_executable(
 )
 
 target_link_libraries("horolog" PRIVATE Threads::Threads)
+
+set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
+install(TARGETS "horolog" DESTINATION "bin")

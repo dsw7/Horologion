@@ -1,0 +1,64 @@
+#!/bin/bash
+
+SERVICE_FILE=horolog.service
+SERVICE_NAME=horolog.service
+DST_SERVICE_FILE=/etc/systemd/system
+PATH_BIN="${HOME}/.local/bin/horolog"
+PATH_PROJ_DIR="${HOME}/.horolog"
+
+set -e
+
+install()
+{
+  if [ ! -f "$PATH_BIN" ]; then
+    echo "Was the 'horolog' binary compiled?"
+    exit 1
+  fi
+
+  local src_cfg
+  src_cfg=Horologion/cfg/horolog.toml
+
+  mkdir -vp "$PATH_PROJ_DIR"
+  cp --verbose "${src_cfg}" "${PATH_PROJ_DIR}/"
+
+  local src_service_file
+  src_service_file=Horologion/systemd/${SERVICE_FILE}
+  sudo cp --verbose "${src_service_file}" ${DST_SERVICE_FILE}/
+
+  sudo sed -i "s@execstart@${PATH_BIN} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+  sudo sed -i "s@datadir@${PATH_PROJ_DIR}@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+
+  sudo systemctl daemon-reload
+  sudo systemctl enable ${SERVICE_NAME}
+}
+
+uninstall()
+{
+  sudo systemctl stop ${SERVICE_NAME}
+  sudo systemctl disable ${SERVICE_NAME}
+  sudo systemctl daemon-reload
+  sudo rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
+
+  rm --force --verbose "${PATH_BIN}"
+  echo
+  echo "The folder '${PATH_PROJ_DIR}' has been left over"
+  echo "Please manually remove this folder"
+}
+
+echo "Select setup type:"
+echo "[1] -> Install product"
+echo "[2] -> Uninstall product"
+echo -n "> "
+read -r SETUP_TYPE
+echo
+
+if [ "$SETUP_TYPE" = 1 ]
+then
+  install
+elif [ "$SETUP_TYPE" = 2 ]
+then
+  uninstall
+else
+  echo "Unrecognized setup option!"
+  exit 1
+fi

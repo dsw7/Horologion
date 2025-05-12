@@ -5,6 +5,7 @@
 #include "utils.hpp"
 #include "workers.hpp"
 
+#include <atomic>
 #include <csignal>
 #include <ctime>
 #include <stdexcept>
@@ -13,115 +14,85 @@
 
 namespace {
 
-const unsigned int SECONDS_PER_DAY = 86400;
+const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 
-void signal_handler(const int signum)
-{
-    logger::info("Received signal " + std::to_string(signum));
-    logger::info("Ending loop");
-
-    utils::unset_rtc_alarm();
-    exit(signum);
-}
-
-struct Times {
-    std::time_t time_wake = 0;
-    std::time_t time_run_cmd = 0;
-    std::time_t wake_duration = 0;
-};
-
-Times set_times(const Configs &configs)
-{
-    Times times;
-
-    times.time_wake = utils::get_epoch_time_from_configs(
-        configs.time_wake.tm_hour,
-        configs.time_wake.tm_min,
-        configs.time_wake.tm_sec // set seconds to zero
-    );
-
-    times.time_run_cmd = utils::get_epoch_time_from_configs(
-        configs.time_run_cmd.tm_hour,
-        configs.time_run_cmd.tm_min,
-        configs.time_run_cmd.tm_sec // set seconds to zero
-    );
-
-    std::time_t time_sleep = utils::get_epoch_time_from_configs(
-        configs.time_sleep.tm_hour,
-        configs.time_sleep.tm_min,
-        configs.time_sleep.tm_sec // set seconds to zero
-    );
-
-    if ((times.time_run_cmd - times.time_wake) < 60) {
-        throw std::runtime_error("The command run time should be at least one minute ahead of the wake time!");
-    }
-
-    times.wake_duration = time_sleep - times.time_run_cmd;
-
-    if (times.wake_duration < 60) {
-        throw std::runtime_error("The sleep time should be at least one minute ahead of the command run time!");
-    }
-
-    return times;
-}
-
-void set_alarm(const std::time_t wake_time)
+void set_rtc_alarm(const std::time_t wake_time)
 {
     logger::info("Setting RTC alarm. Next scheduled wake up time:");
     logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(wake_time));
-    logger::info("The machine will wake up at " + std::to_string(wake_time) + " seconds since Epoch");
+    utils::write_to_file(SYSFS_WAKEALARM, std::to_string(wake_time));
+}
 
-    utils::set_rtc_alarm(wake_time);
+void unset_rtc_alarm()
+{
+    logger::info("Unsetting RTC alarm");
+    utils::write_to_file(SYSFS_WAKEALARM, "0");
+}
+
+std::time_t get_wake_duration(const Configs &configs)
+{
+    return configs.time_sleep_e - configs.time_cmd_e;
 }
 
 void deploy_jobs(Configs &configs, const std::time_t wake_duration)
 {
-    unsigned int n = configs.commands.size();
-
     std::vector<std::thread> jobs;
-    jobs.push_back(std::thread(worker_stay_awake, &wake_duration, &configs.suspend_type));
+    jobs.push_back(std::thread(workers::stay_awake, wake_duration, configs.suspend_type));
 
-    if (n > 0) {
-        for (unsigned int i = 0; i < n; ++i) {
-            jobs.push_back(std::thread(worker_run_command, &configs.commands[i]));
-        }
+    for (auto &command: configs.commands) {
+        jobs.push_back(std::thread(workers::run_command, command));
     }
 
-    for (unsigned int i = 0; i < jobs.size(); ++i) {
-        jobs.at(i).detach();
+    for (auto &job: jobs) {
+        job.detach();
     }
 }
 
-void run_loop(Configs &configs, Times &times)
+std::atomic<bool> SIG_RECEIVED(false);
+
+void signal_handler(__attribute__((unused)) const int signum)
 {
+    SIG_RECEIVED.store(true);
+}
+
+const int SECONDS_PER_DAY = 86400;
+
+void run_loop(Configs &configs)
+{
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+
     logger::info("Starting loop");
 
     bool alarm_is_set = false;
     std::time_t current_epoch_time;
 
-    while (true) {
+    while (not SIG_RECEIVED.load()) {
         current_epoch_time = std::time(nullptr);
 
-        if (current_epoch_time > times.time_wake) {
-            times.time_wake += SECONDS_PER_DAY;
+        if (current_epoch_time > configs.time_wake_e) {
+            configs.time_wake_e += SECONDS_PER_DAY;
             alarm_is_set = false;
         }
 
         if (not alarm_is_set) {
-            set_alarm(times.time_wake);
+            set_rtc_alarm(configs.time_wake_e);
             alarm_is_set = true;
         }
 
-        if (current_epoch_time == times.time_run_cmd) {
-            deploy_jobs(configs, times.wake_duration);
+        if (current_epoch_time == configs.time_cmd_e) {
+            deploy_jobs(configs, get_wake_duration(configs));
         }
 
-        if (current_epoch_time > times.time_run_cmd) {
-            times.time_run_cmd += SECONDS_PER_DAY;
+        if (current_epoch_time > configs.time_cmd_e) {
+            configs.time_cmd_e += SECONDS_PER_DAY;
         }
 
         sleep(1);
     }
+
+    unset_rtc_alarm();
+    logger::info("Ending loop");
 }
 
 } // namespace
@@ -132,13 +103,7 @@ void loop()
 {
     utils::is_running_as_root();
     Configs configs = read_configs_from_file();
-
-    Times times = set_times(configs);
-
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-
-    run_loop(configs, times);
+    run_loop(configs);
 }
 
 } // namespace commands

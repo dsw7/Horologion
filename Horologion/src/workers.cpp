@@ -5,58 +5,84 @@
 
 #include <array>
 #include <chrono>
+#include <cstdio>
+#include <map>
+#include <memory>
+#include <stdexcept>
 #include <stdio.h>
 #include <thread>
 
-void worker_stay_awake(const std::time_t *duration, std::string *suspend_type)
+namespace {
+
+void suspend_system(const std::string &suspend_type)
 {
-    logger::info_thread_safe("<target_0> Keeping system awake for " + std::to_string(*duration) + " seconds");
-    std::this_thread::sleep_for(std::chrono::seconds(*duration));
+    static std::map<std::string, std::string> suspend_types = {
+        { "standby", "S1 (Power-On Suspend)" },
+        { "mem", "S3 (Suspend-to-RAM)" },
+        { "disk", "S4 (Suspend-to-Disk)" }
+    };
 
-    logger::info_thread_safe("<target_0> " + std::to_string(*duration) + " seconds have elapsed");
-
-    if (*suspend_type == "none") {
-        logger::info_thread_safe("<target_0> Suspend disabled. Doing nothing");
-        return;
+    if (not suspend_types.count(suspend_type)) {
+        throw std::runtime_error("Invalid suspend type: \"" + suspend_type + "\"");
     }
 
-    logger::info_thread_safe("<target_0> Suspending system");
-    utils::suspend_system(*suspend_type);
+    // see https://www.kernel.org/doc/html/v4.18/admin-guide/pm/sleep-states.html disk / shutdown section
+    logger::info_thread_safe("Suspending system to state " + suspend_types[suspend_type]);
 
-    logger::info_thread_safe("<target_0> Waking system and terminating this thread");
+    static std::string sysfs_state_file = "/sys/power/state";
+    utils::write_to_file(sysfs_state_file, suspend_type);
 }
 
-void worker_run_command(std::string *command)
+} // namespace
+
+namespace workers {
+
+void stay_awake(const std::time_t duration, const std::string &suspend_type)
 {
-    if (command->find(" 2>&1") == std::string::npos) {
-        // stderr will otherwise leak out to terminal
-        *command += " 2>&1";
-    }
+    logger::info_thread_safe("Keeping system awake for " + std::to_string(duration) + " seconds");
+    std::this_thread::sleep_for(std::chrono::seconds(duration));
 
-    logger::info_thread_safe("Deploying command: \"" + *command + "\"");
+    logger::info_thread_safe(std::to_string(duration) + " seconds have elapsed");
 
-    FILE *pipe = popen(command->c_str(), "r");
-
-    if (!pipe) {
-        logger::error_thread_safe("Could not start command: \"" + *command + "\"");
+    if (suspend_type == "none") {
+        logger::info_thread_safe("ACPI signal transmission disabled. Doing nothing");
         return;
     }
+
+    logger::info_thread_safe("Suspending system");
+    suspend_system(suspend_type);
+
+    logger::info_thread_safe("Waking system and terminating this thread");
+}
+
+void run_command(const std::string &command)
+{
+    std::string command_r = command;
+
+    if (command_r.find(" 2>&1") == std::string::npos) {
+        command_r += " 2>&1";
+    }
+
+    logger::info_thread_safe("Deploying command: \"" + command_r + "\"");
 
     std::array<char, 128> buffer;
-    std::string subproc_output;
+    std::string command_stdout;
 
-    while (fgets(buffer.data(), 128, pipe) != NULL) {
-        logger::info_thread_safe("Reading output from command: \"" + *command + "\"");
-        subproc_output += buffer.data();
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command_r.c_str(), "r"), pclose);
+    if (!pipe) {
+        logger::error_thread_safe("Could not start command");
+        return;
     }
 
-    if (pclose(pipe) != 0) {
-        logger::warning_thread_safe("Command \"" + *command + "\" exited with non-zero exit code");
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        command_stdout += buffer.data();
     }
 
-    if (subproc_output.size() > 0) {
-        logger::info_thread_safe("Output from command: \"" + *command + "\" -> " + subproc_output);
+    if (command_stdout.empty()) {
+        logger::info_thread_safe("No output from command");
     } else {
-        logger::info_thread_safe("Output from command: \"" + *command + "\" -> None");
+        logger::info_thread_safe("Output from command:\n" + command_stdout);
     }
 }
+
+} // namespace workers
