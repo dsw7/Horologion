@@ -177,7 +177,7 @@ To uninstall the product, make the install script executable:
 ```
 chmod +x install
 ```
-Then run the script with elevated privileges:
+Then run the script:
 ```
 ./install
 ```
@@ -188,7 +188,8 @@ Select setup type:
 [2] -> Uninstall product
 >
 ```
-Type 2 then press enter. The install script will uninstall all relevant files and the `horolog` service.
+Type 2 then press enter. The install script will uninstall all relevant files and the `horolog` service. Note
+that this will require the user's `sudo` password.
 
 ## Logging
 Logging is handled by `journald`. The view the logs produced by `horolog`, run:
