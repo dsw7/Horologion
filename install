@@ -3,51 +3,41 @@
 SERVICE_FILE=horolog.service
 SERVICE_NAME=horolog.service
 DST_SERVICE_FILE=/etc/systemd/system
-
-if [ "$(id --user)" -ne 0 ];
-  then echo "Please run as root!"
-  exit 1
-fi
+PATH_BIN="${HOME}/.local/bin/horolog"
+PATH_PROJ_DIR="${HOME}/.horolog"
 
 set -e
 
 install()
 {
   local src_cfg
-  local dst_cfg
-
   src_cfg=Horologion/cfg/horolog.toml
-  dst_cfg="/home/${SUDO_USER}/.horolog"
 
-  mkdir -vp "$dst_cfg"
-  cp --verbose "${src_cfg}" "${dst_cfg}/"
-  chown --recursive --verbose "$SUDO_USER:$SUDO_USER" "$dst_cfg"
+  mkdir -vp "$PATH_PROJ_DIR"
+  cp --verbose "${src_cfg}" "${PATH_PROJ_DIR}/"
 
   local src_service_file
   src_service_file=Horologion/systemd/${SERVICE_FILE}
-  cp --verbose "${src_service_file}" ${DST_SERVICE_FILE}/
+  sudo cp --verbose "${src_service_file}" ${DST_SERVICE_FILE}/
 
-  local path_bin
-  path_bin="/home/${SUDO_USER}/.local/bin/horolog"
+  sudo sed -i "s@execstart@${PATH_BIN} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
+  sudo sed -i "s@datadir@${PATH_PROJ_DIR}@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
-  sed -i "s@execstart@${path_bin} loop@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
-  sed -i "s@datadir@${dst_cfg}@" ${DST_SERVICE_FILE}/${SERVICE_FILE}
-
-  systemctl daemon-reload
-  systemctl enable ${SERVICE_NAME}
+  sudo systemctl daemon-reload
+  sudo systemctl enable ${SERVICE_NAME}
 }
 
 uninstall()
 {
-  systemctl stop ${SERVICE_NAME}
-  systemctl disable ${SERVICE_NAME}
-  systemctl daemon-reload
+  sudo systemctl stop ${SERVICE_NAME}
+  sudo systemctl disable ${SERVICE_NAME}
+  sudo systemctl daemon-reload
+  sudo rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
 
-  local path_bin
-  path_bin="/home/${SUDO_USER}/.local/bin/horolog"
-
-  rm --force --verbose ${DST_SERVICE_FILE}/${SERVICE_FILE}
-  rm --force --verbose "${path_bin}"
+  rm --force --verbose "${PATH_BIN}"
+  echo
+  echo "The folder '${PATH_PROJ_DIR}' has been left over"
+  echo "Please manually remove this folder"
 }
 
 echo "Select setup type:"
