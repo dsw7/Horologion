@@ -10,6 +10,11 @@ set -e
 
 install()
 {
+  if [ ! -f "$PATH_BIN" ]; then
+    echo "Was the 'horolog' binary compiled?"
+    exit 1
+  fi
+
   local src_cfg
   src_cfg=Horologion/cfg/horolog.toml
 
@@ -25,6 +30,8 @@ install()
 
   sudo systemctl daemon-reload
   sudo systemctl enable ${SERVICE_NAME}
+  sudo systemctl start ${SERVICE_NAME}
+  sudo systemctl status ${SERVICE_NAME}
 }
 
 uninstall()
