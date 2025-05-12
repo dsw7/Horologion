@@ -26,29 +26,13 @@ To start, let's provide some definitions:
 | $t_w$ | System wake up time |
 | $t_c$ | Command run time |
 | $t_s$ | System suspend time |
-| $u$ | Difference between $t_w$ and $t_c$ |
-| $v$ | Difference between $t_c$ and $t_s$ |
 
-The following conditions must hold:
-
-$$
+The following condition must hold:
+```math
 t_w < t_c < t_s
-$$
-
-And,
-
-$$
-t_c - t_w \geq u
-$$
-
-And,
-
-$$
-t_s - t_c \geq v
-$$
-
-The system also assumes that the interval bounded by $t_w$ and $t_s$ is bounded within the same calendar day.
-Given the above conditions are met, the program will follow:
+```
+The system also assumes that the interval bounded by $t_w$ and $t_s$ is within the same calendar
+day. Given that the above condition is met, the program will follow:
 
 | Day | Time   | Action |
 | --- | ------ | ------ |
