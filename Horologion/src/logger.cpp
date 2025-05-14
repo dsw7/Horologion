@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <mutex>
+#include <sstream>
 #include <thread>
 #include <unistd.h>
 
@@ -43,22 +44,51 @@ std::ofstream &get_file_stream()
     return fs;
 }
 
+std::string get_thread_id()
+{
+    std::ostringstream oss;
+    oss << std::this_thread::get_id();
+    return oss.str();
+}
+
+void log_to_stdout(const std::string &message)
+{
+    fmt::print("{} {} I {}\n", get_current_datetime_string(), PID, message);
+}
+
+void log_to_stdout(const std::string &message, const std::string &tid)
+{
+    fmt::print("{} (thread {}) {} I {}\n", get_current_datetime_string(), tid, PID, message);
+}
+
+void log_to_stderr(const std::string &message)
+{
+    fmt::print(stderr, "{} {} E {}\n", get_current_datetime_string(), PID, message);
+}
+
+void log_to_stderr(const std::string &message, const std::string &tid)
+{
+    fmt::print(stderr, "{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message);
+}
+
 } // namespace
 
 namespace logger {
 
 void info(const std::string &message)
 {
-    const std::string prefix = fmt::format("{} {} I {}\n", get_current_datetime_string(), PID, message);
-    std::cout << prefix;
+    log_to_stdout(message);
+
     std::ofstream &fs = get_file_stream();
+    const std::string prefix = fmt::format("{} {} I {}\n", get_current_datetime_string(), PID, message);
     fs << prefix;
 }
 
 void error(const std::string &message)
 {
+    log_to_stderr(message);
+
     const std::string prefix = fmt::format("{} {} E {}\n", get_current_datetime_string(), PID, message);
-    std::cerr << prefix;
     std::ofstream &fs = get_file_stream();
     fs << prefix;
 }
@@ -66,15 +96,15 @@ void error(const std::string &message)
 void info_thread_safe(const std::string &message)
 {
     const std::lock_guard<std::mutex> lock(LOCK);
-    std::thread::id id = std::this_thread::get_id();
-    std::cout << get_current_datetime_string() << " (" << id << ") " << PID << " I " << message << '\n';
+    const std::string tid = get_thread_id();
+    log_to_stdout(message, tid);
 }
 
 void error_thread_safe(const std::string &message)
 {
     const std::lock_guard<std::mutex> lock(LOCK);
-    std::thread::id id = std::this_thread::get_id();
-    std::cerr << get_current_datetime_string() << " (" << id << ") " << PID << " E " << message << '\n';
+    const std::string tid = get_thread_id();
+    log_to_stderr(message, tid);
 }
 
 } // namespace logger
