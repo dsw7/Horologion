@@ -3,6 +3,7 @@
 #include "logger.hpp"
 
 #include <filesystem>
+#include <fmt/format.h>
 #include <fstream>
 #include <map>
 #include <stdexcept>
@@ -22,7 +23,7 @@ void is_running_as_root()
 void write_to_file(const std::string &filepath, const std::string &contents)
 {
     if (not std::filesystem::exists(filepath)) {
-        throw std::runtime_error("File \"" + filepath + "\" does not exist!");
+        throw std::runtime_error(fmt::format("File '{}' does not exist!", filepath));
     }
 
     std::ofstream file;
@@ -34,7 +35,7 @@ void write_to_file(const std::string &filepath, const std::string &contents)
 std::string read_from_file(const std::string &filepath)
 {
     if (not std::filesystem::exists(filepath)) {
-        throw std::runtime_error("File \"" + filepath + "\" does not exist!");
+        throw std::runtime_error(fmt::format("File '{}' does not exist!", filepath));
     }
 
     std::ifstream filestream(filepath);

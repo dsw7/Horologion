@@ -1,40 +1,15 @@
 #include "configs.hpp"
 
+#include "files.hpp"
 #include "logger.hpp"
 #include "utils.hpp"
 
-#include <filesystem>
-#include <iostream>
+#include <fmt/format.h>
 #include <sstream>
 #include <stdexcept>
-#include <stdlib.h>
 #include <toml.hpp>
 
 namespace {
-
-std::filesystem::path get_proj_data_dir()
-{
-    // i.e. program running via systemd and the HOROLOG_DATADIR
-    // env var was set by Environment= directive
-    const char *horolog_datadir = std::getenv("HOROLOG_DATADIR");
-    if (horolog_datadir) {
-        return std::filesystem::path(horolog_datadir);
-    }
-
-    // i.e. program running as sudoer and the HOROLOG_DATADIR env var is unset
-    const char *sudo_user = std::getenv("SUDO_USER");
-    if (sudo_user) {
-        return std::filesystem::path("/home") / sudo_user / ".horolog";
-    }
-
-    // If all else fails... try to read HOME env var
-    const char *home_dir = std::getenv("HOME");
-    if (not home_dir) {
-        throw std::runtime_error("Could not locate user home directory!");
-    }
-
-    return std::filesystem::path(home_dir) / ".horolog";
-}
 
 void is_valid_hour(const int hour)
 {
@@ -67,12 +42,7 @@ std::time_t config_time_to_epoch_time(const int hour, const int minute)
 
 void read_project_toml(Configs &configs)
 {
-    static std::string prog_config = get_proj_data_dir() / "horolog.toml";
-
-    if (not std::filesystem::exists(prog_config)) {
-        throw std::runtime_error("Configuration file \"" + prog_config + "\" does not exist");
-    }
-
+    static std::string prog_config = files::get_project_config();
     toml::table table = toml::parse_file(prog_config);
 
     configs.time_wake_e = config_time_to_epoch_time(
@@ -108,7 +78,7 @@ void is_valid_schedule(const Configs &configs)
 
 void is_valid_suspend_state(const std::string &suspend_type)
 {
-    logger::info("Checking whether \"" + suspend_type + "\" is a supported suspend state");
+    logger::info(fmt::format("Checking whether '{}' is a supported suspend state", suspend_type));
 
     static std::string sysfs_state_file = "/sys/power/state";
     std::string sysfs_states = utils::read_from_file(sysfs_state_file);
@@ -124,7 +94,7 @@ void is_valid_suspend_state(const std::string &suspend_type)
     }
 
     if (not is_valid_state) {
-        throw std::runtime_error("Suspend type \"" + suspend_type + "\" not supported!\nValid states are: " + sysfs_states);
+        throw std::runtime_error(fmt::format("Suspend type '{}' not supported!\nValid states are: {}", suspend_type, sysfs_states));
     }
 }
 

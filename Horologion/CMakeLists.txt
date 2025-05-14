@@ -49,6 +49,16 @@ else()
 endif()
 
 # -----------------------------------------------------------------------------------------------------------
+# {fmt}
+
+message(STATUS "Locating {fmt} library")
+find_package(fmt)
+
+if(NOT fmt_FOUND)
+  message(FATAL_ERROR "Is the {fmt} package installed?")
+endif()
+
+# -----------------------------------------------------------------------------------------------------------
 
 include_directories(
   "src"
@@ -60,13 +70,14 @@ add_executable(
   "src/command_plan.cpp"
   "src/command_test.cpp"
   "src/configs.cpp"
+  "src/files.cpp"
   "src/logger.cpp"
   "src/main.cpp"
   "src/utils.cpp"
   "src/workers.cpp"
 )
 
-target_link_libraries("horolog" PRIVATE Threads::Threads)
+target_link_libraries("horolog" PRIVATE Threads::Threads "fmt::fmt")
 
 set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
 install(TARGETS "horolog" DESTINATION "bin")

@@ -52,6 +52,7 @@ int main(int argc, char **argv)
         run_command(prog, std::string(argv[1]));
     } catch (const std::runtime_error &e) {
         logger::error(e.what());
+        std::cerr << e.what() << '\n';
         return EXIT_FAILURE;
     }
 

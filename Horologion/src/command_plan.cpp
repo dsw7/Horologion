@@ -2,8 +2,8 @@
 
 #include "configs.hpp"
 #include "utils.hpp"
+#include <fmt/core.h>
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -22,37 +22,37 @@ void print_schedule(const Configs &configs)
     std::string time_cmd = utils::epoch_time_to_ascii_time(configs.time_cmd_e);
     std::string time_sleep = utils::epoch_time_to_ascii_time(configs.time_sleep_e);
 
-    std::cout << "\n[Plan]:\n\n";
-    std::cout << " " + TL_ELBOW + H_LINE + "{t_w}: " + time_wake + "\n";
-    std::cout << " " + V_LINE + "\n";
-    std::cout << " " + V_LINE + "\n";
-    std::cout << " " + RIGHT_TEE + H_LINE + "{t_c}: " + time_cmd + " -> [Commands]\n";
-    std::cout << " " + V_LINE + "\n";
-    std::cout << " " + V_LINE + "\n";
-    std::cout << " " + BL_ELBOW + H_LINE + "{t_s}: " + time_sleep + "\n";
+    fmt::print("\n[Plan]:\n\n");
+    fmt::print(" {}{}{{t_w}}: {}\n", TL_ELBOW, H_LINE, time_wake);
+    fmt::print(" {}\n", V_LINE);
+    fmt::print(" {}\n", V_LINE);
+    fmt::print(" {}{}{{t_c}}: {} -> [Commands]\n", RIGHT_TEE, H_LINE, time_cmd);
+    fmt::print(" {}\n", V_LINE);
+    fmt::print(" {}\n", V_LINE);
+    fmt::print(" {}{}{{t_s}}: {}\n", BL_ELBOW, H_LINE, time_sleep);
 }
 
 void print_pstree(const Configs &configs)
 {
     if (configs.commands.empty()) {
-        std::cout << "[Commands]: None\n";
+        fmt::print("[Commands]: None\n");
         return;
     }
 
     int n = configs.commands.size();
 
     if (n == 1) {
-        std::cout << "[Commands]: " + H_LINE + H_LINE + H_LINE + " " + configs.commands[0] << '\n';
+        fmt::print("[Commands]: {}{}{} {}\n", H_LINE, H_LINE, H_LINE, configs.commands[0]);
         return;
     }
 
     for (int i = 0; i < n; ++i) {
         if (i == 0) {
-            std::cout << "[Commands]: " + H_LINE + DOWN_TEE + H_LINE + " " + configs.commands[i] + "\n";
+            fmt::print("[Commands]: {}{}{} {}\n", H_LINE, DOWN_TEE, H_LINE, configs.commands[i]);
         } else if (i == n - 1) {
-            std::cout << "             " + BL_ELBOW + H_LINE + " " + configs.commands[i] + "\n";
+            fmt::print("             {}{} {}\n", BL_ELBOW, H_LINE, configs.commands[i]);
         } else {
-            std::cout << "             " + RIGHT_TEE + H_LINE + " " + configs.commands[i] + "\n";
+            fmt::print("             {}{} {}\n", RIGHT_TEE, H_LINE, configs.commands[i]);
         }
     }
 }
@@ -66,10 +66,9 @@ void plan()
     Configs configs = read_configs_from_file();
 
     print_schedule(configs);
-    std::cout << '\n';
+    fmt::print("\n");
 
     print_pstree(configs);
-    std::cout << '\n';
 }
 
 } // namespace commands
