@@ -60,6 +60,7 @@ add_executable(
   "src/command_plan.cpp"
   "src/command_test.cpp"
   "src/configs.cpp"
+  "src/files.cpp"
   "src/logger.cpp"
   "src/main.cpp"
   "src/utils.cpp"
