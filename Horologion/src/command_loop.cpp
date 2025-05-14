@@ -8,6 +8,7 @@
 #include <atomic>
 #include <csignal>
 #include <ctime>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -18,8 +19,8 @@ const std::string SYSFS_WAKEALARM = "/sys/class/rtc/rtc0/wakealarm";
 
 void set_rtc_alarm(const std::time_t wake_time)
 {
-    logger::info("Setting RTC alarm. Next scheduled wake up time:");
-    logger::info("The machine will wake up at " + utils::epoch_time_to_ascii_time(wake_time));
+    logger::info("Setting RTC alarm");
+    logger::info(fmt::format("The machine will wake up at {}", utils::epoch_time_to_ascii_time(wake_time)));
     utils::write_to_file(SYSFS_WAKEALARM, std::to_string(wake_time));
 }
 

@@ -1,6 +1,7 @@
 #include "files.hpp"
 
 #include <filesystem>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <stdlib.h>
 
@@ -39,7 +40,7 @@ std::string get_project_config()
     std::string config = get_proj_data_dir() / "horolog.toml";
 
     if (not std::filesystem::exists(config)) {
-        throw std::runtime_error("Configuration file '" + config + "' does not exist");
+        throw std::runtime_error(fmt::format("Configuration file '{}' does not exist", config));
     }
 
     return config;

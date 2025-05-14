@@ -4,6 +4,7 @@
 #include "logger.hpp"
 #include "utils.hpp"
 
+#include <fmt/format.h>
 #include <sstream>
 #include <stdexcept>
 #include <toml.hpp>
@@ -77,7 +78,7 @@ void is_valid_schedule(const Configs &configs)
 
 void is_valid_suspend_state(const std::string &suspend_type)
 {
-    logger::info("Checking whether \"" + suspend_type + "\" is a supported suspend state");
+    logger::info(fmt::format("Checking whether '{}' is a supported suspend state", suspend_type));
 
     static std::string sysfs_state_file = "/sys/power/state";
     std::string sysfs_states = utils::read_from_file(sysfs_state_file);
@@ -93,7 +94,7 @@ void is_valid_suspend_state(const std::string &suspend_type)
     }
 
     if (not is_valid_state) {
-        throw std::runtime_error("Suspend type \"" + suspend_type + "\" not supported!\nValid states are: " + sysfs_states);
+        throw std::runtime_error(fmt::format("Suspend type '{}' not supported!\nValid states are: {}", suspend_type, sysfs_states));
     }
 }
 
