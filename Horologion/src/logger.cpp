@@ -7,6 +7,7 @@
 #include <iostream>
 #include <mutex>
 #include <sstream>
+#include <stdlib.h>
 #include <thread>
 #include <unistd.h>
 
@@ -51,26 +52,6 @@ std::string get_thread_id()
     return oss.str();
 }
 
-void log_to_stdout(const std::string &message)
-{
-    fmt::print("{} {} I {}\n", get_current_datetime_string(), PID, message);
-}
-
-void log_to_stdout(const std::string &message, const std::string &tid)
-{
-    fmt::print("{} (thread {}) {} I {}\n", get_current_datetime_string(), tid, PID, message);
-}
-
-void log_to_stderr(const std::string &message)
-{
-    fmt::print(stderr, "{} {} E {}\n", get_current_datetime_string(), PID, message);
-}
-
-void log_to_stderr(const std::string &message, const std::string &tid)
-{
-    fmt::print(stderr, "{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message);
-}
-
 void write_info(const std::string &message)
 {
     std::ofstream &fs = get_file_stream();
@@ -95,36 +76,73 @@ void write_error(const std::string &message, const std::string &tid)
     fs << fmt::format("{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message) << std::flush;
 }
 
+bool should_log_to_file()
+{
+    const char *log_to_file = std::getenv("LOG_TO_FILE");
+    if (log_to_file) {
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace
 
 namespace logger {
 
+void enable_file_logging()
+{
+    setenv("LOG_TO_FILE", "1", 1);
+}
+
 void info(const std::string &message)
 {
-    log_to_stdout(message);
-    write_info(message);
+    static bool log_to_file = should_log_to_file();
+
+    if (log_to_file) {
+        write_info(message);
+    } else {
+        fmt::print("{} {} I {}\n", get_current_datetime_string(), PID, message);
+    }
 }
 
 void error(const std::string &message)
 {
-    log_to_stderr(message);
-    write_error(message);
+    static bool log_to_file = should_log_to_file();
+
+    if (log_to_file) {
+        write_error(message);
+    } else {
+        fmt::print(stderr, "{} {} E {}\n", get_current_datetime_string(), PID, message);
+    }
 }
 
 void info_thread_safe(const std::string &message)
 {
     const std::lock_guard<std::mutex> lock(LOCK);
     const std::string tid = get_thread_id();
-    log_to_stdout(message, tid);
-    write_info(message, tid);
+
+    static bool log_to_file = should_log_to_file();
+
+    if (log_to_file) {
+        write_info(message, tid);
+    } else {
+        fmt::print("{} (thread {}) {} I {}\n", get_current_datetime_string(), tid, PID, message);
+    }
 }
 
 void error_thread_safe(const std::string &message)
 {
     const std::lock_guard<std::mutex> lock(LOCK);
     const std::string tid = get_thread_id();
-    log_to_stderr(message, tid);
-    write_error(message, tid);
+
+    static bool log_to_file = should_log_to_file();
+
+    if (log_to_file) {
+        write_error(message, tid);
+    } else {
+        fmt::print(stderr, "{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message);
+    }
 }
 
 } // namespace logger
