@@ -29,7 +29,6 @@ void run_command(const std::string &prog, const std::string &first_arg)
     if (first_arg == "-h" or first_arg == "--help") {
         help_commands(prog);
     } else if (first_arg == "loop") {
-        logger::enable_file_logging();
         commands::loop();
     } else if (first_arg == "plan") {
         commands::plan();

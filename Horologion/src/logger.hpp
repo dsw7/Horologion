@@ -5,6 +5,7 @@
 namespace logger {
 
 void enable_file_logging();
+void disable_file_logging();
 
 void info(const std::string &message);
 void error(const std::string &message);

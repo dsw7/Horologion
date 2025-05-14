@@ -102,8 +102,11 @@ namespace commands {
 void loop()
 {
     utils::is_running_as_root();
+
+    logger::enable_file_logging();
     Configs configs = read_configs_from_file();
     run_loop(configs);
+    logger::disable_file_logging();
 }
 
 } // namespace commands

@@ -7,14 +7,14 @@
 #include <iostream>
 #include <mutex>
 #include <sstream>
-#include <stdlib.h>
 #include <thread>
 #include <unistd.h>
 
 namespace {
 
-std::mutex LOCK;
+bool LOG_TO_FILE = false;
 const pid_t PID = getpid();
+std::mutex LOCK;
 
 std::string get_current_datetime_string()
 {
@@ -76,30 +76,23 @@ void write_error(const std::string &message, const std::string &tid)
     fs << fmt::format("{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message) << std::flush;
 }
 
-bool should_log_to_file()
-{
-    const char *log_to_file = std::getenv("LOG_TO_FILE");
-    if (log_to_file) {
-        return true;
-    }
-
-    return false;
-}
-
 } // namespace
 
 namespace logger {
 
 void enable_file_logging()
 {
-    setenv("LOG_TO_FILE", "1", 1);
+    LOG_TO_FILE = true;
+}
+
+void disable_file_logging()
+{
+    LOG_TO_FILE = false;
 }
 
 void info(const std::string &message)
 {
-    static bool log_to_file = should_log_to_file();
-
-    if (log_to_file) {
+    if (LOG_TO_FILE) {
         write_info(message);
     } else {
         fmt::print("{} {} I {}\n", get_current_datetime_string(), PID, message);
@@ -108,9 +101,7 @@ void info(const std::string &message)
 
 void error(const std::string &message)
 {
-    static bool log_to_file = should_log_to_file();
-
-    if (log_to_file) {
+    if (LOG_TO_FILE) {
         write_error(message);
     } else {
         fmt::print(stderr, "{} {} E {}\n", get_current_datetime_string(), PID, message);
@@ -122,9 +113,7 @@ void info_thread_safe(const std::string &message)
     const std::lock_guard<std::mutex> lock(LOCK);
     const std::string tid = get_thread_id();
 
-    static bool log_to_file = should_log_to_file();
-
-    if (log_to_file) {
+    if (LOG_TO_FILE) {
         write_info(message, tid);
     } else {
         fmt::print("{} (thread {}) {} I {}\n", get_current_datetime_string(), tid, PID, message);
@@ -136,9 +125,7 @@ void error_thread_safe(const std::string &message)
     const std::lock_guard<std::mutex> lock(LOCK);
     const std::string tid = get_thread_id();
 
-    static bool log_to_file = should_log_to_file();
-
-    if (log_to_file) {
+    if (LOG_TO_FILE) {
         write_error(message, tid);
     } else {
         fmt::print(stderr, "{} (thread {}) {} E {}\n", get_current_datetime_string(), tid, PID, message);
